@@ -6,7 +6,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    gnome3.36版本解决dash to dock无法使用问题 |  Hexo
+    numpy 基本使用 |  Hexo
   </title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   
@@ -30,7 +30,7 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article id="post-gnome3-36-dash-to-dock-fix" class="article article-type-post" itemscope
+  <article id="post-numpy-function" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -38,7 +38,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  gnome3.36版本解决dash to dock无法使用问题
+  numpy 基本使用
 </h1>
   
 
@@ -47,8 +47,8 @@
 
     
     <div class="article-meta">
-      <a href="/2020/03/12/gnome3-36-dash-to-dock-fix/" class="article-date">
-  <time datetime="2020-03-12T14:37:05.000Z" itemprop="datePublished">2020-03-12</time>
+      <a href="/2020/03/14/numpy-function/" class="article-date">
+  <time datetime="2020-03-14T10:04:06.000Z" itemprop="datePublished">2020-03-14</time>
 </a>
       
       
@@ -58,7 +58,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">129字</span>
+            <span class="post-count">2.7k字</span>
         </span>
     </span>
 
@@ -67,7 +67,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1分钟</span>
+            <span class="post-count">11分钟</span>
         </span>
     </span>
 </div>
@@ -94,14 +94,41 @@
       
 
       
-      <h1 id="Dash-to-dock-can’t-work-well"><a href="#Dash-to-dock-can’t-work-well" class="headerlink" title="Dash to dock can’t work well."></a><em>Dash to dock can’t work well.</em></h1><p>作为一个arch用户，当滚动更新gnome之后虽然觉得登录界面毛玻璃背景和动态效果很好看，但是很多插件无法使用让人着实难受，最要命的是dock插件无法使用带来的极大困扰。。。。。</p>
+      <h1 id="对Numpy库中的函数进行整理"><a href="#对Numpy库中的函数进行整理" class="headerlink" title="对Numpy库中的函数进行整理"></a><em>对Numpy库中的函数进行整理</em></h1><p>学习DL途中对于numpy的一个粗略整理，部分函数只给出常用参数，之后可能会跳出其中几个复杂的做详细记录。</p>
 <a id="more"></a>
 <hr>
-<ol>
-<li>git clone -b tmp/gnome-3.36 <a href="https://github.com/micheleg/dash-to-dock.git" target="_blank" rel="noopener">https://github.com/micheleg/dash-to-dock.git</a> （国内用户可以使用proxychins代理）  </li>
-<li>cd dash-to-dock</li>
-<li>make &amp;&amp; make install<br>当插件正常更新后删除掉文件夹即可</li>
-</ol>
+<h2 id="查看数组属性"><a href="#查看数组属性" class="headerlink" title="查看数组属性"></a>查看数组属性</h2><ul>
+<li><strong>函数及其功能</strong><br>a.ndim：维度。<br>a.shape：改变自身各维度的尺度。<br>a.size：元素的个数。<br>a.dtype：元素的类型。<br>a.itemsize：每个元素的大小。</li>
+</ul>
+<hr>
+<h2 id="数组的初始化"><a href="#数组的初始化" class="headerlink" title="数组的初始化"></a>数组的初始化</h2><ul>
+<li><strong>函数及其功能</strong><br>np.array(a)/np.ndarray(shape, dtype)：初始化数组a。<br>np.arange(start, end, distance, dtype=None)：由[start, end)创建一个步进为distance的行数组。<br>np.ones((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的1数组。<br>np.zeros((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的0数组。<br>np.full((shape), val, dtype=None)：创建shape大小，内涵dtype类型val的填充数组。<br>np.empty((shape), dtype=np.float64)：生成一个shape大小，dtype类型含无意义数的数组。<br>np.eye(n, dtype=np.float64)：创建一个n*n，dtype类型的单位数组。<br>np.ones_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的1数组。<br>np.zeros_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的0数组。<br>np.full_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型fill_value的数组。<br>np.empty_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型无意义值的数组。<br>np.linspace(start, end, distance)：由[start, end)区间等间距地生成数组.<br>np.set_printoptions(precision=None, threshold=None)：设置所有数组的精度和打印位数。</li>
+</ul>
+<hr>
+<h2 id="数组的合并"><a href="#数组的合并" class="headerlink" title="数组的合并"></a>数组的合并</h2><ul>
+<li><strong>函数及其功能</strong><br>np.concatenate((a, b), axis=0):将b沿着垂直方向（axis=0）或者水平方向（axis=1）与a进行合并。<br>np.vstack((a, b))：沿着竖直方向将数组堆叠起来。<br>np.hstack((a, b))：沿着水平方向将数组堆叠起来。<br>np.c_(a, b)：将列向量进行连接。<br>np.r_(a, b)：将行向量进行链接。</li>
+</ul>
+<hr>
+<h2 id="数组的维度操作"><a href="#数组的维度操作" class="headerlink" title="数组的维度操作"></a>数组的维度操作</h2><ul>
+<li><strong>函数及其功能</strong><br>a.reshape(shape) : 不改变当前数组，依shape生成。<br>a.resize(shape) : 改变当前数组，依shape生成。<br>a.swapaxes(ax1, ax2) : 将两个维度调换。<br>a.flatten() : 对数组进行降维，返回折叠后的一维数组。<br>a.ravel()：对数组进行降维，不会产生源数据的副本。<br>a.squeeze()：对数组进行降维，只能对维数为1的维度降维。<br>np.newaxis：增加一个维度。<br>a.repeat(repeat, axis=None)：将a数组进行repeat倍扩充，axis=0时进行纵向扩充，axis=1时进行横向扩充，为设置时进项扁平化处理。<br>np.repeat(x, y)：创建一个数组，内含y个x。<br>np.tile(a, tile)：对数字进行轮流扩充，将原数据最大单元看做一个单元，将形状变为tile的形状。<br>np.asscalar(a)：将只有一个元素的数组a，转化成标量值。</li>
+</ul>
+<hr>
+<h2 id="数组的类型变换"><a href="#数组的类型变换" class="headerlink" title="数组的类型变换"></a>数组的类型变换</h2><ul>
+<li><strong>函数及其功能</strong><br>a.asarray(b)：将一个非numpy数组的元素转变为numpy数组。<br>a.astype(new_type) : 数据类型的转换。<br>a.tolist()：数组向列表的转换。</li>
+</ul>
+<hr>
+<h2 id="数组的运算操作"><a href="#数组的运算操作" class="headerlink" title="数组的运算操作"></a>数组的运算操作</h2><ul>
+<li><strong>函数及其功能</strong><br>a.transpose()/a.T()：求a矩阵的转置矩阵。<br>np.abs(a)/np.fabs(a)/np.absolute(a): 取各元素的绝对值。<br>np.sqrt(a): 计算各元素的平方根。<br>np.square(a): 计算各元素的平方。<br>np.log(a): 计算以e为底，a的对数。<br>np.log10(a)：计算以10为底，a的对数。<br>np.log2(a)：计算以2为底，a的对数。<br>np.ceil(a)：返回输入值的上限，向上取整。<br>np.floor(a): 返回不大于输入参数的最大整数，向下取整。<br>np.around(a, decimals=0): 返回各元素四舍五入的值，decimals指定保留至小数点后xx位，如果为负，整数将四舍五入到小数点左侧的位置，与round()函数类似。<br>np.exp(a): 计算各元素的指数值。<br>np.sign(a): 计算各元素的符号值 1（+），0，-1（-）。<br>a.copy()：将a进行深复制。<br>a.view()：将a进行浅复制。<br>np.copysign(a, b): 将b中各元素的符号赋值给数组a的对应元素。<br>np.mod(a, b): 元素级的模运算。<br>np.dot(a, b)：对矩阵进行点乘运算。<br>np.sin(a)：计算a的正弦。<br>np.cos(a)：计算a的余弦。<br>np.tan(a)：计算a的正切。<br>np.cov(x)：求协方差。<br>np.corrcoef(x, y)：求x，y相关系数。<br>np.logical_and(x, y)：返回x和y逻辑与之后的结果。<br>np.logical_or(x, y)：返回x和y逻辑或之后的结果。<br>np.logical_not(x, y)：返回x和y逻辑非之后的结果。<br>np.logical_xor(x, y)：返回x和y逻辑异或之后的结果。<br>np.vectorize(myfunc, otype)：定义了一个矢量函数myfunc，输入是嵌套化的对象序列或者是numpy数组，输出是单个或元组的numpy数组，otype指定输出值的类型。<br>np.gradient(a)：计算数组a中元素的梯度。<br>numpy.linalg.solve(a, b)：返回矩阵方程ax=b的解。<br>numpy.linalg.norm(a, ord=2)：求矩阵a的范数，ord=1求一范数，ord=2求二范数，ord=np.inf求无穷范数，当a为两个数组相减的表达式时是计算欧氏距离。</li>
+</ul>
+<hr>
+<h2 id="随机数函数"><a href="#随机数函数" class="headerlink" title="随机数函数"></a>随机数函数</h2><ul>
+<li><strong>函数及其功能</strong><br>np.random.seed(s)：随机数种子，使用下面的随机方法前最好设置一个随机数种子。<br>np.random.rand(d0, d1, …,dn)：各元素是[0, 1）的浮点数，服从均匀分布。<br>np.random.randn(d0, d1, …,dn)：标准正态分布。<br>np.random.randint(low，high=None, size)：创建size个随机整数或整数数组，范围是[low, high），如果没有写参数high的值，则返回[0,low)的值。<br>np.random.shuffle(a)：根据数组a的第一轴进行随机排列，改变数组a。<br>np.random.permutation(a)：根据数组a的第一轴进行随机排列，但是不改变原数组，将生成新数组。<br>np.random.choice(a, size, replace=False, p)：从一维数组a中以概率p抽取元素， 形成size形状新数组，replace表示是否可以重用元素，默认为False。<br>np.random.uniform(low, high, size)：产生均匀分布的数组，起始值为low，high为结束值，size为形状。<br>np.random.normal(loc, scale, size)：产生正态分布的数组， loc为均值，scale为标准差，size为形状。<br>np.random.poisson(lam, size)：产生泊松分布的数组，lam随机事件发生概率，size为形状。</li>
+</ul>
+<hr>
+<h2 id="统计函数"><a href="#统计函数" class="headerlink" title="统计函数"></a>统计函数</h2><ul>
+<li><strong>函数及其功能</strong><br>np.diff(a, n=1, axis=1)：沿着指定轴计算第N维的离散差值（执行的是后一个元素减去前一个元素）。<br>np.sum(a, axis = None)：依给定轴axis计算数组a相关元素之和，axis为整数或者元组。<br>numpy.cumsum(a, axis=None, dtype=None)：按照所给定的轴参数返回元素的梯形累计和(后一个加上前面元素的累加和)，axis=0，按照行累加。axis=1，按照列累加。axis不给定具体值，就把numpy数组当成一个一维数组。<br>np.mean(a)：返回数组元素中的均值。<br>np.average(a, axis =None, weights=None)：依给定轴axis计算数组a相关元素的加权平均值。<br>np.median(a, axis=None)：计算数组的中位数。<br>np.std(a, axis=None)：计算数组的标准差，axis=0时计算每一列的标砖茶，axis=1计算每一行的标准差。<br>a.var()：计算数组的方差。<br>np.max(a, axis=0)：寻找数组中的最大值。<br>np.min(a, axis=0)：寻找数组中的最小值。<br>np.maximum(a, b)/np.fmax()：a,b逐位比较（或者计算）元素级的最大值。<br>np.minimum(a, b)/np.fmin()：a,b逐位比较（或者计算）元素级的最小值。<br>np.argmax(a, axis=None)：沿axis返回最大值的索引。<br>np.argmin(a, axis=None)：沿axis返回最小值的索引。<br>np.argsort(a, axis=None)：返回的是数组值从小到大的索引值。<br>np.argpartition(a, kth)：是将第k大的数字，放在第k个位置。类似于快排找第k大的数，堆其它数不做排序。<br>np.amin(a，axis=None)：返回一维数组a中的最小值，二维数组需通过axis指定行或列，获取行（1）或列（0）的最小值，如不指定，则是所有元素的最小值 。<br>np.amax(a, axis=None)：返回一维数组a中的最大值，二维数组需通过axis指定行（1）或列（0），获取行或列的最大值，如不指定，则是所有元素的最大值。<br>numpy.apply_along_axis(func, axis, arr)：func指定转换方法，axis指定按行（1）运算还是按列（0）运算，arr指定数组。<br>np.nonzero(a)：返回数组a中非零元素的索引值数组。<br>np.percentile(a, percent)：返回数组中第percent%位置的浮点数。<br>(expression).all()：两个数组进行比较时如果所有元素根据expression都为True则返回True。<br>(expression).any()：两个数组进行比较时如果任意元素根据expression都为True则返回True。<br>np.bincount(a)：统计a中[min, max]之间各个数字的出现次数。<br>np.where(condition, x, y)：当condition为True时输出x，否则输出y。<br>np.where(condition)：当筛选满足condition条件的元素。<br>np.argwhere(expression)：返回非0的数组位置的索引，其中expression是要索引数组的条件，非0数组指的时expression中左值对应的数组。<br>a.ptp()：计算数组元素最大值与最小值的差。<br>np.nan：返回运算中的nan值（不显示具体数值）。<br>item.isnan(np.nan)：查看item是否为nan值。<br>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)：对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出；return_index=True返回新列表元素在旧列表中的位置，并以列表形式储存；return_inverse=True返回旧列表元素在新列表中的位置，并以列表形式储存；return_count=True对独特值进行计数。<br>np.digitize(x, bins, right = False)：获得属于数组的每个值的bin的索引数组。<br>np.searchsorted(a, x)：输出x在a中所处数字间的间隔代号。<br>np.sort(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序，会影响列表本身。<br>np.sorted(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序， 不会影响列表本身。<br>np.clip(a, a_min, a_max)：将a的范围限制到[a_min, a_max]之间。<br>np.intersect1d(a1, a2, assume_unique=False)：返回a1中和a2共有的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.setdiff1d(a1, a2, assume_unique=False)：返回a1中和a2差异的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.convolve(a, b, mode=‘full’)：对数组a，b进行卷积运算。</li>
+</ul>
+<hr>
 
       
       <!-- reward -->
@@ -171,13 +198,15 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2020/03/12/gnome3-36-dash-to-dock-fix/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2020/03/14/numpy-function/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Note/" rel="tag">Note</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Numpy/" rel="tag">Numpy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+
 
     </footer>
 
@@ -187,15 +216,20 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/03/13/Gui-Of-Markdown/" class="article-nav-link">
+      <a href="/2020/03/19/repeat-and-tile/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            MarkDown学习笔记
+            numpy库中的repeat和tile
           
         </div>
       </a>
     
+    
+      <a href="/2020/03/13/Gui-Of-Markdown/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">MarkDown学习笔记</div>
+      </a>
     
   </nav>
 

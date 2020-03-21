@@ -6,7 +6,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    查看端口 |  Hexo
+    Numpy文件的存取 |  Hexo
   </title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   
@@ -30,7 +30,7 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article id="post-查看端口" class="article article-type-post" itemscope
+  <article id="post-file-of-numpy" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -38,7 +38,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  查看端口
+  Numpy文件的存取
 </h1>
   
 
@@ -47,8 +47,8 @@
 
     
     <div class="article-meta">
-      <a href="/2020/03/12/%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3/" class="article-date">
-  <time datetime="2020-03-12T12:31:55.000Z" itemprop="datePublished">2020-03-12</time>
+      <a href="/2020/03/22/file-of-numpy/" class="article-date">
+  <time datetime="2020-03-21T16:23:05.000Z" itemprop="datePublished">2020-03-22</time>
 </a>
       
       
@@ -58,7 +58,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">0字</span>
+            <span class="post-count">698字</span>
         </span>
     </span>
 
@@ -67,7 +67,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1分钟</span>
+            <span class="post-count">3分钟</span>
         </span>
     </span>
 </div>
@@ -78,6 +78,8 @@
 
     
     
+    <div class="tocbot"></div>
+
 
 
 
@@ -92,7 +94,37 @@
       
 
       
-      
+      <h1 id="对Numpy中文件相关的函数进行总结"><a href="#对Numpy中文件相关的函数进行总结" class="headerlink" title="对Numpy中文件相关的函数进行总结"></a><em>对Numpy中文件相关的函数进行总结</em></h1><a id="more"></a>
+<hr>
+<h2 id="1-数组以二进制格式保存。"><a href="#1-数组以二进制格式保存。" class="headerlink" title="1.数组以二进制格式保存。"></a>1.数组以二进制格式保存。</h2><ul>
+<li>np.save和np.load是读写磁盘数组数据的两个主要函数。默认情况下，数组以未压缩的原始二进制格式保存在扩展名为npy的文件中，文件的后缀名字一定会被置为.npy。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.save(<span class="string">"filename.npy"</span>,a) <span class="comment">#将数组a中的数据存入文件</span></span><br><span class="line">b = np.load(<span class="string">"filename.npy"</span>) <span class="comment">#将文件中的数据读取出来并存入b</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="2-存取文本文件"><a href="#2-存取文本文件" class="headerlink" title="2.存取文本文件"></a>2.存取文本文件</h2><ul>
+<li>使用 np.savetxt 和 np.loadtxt 只能读写 1 维和 2 维的数组<br>np.savetxt：将数组写入以某种分隔符隔开的文本文件中<br>np.loadtxt：指定某种分隔符，将文本文件读入到数组中<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.savetxt(<span class="string">"filename.txt"</span>,a)</span><br><span class="line">b =  numpy.loadtxt(<span class="string">"filename.txt"</span>, delimiter=<span class="string">','</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="3-保存为二进制文件"><a href="#3-保存为二进制文件" class="headerlink" title="3.保存为二进制文件"></a>3.保存为二进制文件</h2><ul>
+<li>使用数组的 tofile 函数可以方便地将数组中数据以二进制的格式写进文件<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a.tofile(<span class="string">"filename.bin"</span>) <span class="comment">#将数组a的数据存入二进制文件</span></span><br><span class="line">b = np.fromfile(<span class="string">"filename.bin"</span>,dtype = **) <span class="comment">#从二进制文件中以dtype的形式提取数据并存储于b</span></span><br></pre></td></tr></table></figure></li>
+<li>该方法与np.save有几点区别：</li>
+</ul>
+<ol>
+<li>tofile函数只能将数组保存为二进制文件，文件后缀名没有固定要求。这种保存方法对数据读取有要求，np.fromfile 需要手动指定读出来的数据的的dtype，如果指定的格式与保存时的不一致，则读出来的就是错误的数据。</li>
+<li>tofile函数不能保存当前数据的行列信息，不管数组的排列顺序是C语言格式的还是Fortran语言格式，统一使用C语言格式输出。因此使用 np.fromfile 读出来的数据是一维数组，需要利用reshape指定行列信息。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">0</span>,<span class="number">12</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.shape = <span class="number">3</span>,<span class="number">4</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>],</span><br><span class="line">       [ <span class="number">4</span>,  <span class="number">5</span>,  <span class="number">6</span>,  <span class="number">7</span>],</span><br><span class="line">       [ <span class="number">8</span>,  <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.tofile(<span class="string">"a.bin"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.fromfile(<span class="string">"a.bin"</span>, dtype=np.float) <span class="comment"># 按照float类型读入数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="comment"># 读入的数据是错误的</span></span><br><span class="line">array([  <span class="number">2.12199579e-314</span>,   <span class="number">6.36598737e-314</span>,   <span class="number">1.06099790e-313</span>,</span><br><span class="line">         <span class="number">1.48539705e-313</span>,   <span class="number">1.90979621e-313</span>,   <span class="number">2.33419537e-313</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.dtype <span class="comment"># 查看a的dtype</span></span><br><span class="line">dtype(<span class="string">'int32'</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.fromfile(<span class="string">"a.bin"</span>, dtype=np.int32) <span class="comment"># 按照int32类型读入数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="comment"># 数据是一维的</span></span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>,  <span class="number">6</span>,  <span class="number">7</span>,  <span class="number">8</span>,  <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.shape = <span class="number">3</span>, <span class="number">4</span> <span class="comment"># 按照a的shape修改b的shape</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>],</span><br><span class="line">       [ <span class="number">4</span>,  <span class="number">5</span>,  <span class="number">6</span>,  <span class="number">7</span>],</span><br><span class="line">       [ <span class="number">8</span>,  <span class="number">9</span>, <span class="number">10</span>, <span class="number">11</span>]])</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<hr>
+<h2 id="4-从url获取文件"><a href="#4-从url获取文件" class="headerlink" title="4.从url获取文件"></a>4.从url获取文件</h2><ul>
+<li>np.genfromtxt(url, delimiter, dtype=)：从url获取文件，以delimiter为分隔符，设定数据类型为dtype。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">url = <span class="string">'https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'</span></span><br><span class="line">species = np.genfromtxt(url, delimiter=<span class="string">','</span>, dtype=<span class="string">'str'</span>, usecols=<span class="number">4</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li>参考自<a href="https://blog.csdn.net/u010089444/article/details/52738479" target="_blank" rel="noopener">https://blog.csdn.net/u010089444/article/details/52738479</a></li>
+</ul>
+
       
       <!-- reward -->
       
@@ -161,13 +193,15 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2020/03/12/%E6%9F%A5%E7%9C%8B%E7%AB%AF%E5%8F%A3/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2020/03/22/file-of-numpy/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/File/" rel="tag">File</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NUmpy/" rel="tag">NUmpy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Note/" rel="tag">Note</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+
 
     </footer>
 
@@ -177,19 +211,10 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/03/12/gnome3-36-dash-to-dock-fix/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            gnome3.36版本解决dash to dock无法使用问题
-          
-        </div>
-      </a>
     
-    
-      <a href="/2020/02/06/hello-world/" class="article-nav-link">
+      <a href="/2020/03/21/where-argwhere/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Hello World</div>
+        <div class="article-nav-title">where和argwhere详解</div>
       </a>
     
   </nav>
