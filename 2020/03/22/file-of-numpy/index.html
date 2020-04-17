@@ -94,7 +94,8 @@
       
 
       
-      <h2 id="对Numpy中文件相关的函数进行总结"><a href="#对Numpy中文件相关的函数进行总结" class="headerlink" title="对Numpy中文件相关的函数进行总结"></a><em>对Numpy中文件相关的函数进行总结</em></h2><a id="more"></a>
+      <p><strong><em>对Numpy中文件相关的函数进行总结</em></strong></p>
+<a id="more"></a>
 <hr>
 <h2 id="1-数组以二进制格式保存。"><a href="#1-数组以二进制格式保存。" class="headerlink" title="1.数组以二进制格式保存。"></a>1.数组以二进制格式保存。</h2><ul>
 <li>np.save和np.load是读写磁盘数组数据的两个主要函数。默认情况下，数组以未压缩的原始二进制格式保存在扩展名为npy的文件中，<u>文件的后缀名字一定会被置为.npy</u>。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">np.save(<span class="string">"filename.npy"</span>,a) <span class="comment">#将数组a中的数据存入文件</span></span><br><span class="line">b = np.load(<span class="string">"filename.npy"</span>) <span class="comment">#将文件中的数据读取出来并存入b</span></span><br></pre></td></tr></table></figure>
@@ -210,6 +211,15 @@
   
   
   <nav class="article-nav">
+    
+      <a href="/2020/04/04/request-note/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            request库小记
+          
+        </div>
+      </a>
     
     
       <a href="/2020/03/21/where-argwhere/" class="article-nav-link">
