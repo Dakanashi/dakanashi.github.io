@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>三种不同的Copy方式详解</title>
-    <url>/2020/03/21/Different-Copy/</url>
-    <content><![CDATA[<p><strong><em>Python中的Copy有三种方式——完全不复制、浅复制（试图）、深复制，接下来进行举例讲解。</em></strong></p>
-<a id="more"></a>
-<hr>
-<h2 id="完全不复制（两个对象共同指向一个数据）"><a href="#完全不复制（两个对象共同指向一个数据）" class="headerlink" title="完全不复制（两个对象共同指向一个数据）"></a>完全不复制（两个对象共同指向一个数据）</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">6</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#b的id和a的id相同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b都会保管数据。</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a就是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="keyword">is</span> a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="literal">True</span></span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="浅复制（又称试图，发生在np-view和切片操作中）"><a href="#浅复制（又称试图，发生在np-view和切片操作中）" class="headerlink" title="浅复制（又称试图，发生在np.view和切片操作中）"></a>浅复制（又称试图，发生在np.view和切片操作中）</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a[:]   <span class="comment">#或者b = a.view()</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b的id不同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643466911216</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a负责保管数据，b不负责报关数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##a不是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="keyword">is</span> a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改变b的形状不会影响a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.shape=(<span class="number">2</span>, <span class="number">3</span>)<span class="comment"># no.reshape()也是一种浅复制</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#改变b的元素会影响a，即使改变b形状后改变b元素的值也会影响a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">3</span>] = <span class="number">67</span></span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>, <span class="number">67</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">       [<span class="number">67</span>,  <span class="number">4</span>,  <span class="number">5</span>]])</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="深复制"><a href="#深复制" class="headerlink" title="深复制"></a>深复制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a.copy()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">##a和b的id不同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643675206080</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a不是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b各自保管一份不同的数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改变a的元素不会影响b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">2</span>] = <span class="number">90</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>, <span class="number">90</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MarkDown学习笔记</title>
     <url>/2020/03/13/Gui-Of-Markdown/</url>
     <content><![CDATA[<p><strong><em>MarkDown Study</em></strong><br>这几天<del>闲来无事</del>折腾一下hexo，顺便学习一下MarkDown  </p>
@@ -202,6 +185,61 @@
       <tags>
         <tag>学习</tag>
         <tag>MarkDown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>三种不同的Copy方式详解</title>
+    <url>/2020/03/21/Different-Copy/</url>
+    <content><![CDATA[<p><strong><em>Python中的Copy有三种方式——完全不复制、浅复制（试图）、深复制，接下来进行举例讲解。</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="完全不复制（两个对象共同指向一个数据）"><a href="#完全不复制（两个对象共同指向一个数据）" class="headerlink" title="完全不复制（两个对象共同指向一个数据）"></a>完全不复制（两个对象共同指向一个数据）</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">6</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#b的id和a的id相同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b都会保管数据。</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a就是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="keyword">is</span> a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="浅复制（又称试图，发生在np-view和切片操作中）"><a href="#浅复制（又称试图，发生在np-view和切片操作中）" class="headerlink" title="浅复制（又称试图，发生在np.view和切片操作中）"></a>浅复制（又称试图，发生在np.view和切片操作中）</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a[:]   <span class="comment">#或者b = a.view()</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b的id不同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643466911216</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a负责保管数据，b不负责报关数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##a不是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="keyword">is</span> a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改变b的形状不会影响a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.shape=(<span class="number">2</span>, <span class="number">3</span>)<span class="comment"># no.reshape()也是一种浅复制</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#改变b的元素会影响a，即使改变b形状后改变b元素的值也会影响a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">3</span>] = <span class="number">67</span></span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>, <span class="number">67</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">       [<span class="number">67</span>,  <span class="number">4</span>,  <span class="number">5</span>]])</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="深复制"><a href="#深复制" class="headerlink" title="深复制"></a>深复制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a.copy()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">##a和b的id不同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643675206080</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a不是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b各自保管一份不同的数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改变a的元素不会影响b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">2</span>] = <span class="number">90</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>, <span class="number">90</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mariaDB连接</title>
+    <url>/2020/04/21/connection-for-mariadb/</url>
+    <content><![CDATA[<p><strong><em>对mariaDB不同连接方式的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><p><strong>内连接，INNER JOIN (也称为SIMPLE JOIN)</strong></p>
+<ul>
+<li>INNER JOIN是最常见的连接类型，它返回连接条件满足的多个表中的所有行。</li>
+<li>位置在FROM之后。</li>
+<li><img src="/images/connect_1.png" alt="内连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">INNER JOIN database_name  </span><br><span class="line">ON expression</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>左外连接</strong></p>
+<ul>
+<li>LEFT OUTER JOIN用于返回ON条件中指定的左侧表中的所有行，并仅返回满足连接条件的其他表中的行。</li>
+<li><img src="/images/connect_2.png" alt="左外连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">columns</span>  </span><br><span class="line"><span class="keyword">FROM</span> table1  </span><br><span class="line"><span class="keyword">LEFT</span> [<span class="keyword">OUTER</span>] <span class="keyword">JOIN</span> table2  </span><br><span class="line"><span class="keyword">ON</span> table1.column = table2.column;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>右外连接</strong></p>
+<ul>
+<li>RIGHT OUTER JOIN用于返回ON条件中指定的右表中的所有行，并且仅返回来自其他表中连接字段满足条件的行。</li>
+<li><img src="/images/connect_3.png" alt="右外连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">columns</span>  </span><br><span class="line"><span class="keyword">FROM</span> table1  </span><br><span class="line"><span class="keyword">RIGHT</span> [<span class="keyword">OUTER</span>] <span class="keyword">JOIN</span> table2  </span><br><span class="line"><span class="keyword">ON</span> table1.column = table2.column;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -434,41 +472,75 @@
       </tags>
   </entry>
   <entry>
-    <title>mariaDB连接</title>
-    <url>/2020/04/21/connection-for-mariadb/</url>
-    <content><![CDATA[<p><strong><em>对mariaDB不同连接方式的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
+    <title>Python爬虫笔记</title>
+    <url>/2020/04/04/crawler-note/</url>
+    <content><![CDATA[<p><strong><em>对于爬虫的学习记录</em></strong></p>
 <a id="more"></a>
 <hr>
+<h1 id="相关知识说明"><a href="#相关知识说明" class="headerlink" title="相关知识说明"></a><strong><em>相关知识说明</em></strong></h1><ul>
+<li><p><strong>爬虫规模说明</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">方法</th>
+<th align="center">说明</th>
+<th align="center">用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">小规模</td>
+<td align="center">数据量小，爬取数据不敏感，Requests库</td>
+<td align="center">爬取网页，玩转网页</td>
+</tr>
+<tr>
+<td align="center">中规模</td>
+<td align="center">数据规模较大，爬取速度敏感，Scrapy库</td>
+<td align="center">爬取网站，爬取系列网站</td>
+</tr>
+<tr>
+<td align="center">大规模</td>
+<td align="center">搜索引擎，爬取速度关键</td>
+<td align="center">爬取全网</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>网络爬虫的限制</strong></p>
 <ul>
-<li><p><strong>内连接，INNER JOIN (也称为SIMPLE JOIN)</strong></p>
-<ul>
-<li>INNER JOIN是最常见的连接类型，它返回连接条件满足的多个表中的所有行。</li>
-<li>位置在FROM之后。</li>
-<li><img src="/images/connect_1.png" alt="内连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">INNER JOIN database_name  </span><br><span class="line">ON expression</span><br></pre></td></tr></table></figure>
+<li>来源审查：判断User-Agent进行限制<blockquote>
+<p>检查来访HTTP协议头的User-Agent域，只响应浏览器或友好爬虫的访问。</p>
+</blockquote>
+</li>
+<li>发布公告：Robots协议<blockquote>
+<p>告知所有爬虫网站的爬取策略，要求爬虫遵守。</p>
+</blockquote>
 </li>
 </ul>
 </li>
-<li><p><strong>左外连接</strong></p>
+<li><p><strong>Robots协议</strong></p>
 <ul>
-<li>LEFT OUTER JOIN用于返回ON条件中指定的左侧表中的所有行，并仅返回满足连接条件的其他表中的行。</li>
-<li><img src="/images/connect_2.png" alt="左外连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">columns</span>  </span><br><span class="line"><span class="keyword">FROM</span> table1  </span><br><span class="line"><span class="keyword">LEFT</span> [<span class="keyword">OUTER</span>] <span class="keyword">JOIN</span> table2  </span><br><span class="line"><span class="keyword">ON</span> table1.column = table2.column;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>右外连接</strong></p>
-<ul>
-<li>RIGHT OUTER JOIN用于返回ON条件中指定的右表中的所有行，并且仅返回来自其他表中连接字段满足条件的行。</li>
-<li><img src="/images/connect_3.png" alt="右外连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">columns</span>  </span><br><span class="line"><span class="keyword">FROM</span> table1  </span><br><span class="line"><span class="keyword">RIGHT</span> [<span class="keyword">OUTER</span>] <span class="keyword">JOIN</span> table2  </span><br><span class="line"><span class="keyword">ON</span> table1.column = table2.column;</span><br></pre></td></tr></table></figure>
-
-
-</li>
+<li>作用：网站告知网络爬虫哪些页面可以抓取，那些不行。</li>
+<li>形式：在网站根目录下的robots.txt文件夹。</li>
 </ul>
 </li>
 </ul>
+<h1 id="Requests库网络爬虫实例"><a href="#Requests库网络爬虫实例" class="headerlink" title="Requests库网络爬虫实例"></a><strong><em>Requests库网络爬虫实例</em></strong></h1><ol>
+<li><p><strong>京东商品页面的爬取</strong></p>
+ <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">"https://item.jd.com/2967929.html"</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    r = requests.get(url)</span><br><span class="line">    r.raise_for_status()</span><br><span class="line">    r.encoding = r.apparent_encoding</span><br><span class="line">    print(r.text[:<span class="number">1000</span>])</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>亚马逊商品页面的爬取</p>
+ <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">"https://www.amazon.cn/gp/product/B01M8L5Z3Y"</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    kv = &#123;<span class="string">'usr-agent'</span>:<span class="string">'Mozilla/5.0'</span>&#125;<span class="comment"># 不更改headers会遭到拒绝访问</span></span><br><span class="line">    r = requests.get(url, headers=kv)</span><br><span class="line">    r.raise_for_status()</span><br><span class="line">    r.encoding = r.apparent_encoding</span><br><span class="line">    print(r.text[<span class="number">1000</span>:<span class="number">2000</span>])</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>百度/360搜索相关字提交</p>
+ <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">keyword = <span class="string">"Python"</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    kv= &#123;<span class="string">'wd'</span>: keyword&#125;<span class="comment"># 设置关键词</span></span><br><span class="line">    <span class="comment"># 将关键词传入，360搜索将url换为http://www.so.com/s</span></span><br><span class="line">    r = requests.get(<span class="string">"http://www.baidu.com/s"</span>, params=kv)</span><br><span class="line">    print(r.request.url)</span><br><span class="line">    r.raise_for_status()</span><br><span class="line">    print(lem(r.text))<span class="comment"># 打印搜索到的条目数量</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>网络图片的爬取和存储</p>
+ <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    <span class="keyword">import</span> os</span><br><span class="line">    url = <span class="string">"http://image.ngchina.com.cn/2019/0523/20190523103156143.jpg"</span></span><br><span class="line">    root = <span class="string">"/home/john/celitea"</span></span><br><span class="line">    path = root + url.split(<span class="string">'/'</span>)[<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(root):</span><br><span class="line">            os.mkdir(root)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">            r = requests.get(url)</span><br><span class="line">            <span class="keyword">with</span> open(path, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(r.content)</span><br><span class="line">                f.close()</span><br><span class="line">                print(<span class="string">"文件保存成功"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"文件已存在"</span>)</span><br><span class="line">    <span class="keyword">except</span>：</span><br><span class="line">        print(<span class="string">"爬取失败"</span>)</span><br><span class="line">    ``` </span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> IP地址归属地的自动查询</span><br><span class="line">    ```Python</span><br><span class="line">    <span class="comment"># 此方法已不适用，仅供参考</span></span><br><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    url = <span class="string">"http://m.ip138.com/ip.asp?ip="</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url+<span class="string">'104.36.66.224'</span>)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        print(r.text[<span class="number">-500</span>:])</span><br><span class="line">    <span class="keyword">except</span>：</span><br><span class="line">        print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
 ]]></content>
       <tags>
         <tag>Note</tag>
-        <tag>Mysql</tag>
+        <tag>Crawler</tag>
       </tags>
   </entry>
   <entry>
@@ -637,6 +709,24 @@
       </tags>
   </entry>
   <entry>
+    <title>numpy.digitize()笔记</title>
+    <url>/2020/03/19/digitize/</url>
+    <content><![CDATA[<p><strong><em>对digitilize函数做一下记录</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="numpy-digitize-a-bins-right-False"><a href="#numpy-digitize-a-bins-right-False" class="headerlink" title="numpy.digitize(a, bins, right = False)"></a>numpy.digitize(a, bins, right = False)</h2><ul>
+<li>a：numpy数组</li>
+<li>bins：一维单调数组，必须是升序或者降序。</li>
+<li>right：间隔是否包含最右。</li>
+<li>返回值：a在bins中的位置。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bins = np.array(range(<span class="number">1</span>, <span class="number">102</span>, <span class="number">3</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bins</span><br><span class="line">array([  <span class="number">1</span>,   <span class="number">4</span>,   <span class="number">7</span>,  <span class="number">10</span>,  <span class="number">13</span>,  <span class="number">16</span>,  <span class="number">19</span>,  <span class="number">22</span>,  <span class="number">25</span>,  <span class="number">28</span>,  <span class="number">31</span>,  <span class="number">34</span>,  <span class="number">37</span>,</span><br><span class="line">        <span class="number">40</span>,  <span class="number">43</span>,  <span class="number">46</span>,  <span class="number">49</span>,  <span class="number">52</span>,  <span class="number">55</span>,  <span class="number">58</span>,  <span class="number">61</span>,  <span class="number">64</span>,  <span class="number">67</span>,  <span class="number">70</span>,  <span class="number">73</span>,  <span class="number">76</span>,</span><br><span class="line">        <span class="number">79</span>,  <span class="number">82</span>,  <span class="number">85</span>,  <span class="number">88</span>,  <span class="number">91</span>,  <span class="number">94</span>,  <span class="number">97</span>, <span class="number">100</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.digitize(<span class="number">5</span>,bins)</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.digitize(<span class="number">96</span>,bins)</span><br><span class="line"><span class="number">32</span></span><br></pre></td></tr></table></figure></li>
+<li>参考自<a href="https://blog.csdn.net/zby1001/article/details/86616056" target="_blank" rel="noopener">https://blog.csdn.net/zby1001/article/details/86616056</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Numpy</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Numpy文件的存取</title>
     <url>/2020/03/22/file-of-numpy/</url>
     <content><![CDATA[<p><strong><em>对Numpy中文件相关的函数进行总结</em></strong></p>
@@ -679,96 +769,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Python爬虫笔记</title>
-    <url>/2020/04/04/crawler-note/</url>
-    <content><![CDATA[<p><strong><em>对于爬虫的学习记录</em></strong></p>
-<a id="more"></a>
-<hr>
-<h1 id="相关知识说明"><a href="#相关知识说明" class="headerlink" title="相关知识说明"></a><strong><em>相关知识说明</em></strong></h1><ul>
-<li><p><strong>爬虫规模说明</strong></p>
-<table>
-<thead>
-<tr>
-<th align="center">方法</th>
-<th align="center">说明</th>
-<th align="center">用途</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">小规模</td>
-<td align="center">数据量小，爬取数据不敏感，Requests库</td>
-<td align="center">爬取网页，玩转网页</td>
-</tr>
-<tr>
-<td align="center">中规模</td>
-<td align="center">数据规模较大，爬取速度敏感，Scrapy库</td>
-<td align="center">爬取网站，爬取系列网站</td>
-</tr>
-<tr>
-<td align="center">大规模</td>
-<td align="center">搜索引擎，爬取速度关键</td>
-<td align="center">爬取全网</td>
-</tr>
-</tbody></table>
-</li>
-<li><p><strong>网络爬虫的限制</strong></p>
-<ul>
-<li>来源审查：判断User-Agent进行限制<blockquote>
-<p>检查来访HTTP协议头的User-Agent域，只响应浏览器或友好爬虫的访问。</p>
-</blockquote>
-</li>
-<li>发布公告：Robots协议<blockquote>
-<p>告知所有爬虫网站的爬取策略，要求爬虫遵守。</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>Robots协议</strong></p>
-<ul>
-<li>作用：网站告知网络爬虫哪些页面可以抓取，那些不行。</li>
-<li>形式：在网站根目录下的robots.txt文件夹。</li>
-</ul>
-</li>
-</ul>
-<h1 id="Requests库网络爬虫实例"><a href="#Requests库网络爬虫实例" class="headerlink" title="Requests库网络爬虫实例"></a><strong><em>Requests库网络爬虫实例</em></strong></h1><ol>
-<li><p><strong>京东商品页面的爬取</strong></p>
- <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">"https://item.jd.com/2967929.html"</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    r = requests.get(url)</span><br><span class="line">    r.raise_for_status()</span><br><span class="line">    r.encoding = r.apparent_encoding</span><br><span class="line">    print(r.text[:<span class="number">1000</span>])</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>亚马逊商品页面的爬取</p>
- <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">"https://www.amazon.cn/gp/product/B01M8L5Z3Y"</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    kv = &#123;<span class="string">'usr-agent'</span>:<span class="string">'Mozilla/5.0'</span>&#125;<span class="comment"># 不更改headers会遭到拒绝访问</span></span><br><span class="line">    r = requests.get(url, headers=kv)</span><br><span class="line">    r.raise_for_status()</span><br><span class="line">    r.encoding = r.apparent_encoding</span><br><span class="line">    print(r.text[<span class="number">1000</span>:<span class="number">2000</span>])</span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>百度/360搜索相关字提交</p>
- <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">keyword = <span class="string">"Python"</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    kv= &#123;<span class="string">'wd'</span>: keyword&#125;<span class="comment"># 设置关键词</span></span><br><span class="line">    <span class="comment"># 将关键词传入，360搜索将url换为http://www.so.com/s</span></span><br><span class="line">    r = requests.get(<span class="string">"http://www.baidu.com/s"</span>, params=kv)</span><br><span class="line">    print(r.request.url)</span><br><span class="line">    r.raise_for_status()</span><br><span class="line">    print(lem(r.text))<span class="comment"># 打印搜索到的条目数量</span></span><br><span class="line"><span class="keyword">except</span>:</span><br><span class="line">    print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>网络图片的爬取和存储</p>
- <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    <span class="keyword">import</span> os</span><br><span class="line">    url = <span class="string">"http://image.ngchina.com.cn/2019/0523/20190523103156143.jpg"</span></span><br><span class="line">    root = <span class="string">"/home/john/celitea"</span></span><br><span class="line">    path = root + url.split(<span class="string">'/'</span>)[<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(root):</span><br><span class="line">            os.mkdir(root)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">            r = requests.get(url)</span><br><span class="line">            <span class="keyword">with</span> open(path, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(r.content)</span><br><span class="line">                f.close()</span><br><span class="line">                print(<span class="string">"文件保存成功"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"文件已存在"</span>)</span><br><span class="line">    <span class="keyword">except</span>：</span><br><span class="line">        print(<span class="string">"爬取失败"</span>)</span><br><span class="line">    ``` </span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> IP地址归属地的自动查询</span><br><span class="line">    ```Python</span><br><span class="line">    <span class="comment"># 此方法已不适用，仅供参考</span></span><br><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    url = <span class="string">"http://m.ip138.com/ip.asp?ip="</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url+<span class="string">'104.36.66.224'</span>)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        print(r.text[<span class="number">-500</span>:])</span><br><span class="line">    <span class="keyword">except</span>：</span><br><span class="line">        print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Crawler</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>numpy.digitize()笔记</title>
-    <url>/2020/03/19/digitize/</url>
-    <content><![CDATA[<p><strong><em>对digitilize函数做一下记录</em></strong></p>
-<a id="more"></a>
-<hr>
-<h2 id="numpy-digitize-a-bins-right-False"><a href="#numpy-digitize-a-bins-right-False" class="headerlink" title="numpy.digitize(a, bins, right = False)"></a>numpy.digitize(a, bins, right = False)</h2><ul>
-<li>a：numpy数组</li>
-<li>bins：一维单调数组，必须是升序或者降序。</li>
-<li>right：间隔是否包含最右。</li>
-<li>返回值：a在bins中的位置。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bins = np.array(range(<span class="number">1</span>, <span class="number">102</span>, <span class="number">3</span>))</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>bins</span><br><span class="line">array([  <span class="number">1</span>,   <span class="number">4</span>,   <span class="number">7</span>,  <span class="number">10</span>,  <span class="number">13</span>,  <span class="number">16</span>,  <span class="number">19</span>,  <span class="number">22</span>,  <span class="number">25</span>,  <span class="number">28</span>,  <span class="number">31</span>,  <span class="number">34</span>,  <span class="number">37</span>,</span><br><span class="line">        <span class="number">40</span>,  <span class="number">43</span>,  <span class="number">46</span>,  <span class="number">49</span>,  <span class="number">52</span>,  <span class="number">55</span>,  <span class="number">58</span>,  <span class="number">61</span>,  <span class="number">64</span>,  <span class="number">67</span>,  <span class="number">70</span>,  <span class="number">73</span>,  <span class="number">76</span>,</span><br><span class="line">        <span class="number">79</span>,  <span class="number">82</span>,  <span class="number">85</span>,  <span class="number">88</span>,  <span class="number">91</span>,  <span class="number">94</span>,  <span class="number">97</span>, <span class="number">100</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.digitize(<span class="number">5</span>,bins)</span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.digitize(<span class="number">96</span>,bins)</span><br><span class="line"><span class="number">32</span></span><br></pre></td></tr></table></figure></li>
-<li>参考自<a href="https://blog.csdn.net/zby1001/article/details/86616056" target="_blank" rel="noopener">https://blog.csdn.net/zby1001/article/details/86616056</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Numpy</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>gnome3.36版本解决dash to dock无法使用问题</title>
     <url>/2020/03/12/gnome3-36-dash-to-dock-fix/</url>
     <content><![CDATA[<h2 id="Dash-to-dock-can’t-work-well"><a href="#Dash-to-dock-can’t-work-well" class="headerlink" title="Dash to dock can’t work well."></a><em>Dash to dock can’t work well.</em></h2><p>作为一个arch用户，当滚动更新gnome之后虽然觉得登录界面毛玻璃背景和动态效果很好看，但是很多插件无法使用让人着实难受，最要命的是dock插件无法使用带来的极大困扰。。。。。</p>
@@ -801,6 +801,25 @@
 ]]></content>
       <tags>
         <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>numpy中数组切片时使用None</title>
+    <url>/2020/03/21/numpy-slice/</url>
+    <content><![CDATA[<p><strong><em>学习Numpy的途中偶然看到数组切片时使用None的技巧，故记录一下。</em></strong></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li>np.newaxis：None的别称，用于增加一个维度，<u>以下所有代码中None都有可以替换为np.newaxis</u>。</li>
+<li>行的位置设置为None是给整体增加一个维度。</li>
+<li>列的位置设置为None是给<u>每个非整体最大单位元素</u>增加一个维度。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="literal">None</span>, :]</span><br><span class="line">array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[:, <span class="literal">None</span>]</span><br><span class="line">array([[<span class="number">1</span>],</span><br><span class="line">       [<span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>]])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;&gt; a = np.array([[<span class="number">1</span>, <span class="number">1</span>],[<span class="number">2</span>, <span class="number">2</span>],[<span class="number">3</span>, <span class="number">3</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>, <span class="number">3</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[:, <span class="literal">None</span>]</span><br><span class="line">array([[[<span class="number">1</span>, <span class="number">1</span>]],</span><br><span class="line"></span><br><span class="line">       [[<span class="number">2</span>, <span class="number">2</span>]],</span><br><span class="line"></span><br><span class="line">       [[<span class="number">3</span>, <span class="number">3</span>]]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="literal">None</span>, :]</span><br><span class="line">array([[[<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">        [<span class="number">3</span>, <span class="number">3</span>]]])</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>Note</tag>
+        <tag>Numpy</tag>
+        <tag>Slice</tag>
       </tags>
   </entry>
   <entry>
@@ -931,70 +950,6 @@
       </tags>
   </entry>
   <entry>
-    <title>numpy中数组切片时使用None</title>
-    <url>/2020/03/21/numpy-slice/</url>
-    <content><![CDATA[<p><strong><em>学习Numpy的途中偶然看到数组切片时使用None的技巧，故记录一下。</em></strong></p>
-<a id="more"></a>
-<hr>
-<ul>
-<li>np.newaxis：None的别称，用于增加一个维度，<u>以下所有代码中None都有可以替换为np.newaxis</u>。</li>
-<li>行的位置设置为None是给整体增加一个维度。</li>
-<li>列的位置设置为None是给<u>每个非整体最大单位元素</u>增加一个维度。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="literal">None</span>, :]</span><br><span class="line">array([[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[:, <span class="literal">None</span>]</span><br><span class="line">array([[<span class="number">1</span>],</span><br><span class="line">       [<span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>]])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&gt;&gt; a = np.array([[<span class="number">1</span>, <span class="number">1</span>],[<span class="number">2</span>, <span class="number">2</span>],[<span class="number">3</span>, <span class="number">3</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>, <span class="number">3</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[:, <span class="literal">None</span>]</span><br><span class="line">array([[[<span class="number">1</span>, <span class="number">1</span>]],</span><br><span class="line"></span><br><span class="line">       [[<span class="number">2</span>, <span class="number">2</span>]],</span><br><span class="line"></span><br><span class="line">       [[<span class="number">3</span>, <span class="number">3</span>]]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="literal">None</span>, :]</span><br><span class="line">array([[[<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">        [<span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">        [<span class="number">3</span>, <span class="number">3</span>]]])</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>Note</tag>
-        <tag>Numpy</tag>
-        <tag>Slice</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>numpy 基本使用</title>
-    <url>/2020/03/14/numpy-function/</url>
-    <content><![CDATA[<p><strong><em>对Numpy库中的函数进行整理</em></strong><br>学习DL途中对于numpy的一个粗略整理，部分函数只给出常用参数，之后可能会跳出其中几个复杂的做详细记录。</p>
-<a id="more"></a>
-<hr>
-<h2 id="查看数组属性"><a href="#查看数组属性" class="headerlink" title="查看数组属性"></a>查看数组属性</h2><ul>
-<li><strong>函数及其功能</strong><br>a.ndim：维度。<br>a.shape：改变自身各维度的尺度。<br>a.size：元素的个数。<br>a.dtype：元素的类型。<br>a.itemsize：每个元素的大小。</li>
-</ul>
-<hr>
-<h2 id="数组的初始化"><a href="#数组的初始化" class="headerlink" title="数组的初始化"></a>数组的初始化</h2><ul>
-<li><strong>函数及其功能</strong><br>np.array(a)/np.ndarray(shape, dtype)：初始化数组a。<br>np.arange(start, end, distance, dtype=None)：由[start, end)创建一个步进为distance的行数组。<br>np.ones((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的1数组。<br>np.zeros((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的0数组。<br>np.full((shape), val, dtype=None)：创建shape大小，内涵dtype类型val的填充数组。<br>np.empty((shape), dtype=np.float64)：生成一个shape大小，dtype类型含无意义数的数组。<br>np.eye(n, dtype=np.float64)：创建一个n*n，dtype类型的单位数组。<br>np.ones_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的1数组。<br>np.zeros_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的0数组。<br>np.full_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型fill_value的数组。<br>np.empty_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型无意义值的数组。<br>np.linspace(start, end, distance)：由[start, end)区间等间距地生成数组.<br>np.set_printoptions(precision=None, threshold=None)：设置所有数组的精度和打印位数。</li>
-</ul>
-<hr>
-<h2 id="数组的合并"><a href="#数组的合并" class="headerlink" title="数组的合并"></a>数组的合并</h2><ul>
-<li><strong>函数及其功能</strong><br>np.concatenate((a, b), axis=0):将b沿着垂直方向（axis=0）或者水平方向（axis=1）与a进行合并。<br>np.vstack((a, b))：沿着竖直方向将数组堆叠起来。<br>np.hstack((a, b))：沿着水平方向将数组堆叠起来。<br>np.c_(a, b)：将列向量进行连接。<br>np.r_(a, b)：将行向量进行链接。</li>
-</ul>
-<hr>
-<h2 id="数组的维度操作"><a href="#数组的维度操作" class="headerlink" title="数组的维度操作"></a>数组的维度操作</h2><ul>
-<li><strong>函数及其功能</strong><br>a.reshape(shape) : 不改变当前数组，依shape生成。<br>a.resize(shape) : 改变当前数组，依shape生成。<br>a.swapaxes(ax1, ax2) : 将两个维度调换。<br>a.flatten() : 对数组进行降维，返回折叠后的一维数组。<br>a.ravel()：对数组进行降维，不会产生源数据的副本。<br>a.squeeze()：对数组进行降维，只能对维数为1的维度降维。<br>np.newaxis：增加一个维度。<br>a.repeat(repeat, axis=None)：将a数组进行repeat倍扩充，axis=0时进行纵向扩充，axis=1时进行横向扩充，为设置时进项扁平化处理。<br>np.repeat(x, y)：创建一个数组，内含y个x。<br>np.tile(a, tile)：对数字进行轮流扩充，将原数据最大单元看做一个单元，将形状变为tile的形状。<br>np.asscalar(a)：将只有一个元素的数组a，转化成标量值。</li>
-</ul>
-<hr>
-<h2 id="数组的类型变换"><a href="#数组的类型变换" class="headerlink" title="数组的类型变换"></a>数组的类型变换</h2><ul>
-<li><strong>函数及其功能</strong><br>a.asarray(b)：将一个非numpy数组的元素转变为numpy数组。<br>a.astype(new_type) : 数据类型的转换。<br>a.tolist()：数组向列表的转换。</li>
-</ul>
-<hr>
-<h2 id="数组的运算操作"><a href="#数组的运算操作" class="headerlink" title="数组的运算操作"></a>数组的运算操作</h2><ul>
-<li><strong>函数及其功能</strong><br>a.transpose()/a.T()：求a矩阵的转置矩阵。<br>np.abs(a)/np.fabs(a)/np.absolute(a): 取各元素的绝对值。<br>np.sqrt(a): 计算各元素的平方根。<br>np.square(a): 计算各元素的平方。<br>np.log(a): 计算以e为底，a的对数。<br>np.log10(a)：计算以10为底，a的对数。<br>np.log2(a)：计算以2为底，a的对数。<br>np.ceil(a)：返回输入值的上限，向上取整。<br>np.floor(a): 返回不大于输入参数的最大整数，向下取整。<br>np.around(a, decimals=0): 返回各元素四舍五入的值，decimals指定保留至小数点后xx位，如果为负，整数将四舍五入到小数点左侧的位置，与round()函数类似。<br>np.exp(a): 计算各元素的指数值。<br>np.sign(a): 计算各元素的符号值 1（+），0，-1（-）。<br>a.copy()：将a进行深复制。<br>a.view()：将a进行浅复制。<br>np.copysign(a, b): 将b中各元素的符号赋值给数组a的对应元素。<br>np.mod(a, b): 元素级的模运算。<br>np.dot(a, b)：对矩阵进行点乘运算。<br>np.sin(a)：计算a的正弦。<br>np.cos(a)：计算a的余弦。<br>np.tan(a)：计算a的正切。<br>np.cov(x)：求协方差。<br>np.corrcoef(x, y)：求x，y相关系数。<br>np.logical_and(x, y)：返回x和y逻辑与之后的结果。<br>np.logical_or(x, y)：返回x和y逻辑或之后的结果。<br>np.logical_not(x, y)：返回x和y逻辑非之后的结果。<br>np.logical_xor(x, y)：返回x和y逻辑异或之后的结果。<br>np.vectorize(myfunc, otype)：定义了一个矢量函数myfunc，输入是嵌套化的对象序列或者是numpy数组，输出是单个或元组的numpy数组，otype指定输出值的类型。<br>np.gradient(a)：计算数组a中元素的梯度。<br>numpy.linalg.solve(a, b)：返回矩阵方程ax=b的解。<br>numpy.linalg.norm(a, ord=2)：求矩阵a的范数，ord=1求一范数，ord=2求二范数，ord=np.inf求无穷范数，当a为两个数组相减的表达式时是计算欧氏距离。</li>
-</ul>
-<hr>
-<h2 id="随机数函数"><a href="#随机数函数" class="headerlink" title="随机数函数"></a>随机数函数</h2><ul>
-<li><strong>函数及其功能</strong><br>np.random.seed(s)：随机数种子，使用下面的随机方法前最好设置一个随机数种子。<br>np.random.rand(d0, d1, …,dn)：各元素是[0, 1）的浮点数，服从均匀分布。<br>np.random.randn(d0, d1, …,dn)：标准正态分布。<br>np.random.randint(low，high=None, size)：创建size个随机整数或整数数组，范围是[low, high），如果没有写参数high的值，则返回[0,low)的值。<br>np.random.shuffle(a)：根据数组a的第一轴进行随机排列，改变数组a。<br>np.random.permutation(a)：根据数组a的第一轴进行随机排列，但是不改变原数组，将生成新数组。<br>np.random.choice(a, size, replace=False, p)：从一维数组a中以概率p抽取元素， 形成size形状新数组，replace表示是否可以重用元素，默认为False。<br>np.random.uniform(low, high, size)：产生均匀分布的数组，起始值为low，high为结束值，size为形状。<br>np.random.normal(loc, scale, size)：产生正态分布的数组，loc为均值，scale为标准差，size为形状。<br>np.random.poisson(lam, size)：产生泊松分布的数组，lam随机事件发生概率，size为形状。</li>
-</ul>
-<hr>
-<h2 id="统计函数"><a href="#统计函数" class="headerlink" title="统计函数"></a>统计函数</h2><ul>
-<li><strong>函数及其功能</strong><br>np.diff(a, n=1, axis=1)：沿着指定轴计算第N维的离散差值（执行的是后一个元素减去前一个元素）。<br>np.sum(a, axis = None)：依给定轴axis计算数组a相关元素之和，axis为整数或者元组。<br>numpy.cumsum(a, axis=None, dtype=None)：按照所给定的轴参数返回元素的梯形累计和(后一个加上前面元素的累加和)，axis=0，按照行累加。axis=1，按照列累加。axis不给定具体值，就把numpy数组当成一个一维数组。<br>numpy.ufunc.accumulate(a, axis=0, dtype=None)：照所给定的轴参数返回根据ufunc进行计算的元素的梯形累计，ufunc可以是add，multiply等。<br>np.mean(a)：返回数组元素中的均值。<br>np.average(a, axis =None, weights=None)：依给定轴axis计算数组a相关元素的加权平均值。<br>np.median(a, axis=None)：计算数组的中位数。<br>np.std(a, axis=None)：计算数组的标准差，axis=0时计算每一列的标砖茶，axis=1计算每一行的标准差。<br>a.var()：计算数组的方差。<br>np.max(a, axis=0)：寻找数组中的最大值。<br>np.min(a, axis=0)：寻找数组中的最小值。<br>np.maximum(a, b)/np.fmax()：a,b逐位比较（或者计算）元素级的最大值。<br>np.minimum(a, b)/np.fmin()：a,b逐位比较（或者计算）元素级的最小值。<br>np.argmax(a, axis=None)：沿axis返回最大值的索引。<br>np.argmin(a, axis=None)：沿axis返回最小值的索引。<br>np.argsort(a, axis=None)：返回的是数组值从小到大的索引值。<br>np.argpartition(a, kth)：是将第k大的数字，放在第k个位置。类似于快排找第k大的数，堆其它数不做排序。<br>np.amin(a，axis=None)：返回一维数组a中的最小值，二维数组需通过axis指定行或列，获取行（1）或列（0）的最小值，如不指定，则是所有元素的最小值 。<br>np.amax(a, axis=None)：返回一维数组a中的最大值，二维数组需通过axis指定行（1）或列（0），获取行或列的最大值，如不指定，则是所有元素的最大值。<br>numpy.apply_along_axis(func, axis, arr)：func指定转换方法，axis指定按行（1）运算还是按列（0）运算，arr指定数组。<br>np.nonzero(a)：返回数组a中非零元素的索引值数组。<br>np.percentile(a, percent)：返回数组中第percent%位置的浮点数。<br>(expression).all()：两个数组进行比较时如果所有元素根据expression都为True则返回True。<br>(expression).any()：两个数组进行比较时如果任意元素根据expression都为True则返回True。<br>np.bincount(a)：统计a中[min, max]之间各个数字的出现次数。<br>np.where(condition, x, y)：当condition为True时输出x，否则输出y。<br>np.where(condition)：当筛选满足condition条件的元素。<br>np.argwhere(expression)：返回非0的数组位置的索引，其中expression是要索引数组的条件，非0数组指的时expression中左值对应的数组。<br>a.ptp()：计算数组元素最大值与最小值的差。<br>np.pi：数学中的π。<br>numpy.euler_gamma：数学中的伽马。<br>np.e：欧拉的常数，自然对数的基础，纳皮尔的常数<br>np.newaxis：None的别称，用于增加一个维度。<br>np.inf：IEEE 754 浮点表示（正）无穷大。<br>np.infinity：IEEE 754 浮点表示（正）无穷大。<br>np.infty：IEEE 754浮点表示（正）无穷大。<br>np.pinf：IEEE 754 浮点表示（正）无穷大。<br>np.ninf：IEEE 754 浮点表示负无穷大。<br>np.nan：IEEE 754 浮点表示非数字（NaN）。<br>np.pzero：IEEE 754 浮点表示正零。<br>np.nzero：IEEE 754 浮点表示负零。<br>np.isnan(item)：查看item是否为nan值。<br>np.isinf(item) : 显示item元素是否为正或负无穷大。<br>np.isposinf(item) : 显示item元素是否为正无穷大。<br>np.isneginf(item) : 显示item元素是否为负无穷大。<br>np.isnan(item) : 显示item元素是否不是数字。<br>np.isfinite(item) : 显示item元素是否为有限的（不是非数字，正无穷大和负无穷大中的一个）<br>np.nan_to_num(x)：使用0代替数组x中的nan元素，使用有限的数字代替inf元素。<br>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)：对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出；return_index=True返回新列表元素在旧列表中的位置，并以列表形式储存；return_inverse=True返回旧列表元素在新列表中的位置，并以列表形式储存；return_count=True对独特值进行计数。<br>np.digitize(x, bins, right = False)：获得属于数组的每个值的bin的索引数组。<br>np.searchsorted(a, x)：输出x在a中所处数字间的间隔代号。<br>np.sort(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序，会影响列表本身。<br>np.sorted(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序， 不会影响列表本身。<br>np.clip(a, a_min, a_max)：将a的范围限制到[a_min, a_max]之间。<br>np.intersect1d(a1, a2, assume_unique=False)：返回a1中和a2共有的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.setdiff1d(a1, a2, assume_unique=False)：返回a1中和a2差异的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.convolve(a, b, mode=‘full’)：对数组a，b进行卷积运算。<br>np.interp(x, xp, fp)：给定1维数据x中插入点(xp, fp)。<br>np.allclose(a, b)：比较两个array是不是每一元素都相等，默认在1e-05的误差范围内。<br>numpy.trunc(x, /, out=None, *, where=True, casting=’same_kind’, order=’K’, dtype=None, subok=True[, signature, extobj])：以元素方式返回输入的截断值。标量x的截断值是最接近的整数i，它比x更接近零。简而言之，丢弃带符号数x的小数部分。</li>
-</ul>
-<hr>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>Note</tag>
-        <tag>Numpy</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>mariaDB语法笔记</title>
     <url>/2020/04/20/operation-for-mariadb/</url>
     <content><![CDATA[<p><strong><em>对mariaDB操作的记录</em></strong></p>
@@ -1122,6 +1077,72 @@
       <tags>
         <tag>Note</tag>
         <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>numpy库中的repeat和tile</title>
+    <url>/2020/03/19/repeat-and-tile/</url>
+    <content><![CDATA[<p><strong><em>numpy.repeat()与numpy.tile()的区别</em></strong><br>两个方法都是赋值原数组进行扩展，但细节略微不同，repeat还有一种初始化数组的方法。</p>
+<a id="more"></a>
+<hr>
+<h2 id="np-repeat-a-repeat-axis-None"><a href="#np-repeat-a-repeat-axis-None" class="headerlink" title="np.repeat(a, repeat, axis=None)"></a>np.repeat(a, repeat, axis=None)</h2><h2 id="a-repeat-repeat-axis-None"><a href="#a-repeat-repeat-axis-None" class="headerlink" title="a.repeat(repeat, axis=None)"></a>a.repeat(repeat, axis=None)</h2><ul>
+<li>将a数组进行repeat倍扩充，axis=0时进行纵向扩充，axis=1时进行横向扩充，为设置时进项扁平化处理,不改变自身。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;np.repeat(<span class="number">2</span>, <span class="number">9</span>)</span><br><span class="line">array([<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">8</span>).reshape(<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.repeat(<span class="number">2</span>)</span><br><span class="line">array([<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">7</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.repeat(<span class="number">2</span>, <span class="number">0</span>)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.repeat(<span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">7</span>]])</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="np-tile-a-tile"><a href="#np-tile-a-tile" class="headerlink" title="np.tile(a, tile)"></a>np.tile(a, tile)</h2><ul>
+<li>对数字进行tile倍<u>轮流扩充</u>，不改变自身。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">8</span>).reshape(<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.tile(a, <span class="number">2</span>)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]])</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Numpy</tag>
+        <tag>DL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>numpy 基本使用</title>
+    <url>/2020/03/14/numpy-function/</url>
+    <content><![CDATA[<p><strong><em>对Numpy库中的函数进行整理</em></strong><br>学习DL途中对于numpy的一个粗略整理，部分函数只给出常用参数，之后可能会跳出其中几个复杂的做详细记录。</p>
+<a id="more"></a>
+<hr>
+<h2 id="查看数组属性"><a href="#查看数组属性" class="headerlink" title="查看数组属性"></a>查看数组属性</h2><ul>
+<li><strong>函数及其功能</strong><br>a.ndim：维度。<br>a.shape：改变自身各维度的尺度。<br>a.size：元素的个数。<br>a.dtype：元素的类型。<br>a.itemsize：每个元素的大小。</li>
+</ul>
+<hr>
+<h2 id="数组的初始化"><a href="#数组的初始化" class="headerlink" title="数组的初始化"></a>数组的初始化</h2><ul>
+<li><strong>函数及其功能</strong><br>np.array(a)/np.ndarray(shape, dtype)：初始化数组a。<br>np.arange(start, end, distance, dtype=None)：由[start, end)创建一个步进为distance的行数组。<br>np.ones((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的1数组。<br>np.zeros((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的0数组。<br>np.full((shape), val, dtype=None)：创建shape大小，内涵dtype类型val的填充数组。<br>np.empty((shape), dtype=np.float64)：生成一个shape大小，dtype类型含无意义数的数组。<br>np.eye(n, dtype=np.float64)：创建一个n*n，dtype类型的单位数组。<br>np.ones_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的1数组。<br>np.zeros_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的0数组。<br>np.full_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型fill_value的数组。<br>np.empty_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型无意义值的数组。<br>np.linspace(start, end, distance)：由[start, end)区间等间距地生成数组.<br>np.set_printoptions(precision=None, threshold=None)：设置所有数组的精度和打印位数。</li>
+</ul>
+<hr>
+<h2 id="数组的合并"><a href="#数组的合并" class="headerlink" title="数组的合并"></a>数组的合并</h2><ul>
+<li><strong>函数及其功能</strong><br>np.concatenate((a, b), axis=0):将b沿着垂直方向（axis=0）或者水平方向（axis=1）与a进行合并。<br>np.vstack((a, b))：沿着竖直方向将数组堆叠起来。<br>np.hstack((a, b))：沿着水平方向将数组堆叠起来。<br>np.c_(a, b)：将列向量进行连接。<br>np.r_(a, b)：将行向量进行链接。</li>
+</ul>
+<hr>
+<h2 id="数组的维度操作"><a href="#数组的维度操作" class="headerlink" title="数组的维度操作"></a>数组的维度操作</h2><ul>
+<li><strong>函数及其功能</strong><br>a.reshape(shape) : 不改变当前数组，依shape生成。<br>a.resize(shape) : 改变当前数组，依shape生成。<br>a.swapaxes(ax1, ax2) : 将两个维度调换。<br>a.flatten() : 对数组进行降维，返回折叠后的一维数组。<br>a.ravel()：对数组进行降维，不会产生源数据的副本。<br>a.squeeze()：对数组进行降维，只能对维数为1的维度降维。<br>np.newaxis：增加一个维度。<br>a.repeat(repeat, axis=None)：将a数组进行repeat倍扩充，axis=0时进行纵向扩充，axis=1时进行横向扩充，为设置时进项扁平化处理。<br>np.repeat(x, y)：创建一个数组，内含y个x。<br>np.tile(a, tile)：对数字进行轮流扩充，将原数据最大单元看做一个单元，将形状变为tile的形状。<br>np.asscalar(a)：将只有一个元素的数组a，转化成标量值。</li>
+</ul>
+<hr>
+<h2 id="数组的类型变换"><a href="#数组的类型变换" class="headerlink" title="数组的类型变换"></a>数组的类型变换</h2><ul>
+<li><strong>函数及其功能</strong><br>a.asarray(b)：将一个非numpy数组的元素转变为numpy数组。<br>a.astype(new_type) : 数据类型的转换。<br>a.tolist()：数组向列表的转换。</li>
+</ul>
+<hr>
+<h2 id="数组的运算操作"><a href="#数组的运算操作" class="headerlink" title="数组的运算操作"></a>数组的运算操作</h2><ul>
+<li><strong>函数及其功能</strong><br>a.transpose()/a.T()：求a矩阵的转置矩阵。<br>np.abs(a)/np.fabs(a)/np.absolute(a): 取各元素的绝对值。<br>np.sqrt(a): 计算各元素的平方根。<br>np.square(a): 计算各元素的平方。<br>np.log(a): 计算以e为底，a的对数。<br>np.log10(a)：计算以10为底，a的对数。<br>np.log2(a)：计算以2为底，a的对数。<br>np.ceil(a)：返回输入值的上限，向上取整。<br>np.floor(a): 返回不大于输入参数的最大整数，向下取整。<br>np.around(a, decimals=0): 返回各元素四舍五入的值，decimals指定保留至小数点后xx位，如果为负，整数将四舍五入到小数点左侧的位置，与round()函数类似。<br>np.exp(a): 计算各元素的指数值。<br>np.sign(a): 计算各元素的符号值 1（+），0，-1（-）。<br>a.copy()：将a进行深复制。<br>a.view()：将a进行浅复制。<br>np.copysign(a, b): 将b中各元素的符号赋值给数组a的对应元素。<br>np.mod(a, b): 元素级的模运算。<br>np.dot(a, b)：对矩阵进行点乘运算。<br>np.sin(a)：计算a的正弦。<br>np.cos(a)：计算a的余弦。<br>np.tan(a)：计算a的正切。<br>np.cov(x)：求协方差。<br>np.corrcoef(x, y)：求x，y相关系数。<br>np.logical_and(x, y)：返回x和y逻辑与之后的结果。<br>np.logical_or(x, y)：返回x和y逻辑或之后的结果。<br>np.logical_not(x, y)：返回x和y逻辑非之后的结果。<br>np.logical_xor(x, y)：返回x和y逻辑异或之后的结果。<br>np.vectorize(myfunc, otype)：定义了一个矢量函数myfunc，输入是嵌套化的对象序列或者是numpy数组，输出是单个或元组的numpy数组，otype指定输出值的类型。<br>np.gradient(a)：计算数组a中元素的梯度。<br>numpy.linalg.solve(a, b)：返回矩阵方程ax=b的解。<br>numpy.linalg.norm(a, ord=2)：求矩阵a的范数，ord=1求一范数，ord=2求二范数，ord=np.inf求无穷范数，当a为两个数组相减的表达式时是计算欧氏距离。</li>
+</ul>
+<hr>
+<h2 id="随机数函数"><a href="#随机数函数" class="headerlink" title="随机数函数"></a>随机数函数</h2><ul>
+<li><strong>函数及其功能</strong><br>np.random.seed(s)：随机数种子，使用下面的随机方法前最好设置一个随机数种子。<br>np.random.rand(d0, d1, …,dn)：各元素是[0, 1）的浮点数，服从均匀分布。<br>np.random.randn(d0, d1, …,dn)：标准正态分布。<br>np.random.randint(low，high=None, size)：创建size个随机整数或整数数组，范围是[low, high），如果没有写参数high的值，则返回[0,low)的值。<br>np.random.shuffle(a)：根据数组a的第一轴进行随机排列，改变数组a。<br>np.random.permutation(a)：根据数组a的第一轴进行随机排列，但是不改变原数组，将生成新数组。<br>np.random.choice(a, size, replace=False, p)：从一维数组a中以概率p抽取元素， 形成size形状新数组，replace表示是否可以重用元素，默认为False。<br>np.random.uniform(low, high, size)：产生均匀分布的数组，起始值为low，high为结束值，size为形状。<br>np.random.normal(loc, scale, size)：产生正态分布的数组，loc为均值，scale为标准差，size为形状。<br>np.random.poisson(lam, size)：产生泊松分布的数组，lam随机事件发生概率，size为形状。</li>
+</ul>
+<hr>
+<h2 id="统计函数"><a href="#统计函数" class="headerlink" title="统计函数"></a>统计函数</h2><ul>
+<li><strong>函数及其功能</strong><br>np.diff(a, n=1, axis=1)：沿着指定轴计算第N维的离散差值（执行的是后一个元素减去前一个元素）。<br>np.sum(a, axis = None)：依给定轴axis计算数组a相关元素之和，axis为整数或者元组。<br>numpy.cumsum(a, axis=None, dtype=None)：按照所给定的轴参数返回元素的梯形累计和(后一个加上前面元素的累加和)，axis=0，按照行累加。axis=1，按照列累加。axis不给定具体值，就把numpy数组当成一个一维数组。<br>numpy.ufunc.accumulate(a, axis=0, dtype=None)：照所给定的轴参数返回根据ufunc进行计算的元素的梯形累计，ufunc可以是add，multiply等。<br>np.mean(a)：返回数组元素中的均值。<br>np.average(a, axis =None, weights=None)：依给定轴axis计算数组a相关元素的加权平均值。<br>np.median(a, axis=None)：计算数组的中位数。<br>np.std(a, axis=None)：计算数组的标准差，axis=0时计算每一列的标砖茶，axis=1计算每一行的标准差。<br>a.var()：计算数组的方差。<br>np.max(a, axis=0)：寻找数组中的最大值。<br>np.min(a, axis=0)：寻找数组中的最小值。<br>np.maximum(a, b)/np.fmax()：a,b逐位比较（或者计算）元素级的最大值。<br>np.minimum(a, b)/np.fmin()：a,b逐位比较（或者计算）元素级的最小值。<br>np.argmax(a, axis=None)：沿axis返回最大值的索引。<br>np.argmin(a, axis=None)：沿axis返回最小值的索引。<br>np.argsort(a, axis=None)：返回的是数组值从小到大的索引值。<br>np.argpartition(a, kth)：是将第k大的数字，放在第k个位置。类似于快排找第k大的数，堆其它数不做排序。<br>np.amin(a，axis=None)：返回一维数组a中的最小值，二维数组需通过axis指定行或列，获取行（1）或列（0）的最小值，如不指定，则是所有元素的最小值 。<br>np.amax(a, axis=None)：返回一维数组a中的最大值，二维数组需通过axis指定行（1）或列（0），获取行或列的最大值，如不指定，则是所有元素的最大值。<br>numpy.apply_along_axis(func, axis, arr)：func指定转换方法，axis指定按行（1）运算还是按列（0）运算，arr指定数组。<br>np.nonzero(a)：返回数组a中非零元素的索引值数组。<br>np.percentile(a, percent)：返回数组中第percent%位置的浮点数。<br>(expression).all()：两个数组进行比较时如果所有元素根据expression都为True则返回True。<br>(expression).any()：两个数组进行比较时如果任意元素根据expression都为True则返回True。<br>np.bincount(a)：统计a中[min, max]之间各个数字的出现次数。<br>np.where(condition, x, y)：当condition为True时输出x，否则输出y。<br>np.where(condition)：当筛选满足condition条件的元素。<br>np.argwhere(expression)：返回非0的数组位置的索引，其中expression是要索引数组的条件，非0数组指的时expression中左值对应的数组。<br>a.ptp()：计算数组元素最大值与最小值的差。<br>np.pi：数学中的π。<br>numpy.euler_gamma：数学中的伽马。<br>np.e：欧拉的常数，自然对数的基础，纳皮尔的常数<br>np.newaxis：None的别称，用于增加一个维度。<br>np.inf：IEEE 754 浮点表示（正）无穷大。<br>np.infinity：IEEE 754 浮点表示（正）无穷大。<br>np.infty：IEEE 754浮点表示（正）无穷大。<br>np.pinf：IEEE 754 浮点表示（正）无穷大。<br>np.ninf：IEEE 754 浮点表示负无穷大。<br>np.nan：IEEE 754 浮点表示非数字（NaN）。<br>np.pzero：IEEE 754 浮点表示正零。<br>np.nzero：IEEE 754 浮点表示负零。<br>np.isnan(item)：查看item是否为nan值。<br>np.isinf(item) : 显示item元素是否为正或负无穷大。<br>np.isposinf(item) : 显示item元素是否为正无穷大。<br>np.isneginf(item) : 显示item元素是否为负无穷大。<br>np.isnan(item) : 显示item元素是否不是数字。<br>np.isfinite(item) : 显示item元素是否为有限的（不是非数字，正无穷大和负无穷大中的一个）<br>np.nan_to_num(x)：使用0代替数组x中的nan元素，使用有限的数字代替inf元素。<br>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)：对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出；return_index=True返回新列表元素在旧列表中的位置，并以列表形式储存；return_inverse=True返回旧列表元素在新列表中的位置，并以列表形式储存；return_count=True对独特值进行计数。<br>np.digitize(x, bins, right = False)：获得属于数组的每个值的bin的索引数组。<br>np.searchsorted(a, x)：输出x在a中所处数字间的间隔代号。<br>np.sort(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序，会影响列表本身。<br>np.sorted(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序， 不会影响列表本身。<br>np.clip(a, a_min, a_max)：将a的范围限制到[a_min, a_max]之间。<br>np.intersect1d(a1, a2, assume_unique=False)：返回a1中和a2共有的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.setdiff1d(a1, a2, assume_unique=False)：返回a1中和a2差异的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.convolve(a, b, mode=‘full’)：对数组a，b进行卷积运算。<br>np.interp(x, xp, fp)：给定1维数据x中插入点(xp, fp)。<br>np.allclose(a, b)：比较两个array是不是每一元素都相等，默认在1e-05的误差范围内。<br>numpy.trunc(x, /, out=None, *, where=True, casting=’same_kind’, order=’K’, dtype=None, subok=True[, signature, extobj])：以元素方式返回输入的截断值。标量x的截断值是最接近的整数i，它比x更接近零。简而言之，丢弃带符号数x的小数部分。</li>
+</ul>
+<hr>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>Note</tag>
+        <tag>Numpy</tag>
       </tags>
   </entry>
   <entry>
@@ -1560,24 +1581,143 @@
       </tags>
   </entry>
   <entry>
-    <title>numpy库中的repeat和tile</title>
-    <url>/2020/03/19/repeat-and-tile/</url>
-    <content><![CDATA[<p><strong><em>numpy.repeat()与numpy.tile()的区别</em></strong><br>两个方法都是赋值原数组进行扩展，但细节略微不同，repeat还有一种初始化数组的方法。</p>
+    <title>mariaDB符号</title>
+    <url>/2020/04/21/sign-for-mariadb/</url>
+    <content><![CDATA[<p><strong><em>对mariaDB操作符的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
 <a id="more"></a>
 <hr>
-<h2 id="np-repeat-a-repeat-axis-None"><a href="#np-repeat-a-repeat-axis-None" class="headerlink" title="np.repeat(a, repeat, axis=None)"></a>np.repeat(a, repeat, axis=None)</h2><h2 id="a-repeat-repeat-axis-None"><a href="#a-repeat-repeat-axis-None" class="headerlink" title="a.repeat(repeat, axis=None)"></a>a.repeat(repeat, axis=None)</h2><ul>
-<li>将a数组进行repeat倍扩充，axis=0时进行纵向扩充，axis=1时进行横向扩充，为设置时进项扁平化处理,不改变自身。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt;np.repeat(<span class="number">2</span>, <span class="number">9</span>)</span><br><span class="line">array([<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">8</span>).reshape(<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.repeat(<span class="number">2</span>)</span><br><span class="line">array([<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">7</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.repeat(<span class="number">2</span>, <span class="number">0</span>)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.repeat(<span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">7</span>]])</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><strong>比较运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">编号</th>
+<th align="center">比较运算符</th>
+<th align="center">描述</th>
+<th align="center">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">=</td>
+<td align="center">比较等于</td>
+<td align="center">select * from students where id=100</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">&lt;=&gt;</td>
+<td align="center">比较等于(安全比较NULL值)</td>
+<td align="center">select * from students where student_name&lt;=&gt;’Maxsu’</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">&lt;&gt;</td>
+<td align="center">比较不等于</td>
+<td align="center">select * from students where student_name&lt;&gt;’Maxsu’</td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="center">!=</td>
+<td align="center">比较不等于</td>
+<td align="center">select * from students where student_name!=’Maxsu’</td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="center">&gt;</td>
+<td align="center">比较大于</td>
+<td align="center">select * from students where student_id&gt;5</td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="center">&gt;=</td>
+<td align="center">比较大于或等于</td>
+<td align="center">select * from students where student_id&gt;=5</td>
+</tr>
+<tr>
+<td align="center">7</td>
+<td align="center">&lt;</td>
+<td align="center">比较小于</td>
+<td align="center">select * from students where student_id&lt;5</td>
+</tr>
+<tr>
+<td align="center">8</td>
+<td align="center">&lt;=</td>
+<td align="center">比较小于或等于</td>
+<td align="center">select * from students where student_id&lt;=5</td>
+</tr>
+<tr>
+<td align="center">9</td>
+<td align="center">in ( )</td>
+<td align="center">匹配列表中的值</td>
+<td align="center">select * from students where student_id IN(1,3,6)</td>
+</tr>
+<tr>
+<td align="center">10</td>
+<td align="center">not</td>
+<td align="center">否定一个条件</td>
+<td align="center">select * from students where student_id  NOT IN(1,3,6)</td>
+</tr>
+<tr>
+<td align="center">11</td>
+<td align="center">between</td>
+<td align="center">匹配在一个范围内(含)</td>
+<td align="center">select * from students where student_id between 1 AND 3)</td>
+</tr>
+<tr>
+<td align="center">12</td>
+<td align="center">is null</td>
+<td align="center">判断是否为NULL值</td>
+<td align="center">select * from students where student_address IS NULL</td>
+</tr>
+<tr>
+<td align="center">13</td>
+<td align="center">is not null</td>
+<td align="center">判断是否为非NULL值</td>
+<td align="center">select * from students where student_address IS NOT NULL</td>
+</tr>
+<tr>
+<td align="center">14</td>
+<td align="center">like</td>
+<td align="center">与%和_模式匹配</td>
+<td align="center">select * from students where student_name LIKE ‘Ma%’</td>
+</tr>
+<tr>
+<td align="center">15</td>
+<td align="center">exists</td>
+<td align="center">如果子查询返回至少一行，则满足条件。</td>
+<td align="center">—</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>Union运算符</strong></p>
+<ul>
+<li>UNION运算符用于组合两个或更多SELECT语句的结果集。它删除各种SELECT语句之间的重复行。</li>
+<li>UNION运算符中的每个SELECT语句在具有相似数据类型的结果集中必须具有相同数量的字段。</li>
+<li>使用ORDER BY子句的UNION运算符从两个表中检索多个列。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions]  </span><br><span class="line"><span class="keyword">UNION</span> [<span class="keyword">DISTINCT</span>]  </span><br><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>Union All运算符</strong></p>
+<ul>
+<li>UNION ALL操作符与UNION操作符相同，但不会删除重复的记录。它返回查询中的所有行，并且不删除各种SELECT语句之间的重复行。</li>
+<li>UNION All运算符中的每个SELECT语句在具有相似数据类型的结果集中必须具有相同数量的字段。</li>
+<li>使用ORDER BY子句的UNION运算符从两个表中检索多个列。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions]  </span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span>  </span><br><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>Intersect运算符</strong></p>
+<ul>
+<li>INTERSECT运算符用于返回2个或更多表的交集。 如果两个表中都存在记录，它将被包含在INTERSECT结果中。 否则，它将从INTERSECT结果中被省略。</li>
+<li>MariaDB不支持INTERSECT运算符，但是通过使用IN运算符来模拟INTERSECT查询，可以看到相同的结果，如下示例中所示。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions]  </span><br><span class="line"><span class="keyword">INTERSECT</span>  </span><br><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
-<h2 id="np-tile-a-tile"><a href="#np-tile-a-tile" class="headerlink" title="np.tile(a, tile)"></a>np.tile(a, tile)</h2><ul>
-<li>对数字进行tile倍<u>轮流扩充</u>，不改变自身。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">8</span>).reshape(<span class="number">2</span>, <span class="number">4</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.tile(a, <span class="number">2</span>)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],</span><br><span class="line">       [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>]])</span><br></pre></td></tr></table></figure></li>
+</li>
 </ul>
 ]]></content>
       <tags>
         <tag>Note</tag>
-        <tag>Numpy</tag>
-        <tag>DL</tag>
+        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -2143,203 +2283,7 @@
       </tags>
   </entry>
   <entry>
-    <title>股票爬虫实例</title>
-    <url>/2020/04/15/stock-example/</url>
-    <content><![CDATA[<p><strong><em>股票爬虫实例</em></strong></p>
-<a id="more"></a>
-<hr>
-<ul>
-<li><p><strong>功能描述</strong></p>
-<ul>
-<li>目标：获取上交所和深交所所有股票的名称和交易信息</li>
-<li>输出：保存到文件中</li>
-<li>技术路线：<blockquote>
-<p>requests<br>bs4<br>re</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>候选数据网站的选择</strong></p>
-<blockquote>
-<p>新浪股票：<a href="http://finance.sina.com.cn/stock/" target="_blank" rel="noopener">http://finance.sina.com.cn/stock/</a><br>百度股票：<a href="https://gupiao.baidu.com/stock/" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/</a></p>
-</blockquote>
-<ul>
-<li>选取原则：股票信息静态存在于HTML页面中，非js代码生成,没有Robots协议限制</li>
-<li>选取方法：浏览器 F12，源代码查看等</li>
-<li>选取心态：不要纠结于某个网站，多找信息源尝试</li>
-</ul>
-</li>
-<li><p><strong>数据网站的确定</strong></p>
-<ul>
-<li>获取股票列表：<blockquote>
-<p>东方财富网：<a href="http://quote.eastmoney.com/stocklist.html" target="_blank" rel="noopener">http://quote.eastmoney.com/stocklist.html</a></p>
-</blockquote>
-</li>
-<li>获取个股信息：<blockquote>
-<p>百度股票：<a href="https://gupiao.baidu.com/stock/" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/</a><br>单个股票：<a href="https://gupiao.baidu.com/stock/sz002439.html" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/sz002439.html</a></p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>程序的结构设计</strong></p>
-<blockquote>
-<p>步骤1：从东方财富网获取股票列表<br>步骤2：根据股票列表逐个到百度股票获取个股信息<br>步骤3：将结果存储到文件</p>
-</blockquote>
-</li>
-<li><p><strong>程序代码（已经优化）</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> traceback</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认设置为utf-8编码，使用apparent_encoding会花费更多时间</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span><span class="params">(url, code=<span class="string">"utf-8"</span>)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = code</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getStockList</span><span class="params">(lst, stockURL)</span>:</span></span><br><span class="line">    html = getHTMLText(stockURL, <span class="string">"GB2312"</span>)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>) </span><br><span class="line">    a = soup.find_all(<span class="string">'a'</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            href = i.attrs[<span class="string">'href'</span>]</span><br><span class="line">            lst.append(re.findall(<span class="string">r"[s][hz]\d&#123;6&#125;"</span>, href)[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加动态速度</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getStockInfo</span><span class="params">(lst, stockURL, fpath)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> stock <span class="keyword">in</span> lst:</span><br><span class="line">        url = stockURL + stock + <span class="string">".html"</span></span><br><span class="line">        html = getHTMLText(url)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span> html==<span class="string">""</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            infoDict = &#123;&#125;</span><br><span class="line">            soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">            stockInfo = soup.find(<span class="string">'div'</span>,attrs=&#123;<span class="string">'class'</span>:<span class="string">'stock-bets'</span>&#125;)</span><br><span class="line"></span><br><span class="line">            name = stockInfo.find_all(attrs=&#123;<span class="string">'class'</span>:<span class="string">'bets-name'</span>&#125;)[<span class="number">0</span>]</span><br><span class="line">            infoDict.update(&#123;<span class="string">'股票名称'</span>: name.text.split()[<span class="number">0</span>]&#125;)</span><br><span class="line">            </span><br><span class="line">            keyList = stockInfo.find_all(<span class="string">'dt'</span>)</span><br><span class="line">            valueList = stockInfo.find_all(<span class="string">'dd'</span>)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(keyList)):</span><br><span class="line">                key = keyList[i].text</span><br><span class="line">                val = valueList[i].text</span><br><span class="line">                infoDict[key] = val</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">with</span> open(fpath, <span class="string">'a'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write( str(infoDict) + <span class="string">'\n'</span> )</span><br><span class="line">                count = count + <span class="number">1</span></span><br><span class="line">                print(<span class="string">"\r当前进度: &#123;:.2f&#125;%"</span>.format(count*<span class="number">100</span>/len(lst)),end=<span class="string">""</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            count = count + <span class="number">1</span></span><br><span class="line">            print(<span class="string">"\r当前进度: &#123;:.2f&#125;%"</span>.format(count*<span class="number">100</span>/len(lst)),end=<span class="string">""</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    stock_list_url = <span class="string">'http://quote.eastmoney.com/stocklist.html'</span></span><br><span class="line">    stock_info_url = <span class="string">'http://gupiao.baidu.com/stock/'</span></span><br><span class="line">    output_file = <span class="string">'D:/BaiduStockInfo.txt'</span></span><br><span class="line">    slist=[]</span><br><span class="line">    getStockList(slist, stock_list_url)</span><br><span class="line">    getStockInfo(slist, stock_info_url, output_file)</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Crawler</tag>
-        <tag>Example</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sign for mariadb</title>
-    <url>/2020/04/21/sign-for-mariadb/</url>
-    <content><![CDATA[<p><strong><em>对mariaDB操作符的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
-<a id="more"></a>
-<hr>
-<ul>
-<li><p><strong>比较运算符</strong></p>
-<table>
-<thead>
-<tr>
-<th align="center">编号</th>
-<th align="center">比较运算符</th>
-<th align="center">描述</th>
-<th align="center">示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">1</td>
-<td align="center">=</td>
-<td align="center">比较等于</td>
-<td align="center">select * from students where id=100</td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="center">&lt;=&gt;</td>
-<td align="center">比较等于(安全比较NULL值)</td>
-<td align="center">select * from students where student_name&lt;=&gt;’Maxsu’</td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="center">&lt;&gt;</td>
-<td align="center">比较不等于</td>
-<td align="center">select * from students where student_name&lt;&gt;’Maxsu’</td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="center">!=</td>
-<td align="center">比较不等于</td>
-<td align="center">select * from students where student_name!=’Maxsu’</td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="center">&gt;</td>
-<td align="center">比较大于</td>
-<td align="center">select * from students where student_id&gt;5</td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="center">&gt;=</td>
-<td align="center">比较大于或等于</td>
-<td align="center">select * from students where student_id&gt;=5</td>
-</tr>
-<tr>
-<td align="center">7</td>
-<td align="center">&lt;</td>
-<td align="center">比较小于</td>
-<td align="center">select * from students where student_id&lt;5</td>
-</tr>
-<tr>
-<td align="center">8</td>
-<td align="center">&lt;=</td>
-<td align="center">比较小于或等于</td>
-<td align="center">select * from students where student_id&lt;=5</td>
-</tr>
-<tr>
-<td align="center">9</td>
-<td align="center">in ( )</td>
-<td align="center">匹配列表中的值</td>
-<td align="center">select * from students where student_id IN(1,3,6)</td>
-</tr>
-<tr>
-<td align="center">10</td>
-<td align="center">not</td>
-<td align="center">否定一个条件</td>
-<td align="center">select * from students where student_id  NOT IN(1,3,6)</td>
-</tr>
-<tr>
-<td align="center">11</td>
-<td align="center">between</td>
-<td align="center">匹配在一个范围内(含)</td>
-<td align="center">select * from students where student_id between 1 AND 3)</td>
-</tr>
-<tr>
-<td align="center">12</td>
-<td align="center">is null</td>
-<td align="center">判断是否为NULL值</td>
-<td align="center">select * from students where student_address IS NULL</td>
-</tr>
-<tr>
-<td align="center">13</td>
-<td align="center">is not null</td>
-<td align="center">判断是否为非NULL值</td>
-<td align="center">select * from students where student_address IS NOT NULL</td>
-</tr>
-<tr>
-<td align="center">14</td>
-<td align="center">like</td>
-<td align="center">与%和_模式匹配</td>
-<td align="center">select * from students where student_name LIKE ‘Ma%’</td>
-</tr>
-<tr>
-<td align="center">15</td>
-<td align="center">exists</td>
-<td align="center">如果子查询返回至少一行，则满足条件。</td>
-<td align="center">—</td>
-</tr>
-</tbody></table>
-</li>
-<li><p><strong>Union运算符</strong></p>
-<ul>
-<li>UNION运算符用于组合两个或更多SELECT语句的结果集。它删除各种SELECT语句之间的重复行。</li>
-<li>UNION运算符中的每个SELECT语句在具有相似数据类型的结果集中必须具有相同数量的字段。</li>
-<li>使用ORDER BY子句的UNION运算符从两个表中检索多个列。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions]  </span><br><span class="line"><span class="keyword">UNION</span> [<span class="keyword">DISTINCT</span>]  </span><br><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>Union All运算符</strong></p>
-<ul>
-<li>UNION ALL操作符与UNION操作符相同，但不会删除重复的记录。它返回查询中的所有行，并且不删除各种SELECT语句之间的重复行。</li>
-<li>UNION All运算符中的每个SELECT语句在具有相似数据类型的结果集中必须具有相同数量的字段。</li>
-<li>使用ORDER BY子句的UNION运算符从两个表中检索多个列。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions]  </span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span>  </span><br><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>Intersect运算符</strong></p>
-<ul>
-<li>INTERSECT运算符用于返回2个或更多表的交集。 如果两个表中都存在记录，它将被包含在INTERSECT结果中。 否则，它将从INTERSECT结果中被省略。</li>
-<li>MariaDB不支持INTERSECT运算符，但是通过使用IN运算符来模拟INTERSECT查询，可以看到相同的结果，如下示例中所示。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions]  </span><br><span class="line"><span class="keyword">INTERSECT</span>  </span><br><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Mysql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sneior for mariadb</title>
+    <title>mariaDB高级技巧</title>
     <url>/2020/04/21/sneior-for-mariadb/</url>
     <content><![CDATA[<p><strong><em>对mariaDB高级部分的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
 <a id="more"></a>
@@ -2416,6 +2360,30 @@
       </tags>
   </entry>
   <entry>
+    <title>numpy.unique()详解</title>
+    <url>/2020/03/19/unique/</url>
+    <content><![CDATA[<p><strong><em>numpy库里面的unique参数比较多，有些复杂，故整理一下方便以后查阅。</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="np-unique-a-return-index-False-return-inverse-False-return-counts-False-axis-None"><a href="#np-unique-a-return-index-False-return-inverse-False-return-counts-False-axis-None" class="headerlink" title="np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)"></a>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)</h2><ul>
+<li>对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.unique(a)</span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure></li>
+<li>return_index=True<u>返回新列表元素在旧列表中的位置</u>，并以列表形式储存。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b,s = np.unique(a, return_index=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(b)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(s)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">4</span> <span class="number">5</span> <span class="number">3</span>]</span><br></pre></td></tr></table></figure></li>
+<li>return_inverse=True<u>返回旧列表元素在新列表中的位置</u>，并以列表形式储存。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>c,s,p = np.unique(a, return_index=<span class="literal">True</span>, return_inverse=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(c)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(s)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">4</span> <span class="number">5</span> <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(p)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">1</span> <span class="number">4</span> <span class="number">2</span> <span class="number">3</span> <span class="number">2</span>]</span><br></pre></td></tr></table></figure></li>
+<li>return_count=True对独特值进行计数。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d,q = np.unique(a, return_counts=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(d)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(q)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">2</span> <span class="number">1</span> <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li>参考自<a href="https://blog.csdn.net/yangyuwen_yang/article/details/79193770" target="_blank" rel="noopener">https://blog.csdn.net/yangyuwen_yang/article/details/79193770</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Numpy</tag>
+        <tag>独特值相关计算</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>淘宝爬虫实例</title>
     <url>/2020/04/14/tb-example/</url>
     <content><![CDATA[<p><strong><em>淘宝爬虫实例</em></strong></p>
@@ -2465,6 +2433,62 @@
       </tags>
   </entry>
   <entry>
+    <title>股票爬虫实例</title>
+    <url>/2020/04/15/stock-example/</url>
+    <content><![CDATA[<p><strong><em>股票爬虫实例</em></strong></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><p><strong>功能描述</strong></p>
+<ul>
+<li>目标：获取上交所和深交所所有股票的名称和交易信息</li>
+<li>输出：保存到文件中</li>
+<li>技术路线：<blockquote>
+<p>requests<br>bs4<br>re</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>候选数据网站的选择</strong></p>
+<blockquote>
+<p>新浪股票：<a href="http://finance.sina.com.cn/stock/" target="_blank" rel="noopener">http://finance.sina.com.cn/stock/</a><br>百度股票：<a href="https://gupiao.baidu.com/stock/" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/</a></p>
+</blockquote>
+<ul>
+<li>选取原则：股票信息静态存在于HTML页面中，非js代码生成,没有Robots协议限制</li>
+<li>选取方法：浏览器 F12，源代码查看等</li>
+<li>选取心态：不要纠结于某个网站，多找信息源尝试</li>
+</ul>
+</li>
+<li><p><strong>数据网站的确定</strong></p>
+<ul>
+<li>获取股票列表：<blockquote>
+<p>东方财富网：<a href="http://quote.eastmoney.com/stocklist.html" target="_blank" rel="noopener">http://quote.eastmoney.com/stocklist.html</a></p>
+</blockquote>
+</li>
+<li>获取个股信息：<blockquote>
+<p>百度股票：<a href="https://gupiao.baidu.com/stock/" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/</a><br>单个股票：<a href="https://gupiao.baidu.com/stock/sz002439.html" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/sz002439.html</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>程序的结构设计</strong></p>
+<blockquote>
+<p>步骤1：从东方财富网获取股票列表<br>步骤2：根据股票列表逐个到百度股票获取个股信息<br>步骤3：将结果存储到文件</p>
+</blockquote>
+</li>
+<li><p><strong>程序代码（已经优化）</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> traceback</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认设置为utf-8编码，使用apparent_encoding会花费更多时间</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span><span class="params">(url, code=<span class="string">"utf-8"</span>)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = code</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getStockList</span><span class="params">(lst, stockURL)</span>:</span></span><br><span class="line">    html = getHTMLText(stockURL, <span class="string">"GB2312"</span>)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>) </span><br><span class="line">    a = soup.find_all(<span class="string">'a'</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            href = i.attrs[<span class="string">'href'</span>]</span><br><span class="line">            lst.append(re.findall(<span class="string">r"[s][hz]\d&#123;6&#125;"</span>, href)[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加动态速度</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getStockInfo</span><span class="params">(lst, stockURL, fpath)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> stock <span class="keyword">in</span> lst:</span><br><span class="line">        url = stockURL + stock + <span class="string">".html"</span></span><br><span class="line">        html = getHTMLText(url)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span> html==<span class="string">""</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            infoDict = &#123;&#125;</span><br><span class="line">            soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">            stockInfo = soup.find(<span class="string">'div'</span>,attrs=&#123;<span class="string">'class'</span>:<span class="string">'stock-bets'</span>&#125;)</span><br><span class="line"></span><br><span class="line">            name = stockInfo.find_all(attrs=&#123;<span class="string">'class'</span>:<span class="string">'bets-name'</span>&#125;)[<span class="number">0</span>]</span><br><span class="line">            infoDict.update(&#123;<span class="string">'股票名称'</span>: name.text.split()[<span class="number">0</span>]&#125;)</span><br><span class="line">            </span><br><span class="line">            keyList = stockInfo.find_all(<span class="string">'dt'</span>)</span><br><span class="line">            valueList = stockInfo.find_all(<span class="string">'dd'</span>)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(keyList)):</span><br><span class="line">                key = keyList[i].text</span><br><span class="line">                val = valueList[i].text</span><br><span class="line">                infoDict[key] = val</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">with</span> open(fpath, <span class="string">'a'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write( str(infoDict) + <span class="string">'\n'</span> )</span><br><span class="line">                count = count + <span class="number">1</span></span><br><span class="line">                print(<span class="string">"\r当前进度: &#123;:.2f&#125;%"</span>.format(count*<span class="number">100</span>/len(lst)),end=<span class="string">""</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            count = count + <span class="number">1</span></span><br><span class="line">            print(<span class="string">"\r当前进度: &#123;:.2f&#125;%"</span>.format(count*<span class="number">100</span>/len(lst)),end=<span class="string">""</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    stock_list_url = <span class="string">'http://quote.eastmoney.com/stocklist.html'</span></span><br><span class="line">    stock_info_url = <span class="string">'http://gupiao.baidu.com/stock/'</span></span><br><span class="line">    output_file = <span class="string">'D:/BaiduStockInfo.txt'</span></span><br><span class="line">    slist=[]</span><br><span class="line">    getStockList(slist, stock_list_url)</span><br><span class="line">    getStockInfo(slist, stock_info_url, output_file)</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Crawler</tag>
+        <tag>Example</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>where和argwhere详解</title>
     <url>/2020/03/21/where-argwhere/</url>
     <content><![CDATA[<p><strong><em>学习Numpy发现np.where()使用有一些难点，顺便一块将np.argsort()进行整理</em></strong></p>
@@ -2491,30 +2515,6 @@
         <tag>Python</tag>
         <tag>Note</tag>
         <tag>Numpy</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>numpy.unique()详解</title>
-    <url>/2020/03/19/unique/</url>
-    <content><![CDATA[<p><strong><em>numpy库里面的unique参数比较多，有些复杂，故整理一下方便以后查阅。</em></strong></p>
-<a id="more"></a>
-<hr>
-<h2 id="np-unique-a-return-index-False-return-inverse-False-return-counts-False-axis-None"><a href="#np-unique-a-return-index-False-return-inverse-False-return-counts-False-axis-None" class="headerlink" title="np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)"></a>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)</h2><ul>
-<li>对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.unique(a)</span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure></li>
-<li>return_index=True<u>返回新列表元素在旧列表中的位置</u>，并以列表形式储存。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b,s = np.unique(a, return_index=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(b)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(s)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">4</span> <span class="number">5</span> <span class="number">3</span>]</span><br></pre></td></tr></table></figure></li>
-<li>return_inverse=True<u>返回旧列表元素在新列表中的位置</u>，并以列表形式储存。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>c,s,p = np.unique(a, return_index=<span class="literal">True</span>, return_inverse=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(c)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(s)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">4</span> <span class="number">5</span> <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(p)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">1</span> <span class="number">4</span> <span class="number">2</span> <span class="number">3</span> <span class="number">2</span>]</span><br></pre></td></tr></table></figure></li>
-<li>return_count=True对独特值进行计数。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d,q = np.unique(a, return_counts=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(d)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(q)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">2</span> <span class="number">1</span> <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<ul>
-<li>参考自<a href="https://blog.csdn.net/yangyuwen_yang/article/details/79193770" target="_blank" rel="noopener">https://blog.csdn.net/yangyuwen_yang/article/details/79193770</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Numpy</tag>
-        <tag>独特值相关计算</tag>
       </tags>
   </entry>
   <entry>
