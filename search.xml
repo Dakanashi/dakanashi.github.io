@@ -1,6 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>三种不同的Copy方式详解</title>
+    <url>/2020/03/21/Different-Copy/</url>
+    <content><![CDATA[<p><strong><em>Python中的Copy有三种方式——完全不复制、浅复制（试图）、深复制，接下来进行举例讲解。</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="完全不复制（两个对象共同指向一个数据）"><a href="#完全不复制（两个对象共同指向一个数据）" class="headerlink" title="完全不复制（两个对象共同指向一个数据）"></a>完全不复制（两个对象共同指向一个数据）</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">6</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#b的id和a的id相同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b都会保管数据。</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a就是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="keyword">is</span> a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="浅复制（又称试图，发生在np-view和切片操作中）"><a href="#浅复制（又称试图，发生在np-view和切片操作中）" class="headerlink" title="浅复制（又称试图，发生在np.view和切片操作中）"></a>浅复制（又称试图，发生在np.view和切片操作中）</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a[:]   <span class="comment">#或者b = a.view()</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b的id不同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643466911216</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a负责保管数据，b不负责报关数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##a不是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="keyword">is</span> a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改变b的形状不会影响a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.shape=(<span class="number">2</span>, <span class="number">3</span>)<span class="comment"># no.reshape()也是一种浅复制</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#改变b的元素会影响a，即使改变b形状后改变b元素的值也会影响a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">3</span>] = <span class="number">67</span></span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>, <span class="number">67</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">       [<span class="number">67</span>,  <span class="number">4</span>,  <span class="number">5</span>]])</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="深复制"><a href="#深复制" class="headerlink" title="深复制"></a>深复制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a.copy()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">##a和b的id不同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643675206080</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a不是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b各自保管一份不同的数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改变a的元素不会影响b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">2</span>] = <span class="number">90</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>, <span class="number">90</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>BeautifulSoup 解析</title>
+    <url>/2020/04/08/bs4-note/</url>
+    <content><![CDATA[<p><strong><em>爬虫学习中对bs4库的记录</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="BeautifulSoup的安装"><a href="#BeautifulSoup的安装" class="headerlink" title="BeautifulSoup的安装"></a><strong>BeautifulSoup的安装</strong></h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install beautifulsoup4</span><br></pre></td></tr></table></figure>
+
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a><strong>基本使用</strong></h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup<span class="comment"># 注意大小写</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(<span class="string">"&lt;html&gt;data&lt;/html&gt;"</span>, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup2 = BeautifulSoup(open(<span class="string">"/home/john/celitea/demo.html"</span>), <span class="string">"html.parser"</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="基本元素"><a href="#基本元素" class="headerlink" title="基本元素"></a><strong>基本元素</strong></h2><table>
+<thead>
+<tr>
+<th align="center">基本元素</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Tag</td>
+<td align="center">标签,最基本的信息组成单元 ，分别用&lt;&gt;和&lt;/&gt;标明开头和结尾</td>
+</tr>
+<tr>
+<td align="center">Name</td>
+<td align="center">标签的名字，&lt;p&gt;…&lt;/p&gt;的名字是’p’，格式：&lt;tag&gt;.name</td>
+</tr>
+<tr>
+<td align="center">Attributes</td>
+<td align="center">标签的属性，字典形式组织，格式：&lt;tag&gt;.attrs</td>
+</tr>
+<tr>
+<td align="center">NavigableString</td>
+<td align="center">标签内非属性字符串，&lt;&gt;…&lt;/&gt;中字符串，格式：&lt;tag&gt;.string，可跨越嵌套的标签层次</td>
+</tr>
+<tr>
+<td align="center">Comment</td>
+<td align="center">标签内字符串的注释部分，一种特殊的Comment类型</td>
+</tr>
+</tbody></table>
+<ul>
+<li>代码演示<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> requests</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = requests.get(<span class="string">"http://python123.io/ws/demo.html"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>demo = r.text</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>demo</span><br><span class="line"><span class="string">'&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;\r\n&lt;p class="course"&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n&lt;a href="http://www.icourse163.org/course/BIT-268001" class="py1" id="link1"&gt;Basic Python&lt;/a&gt; and &lt;a href="http://www.icourse163.org/course/BIT-1001870001" class="py2" id="link2"&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;\r\n&lt;/body&gt;&lt;/html&gt;'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 任何存在与HTML语法中的标签都可以用soup.&lt;tag&gt;访问获得</span></span><br><span class="line"><span class="comment">#当HTML文档中存在多个想用&lt;tag&gt;对应内容时，soup.&lt;tag&gt;返回第一个</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.title</span><br><span class="line">&lt;title&gt;This is a python demo page&lt;/title&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag = soup.a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 每个&lt;tag&gt;都有自己的名字，通过&lt;tag&gt;.name获取，字符串类型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag = soup.a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.name</span><br><span class="line"><span class="string">'a'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.parent.name</span><br><span class="line"><span class="string">'p'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.parent.parent.name</span><br><span class="line"><span class="string">'body'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个&lt;tag&gt;可以有0或多个属性，字典类型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag = soup.a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag.attrs</span><br><span class="line">&#123;<span class="string">'href'</span>: <span class="string">'http://www.icourse163.org/course/BIT-268001'</span>, <span class="string">'class'</span>: [<span class="string">'py1'</span>], <span class="string">'id'</span>: <span class="string">'link1'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag.attrs[<span class="string">'class'</span>]</span><br><span class="line">[<span class="string">'py1'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag.attrs[<span class="string">'href'</span>]</span><br><span class="line"><span class="string">'http://www.icourse163.org/course/BIT-268001'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(tag.attrs)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">dict</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span><span class="params">(tag)</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> '<span class="title">bs4</span>.<span class="title">element</span>.<span class="title">Tag</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"># <span class="title">NavigableString</span>可以跨越多个层次</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">soup</span>.<span class="title">a</span></span></span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.string</span><br><span class="line"><span class="string">'Basic Python'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.p</span><br><span class="line">&lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.p.string</span><br><span class="line"><span class="string">'The demo python introduces several python courses.'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(soup.p.string)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">bs4</span>.<span class="title">element</span>.<span class="title">NavigableString</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"># <span class="title">Comment</span>是一种特殊类型</span></span><br><span class="line">&gt;&gt;&gt; newsoup = BeautifulSoup("&lt;b&gt;&lt;!--This is a comment--&gt;&lt;/b&gt;&lt;p&gt;This is not a comment&lt;/p&gt;", "html.parser")</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>newsoup.b.string</span><br><span class="line"><span class="string">'This is a comment'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(newsoup.b.string)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">bs4</span>.<span class="title">element</span>.<span class="title">Comment</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">newsoup</span>.<span class="title">p</span>.<span class="title">string</span></span></span><br><span class="line"><span class="class">'<span class="title">This</span> <span class="title">is</span> <span class="title">not</span> <span class="title">a</span> <span class="title">comment</span>'</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span><span class="params">(newsoup.p.string)</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> '<span class="title">bs4</span>.<span class="title">element</span>.<span class="title">NavigableString</span>'&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="HTML内容遍历"><a href="#HTML内容遍历" class="headerlink" title="HTML内容遍历"></a><strong>HTML内容遍历</strong></h2><ul>
+<li><strong>标签树的上层遍历</strong><table>
+<thead>
+<tr>
+<th align="center">属性</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">.parent</td>
+<td align="center">节点的父亲标签</td>
+</tr>
+<tr>
+<td align="center">.parents</td>
+<td align="center">节点先辈标签的迭代类型，用于循环遍历先辈节点</td>
+</tr>
+<tr>
+<td align="center"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.title.parent</span><br><span class="line">&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.html.parent <span class="comment">#html的父辈是其本身</span></span><br><span class="line">&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;</span><br><span class="line">&lt;p class="course"&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt; and &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;&lt;/html&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.parent <span class="comment">#soup本身没有父辈</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用for循环进行上行遍历</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> parent <span class="keyword">in</span> soup.a.parents:</span><br><span class="line">        <span class="keyword">if</span> parent <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">             print(parent)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(parent.name)</span><br></pre></td></tr></table></figure></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+</li>
+<li><strong>标签树的下层遍历</strong><table>
+<thead>
+<tr>
+<th align="center">属性</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">.contents</td>
+<td align="center">子节点的列表，将&lt;tag&gt;所有儿子节点存入列表</td>
+</tr>
+<tr>
+<td align="center">.children</td>
+<td align="center">子节点的迭代类型，与.content类似，用于循环儿子节点</td>
+</tr>
+<tr>
+<td align="center">.descendents</td>
+<td align="center">子孙节点的迭代类型， 包含所有子孙节点，用于循环遍历</td>
+</tr>
+<tr>
+<td align="center"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.head</span><br><span class="line">&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.head.contents</span><br><span class="line">[&lt;title&gt;This is a python demo page&lt;/title&gt;]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.body.contents</span><br><span class="line">['\n', &lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;, '\n', &lt;p class="course"&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt; and &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;, '\n']</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(soup.body.contents)</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.body.contents[<span class="number">1</span>]</span><br><span class="line">&lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用for循环遍历孩子节点</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> child <span class="keyword">in</span> soup.body.children:</span><br><span class="line">     print(child)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用for循环遍历后辈节点</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> child <span class="keyword">in</span> soup.body.descendants:</span><br><span class="line">     print(child)</span><br></pre></td></tr></table></figure></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+</li>
+<li><strong>标签树的平行遍历</strong><table>
+<thead>
+<tr>
+<th align="center">属性</th>
+<th align="center">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">.next_sibling</td>
+<td align="center">返回按照HTML文本顺序的下一个平行节点标签</td>
+</tr>
+<tr>
+<td align="center">.previous_sibling</td>
+<td align="center">返回按照HTML文本顺序的上一个平行节点标签</td>
+</tr>
+<tr>
+<td align="center">.next_sibilings</td>
+<td align="center">迭代类型，返回按照HTML文本顺序的后续所有平行节点标签</td>
+</tr>
+<tr>
+<td align="center">.previous_siblings</td>
+<td align="center">迭代类型，返回按照HTML文本顺序的前续所有平行节点标签</td>
+</tr>
+<tr>
+<td align="center"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.next_sibling</span><br><span class="line"><span class="string">' and '</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.next_sibling.next_sibling</span><br><span class="line">&lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;Advanced Python&lt;/a&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.previous_sibling</span><br><span class="line"><span class="string">'Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.previous_sibling.previous_sibling</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.parent</span><br><span class="line">&lt;p class="course"&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt; and &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 平行遍历后续节点</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> sibling <span class="keyword">in</span> soup.a.next_sibling:</span><br><span class="line">         print(sibling)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 平行遍历前序节点</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> sibling <span class="keyword">in</span> soup.a.previous_sibling:</span><br><span class="line">         print(sibling)</span><br></pre></td></tr></table></figure></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h2 id="HTML格式输出"><a href="#HTML格式输出" class="headerlink" title="HTML格式输出"></a><strong>HTML格式输出</strong></h2><ol>
+<li><p><strong>prettify()方法</strong></p>
+<blockquote>
+<p>prettify()为HTML文本&lt;&gt;及其内容增加’\n’<br>prettify()可用于标签，方法：&lt;tag&gt;.prettify()</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.prettify()</span><br><span class="line"><span class="string">'&lt;html&gt;\n &lt;head&gt;\n  &lt;title&gt;\n   This is a python demo page\n  &lt;/title&gt;\n &lt;/head&gt;\n &lt;body&gt;\n  &lt;p class="title"&gt;\n   &lt;b&gt;\n    The demo python introduces several python courses.\n   &lt;/b&gt;\n  &lt;/p&gt;\n  &lt;p class="course"&gt;\n   Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\n   &lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;\n    Basic Python\n   &lt;/a&gt;\n   and\n   &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;\n    Advanced Python\n   &lt;/a&gt;\n   .\n  &lt;/p&gt;\n &lt;/body&gt;\n&lt;/html&gt;'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(soup.prettify())</span><br><span class="line">&lt;html&gt;</span><br><span class="line"> &lt;head&gt;</span><br><span class="line">  &lt;title&gt;</span><br><span class="line">   This <span class="keyword">is</span> a python demo page</span><br><span class="line">  &lt;/title&gt;</span><br><span class="line"> &lt;/head&gt;</span><br><span class="line"> &lt;body&gt;</span><br><span class="line">  &lt;p class="title"&gt;</span><br><span class="line">   &lt;b&gt;</span><br><span class="line">    The demo python introduces several python courses.</span><br><span class="line">   &lt;/b&gt;</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line">  &lt;p class="course"&gt;</span><br><span class="line">   Python <span class="keyword">is</span> a wonderful general-purpose programming language. You can learn Python <span class="keyword">from</span> novice to professional by tracking the following courses:</span><br><span class="line">   &lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;</span><br><span class="line">    Basic Python</span><br><span class="line">   &lt;/a&gt;</span><br><span class="line">   <span class="keyword">and</span></span><br><span class="line">   &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;</span><br><span class="line">    Advanced Python</span><br><span class="line">   &lt;/a&gt;</span><br><span class="line">   .</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line"> &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>编码</strong></p>
+<blockquote>
+<p>bs4库将任何HTML输入都变成utf-8编码<br>Python 3.x默认支持编码时utf-8，解析无障碍</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(<span class="string">"&lt;p&gt;中文&lt;/p&gt;"</span>, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.p.string</span><br><span class="line"><span class="string">'中文'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(soup.p.prettify())</span><br><span class="line">&lt;p&gt;</span><br><span class="line"> 中文</span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>Note</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MarkDown学习笔记</title>
     <url>/2020/03/13/Gui-Of-Markdown/</url>
     <content><![CDATA[<p><strong><em>MarkDown Study</em></strong><br>这几天<del>闲来无事</del>折腾一下hexo，顺便学习一下MarkDown  </p>
@@ -188,203 +347,6 @@
       </tags>
   </entry>
   <entry>
-    <title>三种不同的Copy方式详解</title>
-    <url>/2020/03/21/Different-Copy/</url>
-    <content><![CDATA[<p><strong><em>Python中的Copy有三种方式——完全不复制、浅复制（试图）、深复制，接下来进行举例讲解。</em></strong></p>
-<a id="more"></a>
-<hr>
-<h2 id="完全不复制（两个对象共同指向一个数据）"><a href="#完全不复制（两个对象共同指向一个数据）" class="headerlink" title="完全不复制（两个对象共同指向一个数据）"></a>完全不复制（两个对象共同指向一个数据）</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">6</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#b的id和a的id相同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b都会保管数据。</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a就是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="keyword">is</span> a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="literal">True</span></span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="浅复制（又称试图，发生在np-view和切片操作中）"><a href="#浅复制（又称试图，发生在np-view和切片操作中）" class="headerlink" title="浅复制（又称试图，发生在np.view和切片操作中）"></a>浅复制（又称试图，发生在np.view和切片操作中）</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a[:]   <span class="comment">#或者b = a.view()</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b的id不同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643466911216</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a负责保管数据，b不负责报关数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">##a不是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b <span class="keyword">is</span> a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改变b的形状不会影响a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.shape=(<span class="number">2</span>, <span class="number">3</span>)<span class="comment"># no.reshape()也是一种浅复制</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#改变b的元素会影响a，即使改变b形状后改变b元素的值也会影响a</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">3</span>] = <span class="number">67</span></span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>, <span class="number">67</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([[ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>],</span><br><span class="line">       [<span class="number">67</span>,  <span class="number">4</span>,  <span class="number">5</span>]])</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="深复制"><a href="#深复制" class="headerlink" title="深复制"></a>深复制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = a.copy()</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>,  <span class="number">2</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">##a和b的id不同</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(a)</span><br><span class="line"><span class="number">139643466946240</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>id(b)</span><br><span class="line"><span class="number">139643675206080</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a不是b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a <span class="keyword">is</span> b</span><br><span class="line"><span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#a和b各自保管一份不同的数据</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b.flags.owndata</span><br><span class="line"><span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#改变a的元素不会影响b</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[<span class="number">2</span>] = <span class="number">90</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([ <span class="number">0</span>,  <span class="number">1</span>, <span class="number">90</span>,  <span class="number">3</span>,  <span class="number">4</span>,  <span class="number">5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>mariaDB连接</title>
-    <url>/2020/04/21/connection-for-mariadb/</url>
-    <content><![CDATA[<p><strong><em>对mariaDB不同连接方式的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
-<a id="more"></a>
-<hr>
-<ul>
-<li><p><strong>内连接，INNER JOIN (也称为SIMPLE JOIN)</strong></p>
-<ul>
-<li>INNER JOIN是最常见的连接类型，它返回连接条件满足的多个表中的所有行。</li>
-<li>位置在FROM之后。</li>
-<li><img src="/images/connect_1.png" alt="内连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">INNER JOIN database_name  </span><br><span class="line">ON expression</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>左外连接</strong></p>
-<ul>
-<li>LEFT OUTER JOIN用于返回ON条件中指定的左侧表中的所有行，并仅返回满足连接条件的其他表中的行。</li>
-<li><img src="/images/connect_2.png" alt="左外连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">columns</span>  </span><br><span class="line"><span class="keyword">FROM</span> table1  </span><br><span class="line"><span class="keyword">LEFT</span> [<span class="keyword">OUTER</span>] <span class="keyword">JOIN</span> table2  </span><br><span class="line"><span class="keyword">ON</span> table1.column = table2.column;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>右外连接</strong></p>
-<ul>
-<li>RIGHT OUTER JOIN用于返回ON条件中指定的右表中的所有行，并且仅返回来自其他表中连接字段满足条件的行。</li>
-<li><img src="/images/connect_3.png" alt="右外连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">columns</span>  </span><br><span class="line"><span class="keyword">FROM</span> table1  </span><br><span class="line"><span class="keyword">RIGHT</span> [<span class="keyword">OUTER</span>] <span class="keyword">JOIN</span> table2  </span><br><span class="line"><span class="keyword">ON</span> table1.column = table2.column;</span><br></pre></td></tr></table></figure>
-
-
-</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Mysql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>BeautifulSoup 解析</title>
-    <url>/2020/04/08/bs4-note/</url>
-    <content><![CDATA[<p><strong><em>爬虫学习中对bs4库的记录</em></strong></p>
-<a id="more"></a>
-<hr>
-<h2 id="BeautifulSoup的安装"><a href="#BeautifulSoup的安装" class="headerlink" title="BeautifulSoup的安装"></a><strong>BeautifulSoup的安装</strong></h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pip install beautifulsoup4</span><br></pre></td></tr></table></figure>
-
-<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a><strong>基本使用</strong></h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup<span class="comment"># 注意大小写</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(<span class="string">"&lt;html&gt;data&lt;/html&gt;"</span>, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup2 = BeautifulSoup(open(<span class="string">"/home/john/celitea/demo.html"</span>), <span class="string">"html.parser"</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="基本元素"><a href="#基本元素" class="headerlink" title="基本元素"></a><strong>基本元素</strong></h2><table>
-<thead>
-<tr>
-<th align="center">基本元素</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Tag</td>
-<td align="center">标签,最基本的信息组成单元 ，分别用&lt;&gt;和&lt;/&gt;标明开头和结尾</td>
-</tr>
-<tr>
-<td align="center">Name</td>
-<td align="center">标签的名字，&lt;p&gt;…&lt;/p&gt;的名字是’p’，格式：&lt;tag&gt;.name</td>
-</tr>
-<tr>
-<td align="center">Attributes</td>
-<td align="center">标签的属性，字典形式组织，格式：&lt;tag&gt;.attrs</td>
-</tr>
-<tr>
-<td align="center">NavigableString</td>
-<td align="center">标签内非属性字符串，&lt;&gt;…&lt;/&gt;中字符串，格式：&lt;tag&gt;.string，可跨越嵌套的标签层次</td>
-</tr>
-<tr>
-<td align="center">Comment</td>
-<td align="center">标签内字符串的注释部分，一种特殊的Comment类型</td>
-</tr>
-</tbody></table>
-<ul>
-<li>代码演示<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> requests</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>r = requests.get(<span class="string">"http://python123.io/ws/demo.html"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>demo = r.text</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>demo</span><br><span class="line"><span class="string">'&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;\r\n&lt;body&gt;\r\n&lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;\r\n&lt;p class="course"&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n&lt;a href="http://www.icourse163.org/course/BIT-268001" class="py1" id="link1"&gt;Basic Python&lt;/a&gt; and &lt;a href="http://www.icourse163.org/course/BIT-1001870001" class="py2" id="link2"&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;\r\n&lt;/body&gt;&lt;/html&gt;'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 任何存在与HTML语法中的标签都可以用soup.&lt;tag&gt;访问获得</span></span><br><span class="line"><span class="comment">#当HTML文档中存在多个想用&lt;tag&gt;对应内容时，soup.&lt;tag&gt;返回第一个</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.title</span><br><span class="line">&lt;title&gt;This is a python demo page&lt;/title&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag = soup.a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 每个&lt;tag&gt;都有自己的名字，通过&lt;tag&gt;.name获取，字符串类型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag = soup.a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.name</span><br><span class="line"><span class="string">'a'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.parent.name</span><br><span class="line"><span class="string">'p'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.parent.parent.name</span><br><span class="line"><span class="string">'body'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个&lt;tag&gt;可以有0或多个属性，字典类型</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag = soup.a</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag.attrs</span><br><span class="line">&#123;<span class="string">'href'</span>: <span class="string">'http://www.icourse163.org/course/BIT-268001'</span>, <span class="string">'class'</span>: [<span class="string">'py1'</span>], <span class="string">'id'</span>: <span class="string">'link1'</span>&#125;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag.attrs[<span class="string">'class'</span>]</span><br><span class="line">[<span class="string">'py1'</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>tag.attrs[<span class="string">'href'</span>]</span><br><span class="line"><span class="string">'http://www.icourse163.org/course/BIT-268001'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(tag.attrs)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">dict</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span><span class="params">(tag)</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> '<span class="title">bs4</span>.<span class="title">element</span>.<span class="title">Tag</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"># <span class="title">NavigableString</span>可以跨越多个层次</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">soup</span>.<span class="title">a</span></span></span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.string</span><br><span class="line"><span class="string">'Basic Python'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.p</span><br><span class="line">&lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.p.string</span><br><span class="line"><span class="string">'The demo python introduces several python courses.'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(soup.p.string)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">bs4</span>.<span class="title">element</span>.<span class="title">NavigableString</span>'&gt;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"># <span class="title">Comment</span>是一种特殊类型</span></span><br><span class="line">&gt;&gt;&gt; newsoup = BeautifulSoup("&lt;b&gt;&lt;!--This is a comment--&gt;&lt;/b&gt;&lt;p&gt;This is not a comment&lt;/p&gt;", "html.parser")</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>newsoup.b.string</span><br><span class="line"><span class="string">'This is a comment'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>type(newsoup.b.string)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> '<span class="title">bs4</span>.<span class="title">element</span>.<span class="title">Comment</span>'&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">newsoup</span>.<span class="title">p</span>.<span class="title">string</span></span></span><br><span class="line"><span class="class">'<span class="title">This</span> <span class="title">is</span> <span class="title">not</span> <span class="title">a</span> <span class="title">comment</span>'</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">type</span><span class="params">(newsoup.p.string)</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> '<span class="title">bs4</span>.<span class="title">element</span>.<span class="title">NavigableString</span>'&gt;</span></span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<h2 id="HTML内容遍历"><a href="#HTML内容遍历" class="headerlink" title="HTML内容遍历"></a><strong>HTML内容遍历</strong></h2><ul>
-<li><strong>标签树的上层遍历</strong><table>
-<thead>
-<tr>
-<th align="center">属性</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">.parent</td>
-<td align="center">节点的父亲标签</td>
-</tr>
-<tr>
-<td align="center">.parents</td>
-<td align="center">节点先辈标签的迭代类型，用于循环遍历先辈节点</td>
-</tr>
-<tr>
-<td align="center"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.title.parent</span><br><span class="line">&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.html.parent <span class="comment">#html的父辈是其本身</span></span><br><span class="line">&lt;html&gt;&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;</span><br><span class="line">&lt;p class="course"&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt; and &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;&lt;/html&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.parent <span class="comment">#soup本身没有父辈</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用for循环进行上行遍历</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> parent <span class="keyword">in</span> soup.a.parents:</span><br><span class="line">        <span class="keyword">if</span> parent <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">             print(parent)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(parent.name)</span><br></pre></td></tr></table></figure></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-</li>
-<li><strong>标签树的下层遍历</strong><table>
-<thead>
-<tr>
-<th align="center">属性</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">.contents</td>
-<td align="center">子节点的列表，将&lt;tag&gt;所有儿子节点存入列表</td>
-</tr>
-<tr>
-<td align="center">.children</td>
-<td align="center">子节点的迭代类型，与.content类似，用于循环儿子节点</td>
-</tr>
-<tr>
-<td align="center">.descendents</td>
-<td align="center">子孙节点的迭代类型， 包含所有子孙节点，用于循环遍历</td>
-</tr>
-<tr>
-<td align="center"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.head</span><br><span class="line">&lt;head&gt;&lt;title&gt;This is a python demo page&lt;/title&gt;&lt;/head&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.head.contents</span><br><span class="line">[&lt;title&gt;This is a python demo page&lt;/title&gt;]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.body.contents</span><br><span class="line">['\n', &lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;, '\n', &lt;p class="course"&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt; and &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;, '\n']</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>len(soup.body.contents)</span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.body.contents[<span class="number">1</span>]</span><br><span class="line">&lt;p class="title"&gt;&lt;b&gt;The demo python introduces several python courses.&lt;/b&gt;&lt;/p&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用for循环遍历孩子节点</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> child <span class="keyword">in</span> soup.body.children:</span><br><span class="line">     print(child)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用for循环遍历后辈节点</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> child <span class="keyword">in</span> soup.body.descendants:</span><br><span class="line">     print(child)</span><br></pre></td></tr></table></figure></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-</li>
-<li><strong>标签树的平行遍历</strong><table>
-<thead>
-<tr>
-<th align="center">属性</th>
-<th align="center">说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">.next_sibling</td>
-<td align="center">返回按照HTML文本顺序的下一个平行节点标签</td>
-</tr>
-<tr>
-<td align="center">.previous_sibling</td>
-<td align="center">返回按照HTML文本顺序的上一个平行节点标签</td>
-</tr>
-<tr>
-<td align="center">.next_sibilings</td>
-<td align="center">迭代类型，返回按照HTML文本顺序的后续所有平行节点标签</td>
-</tr>
-<tr>
-<td align="center">.previous_siblings</td>
-<td align="center">迭代类型，返回按照HTML文本顺序的前续所有平行节点标签</td>
-</tr>
-<tr>
-<td align="center"><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.next_sibling</span><br><span class="line"><span class="string">' and '</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.next_sibling.next_sibling</span><br><span class="line">&lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;Advanced Python&lt;/a&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.previous_sibling</span><br><span class="line"><span class="string">'Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\r\n'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.previous_sibling.previous_sibling</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.a.parent</span><br><span class="line">&lt;p class="course"&gt;Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:</span><br><span class="line">&lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;Basic Python&lt;/a&gt; and &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;Advanced Python&lt;/a&gt;.&lt;/p&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 平行遍历后续节点</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> sibling <span class="keyword">in</span> soup.a.next_sibling:</span><br><span class="line">         print(sibling)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 平行遍历前序节点</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">for</span> sibling <span class="keyword">in</span> soup.a.previous_sibling:</span><br><span class="line">         print(sibling)</span><br></pre></td></tr></table></figure></td>
-<td align="center"></td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<h2 id="HTML格式输出"><a href="#HTML格式输出" class="headerlink" title="HTML格式输出"></a><strong>HTML格式输出</strong></h2><ol>
-<li><p><strong>prettify()方法</strong></p>
-<blockquote>
-<p>prettify()为HTML文本&lt;&gt;及其内容增加’\n’<br>prettify()可用于标签，方法：&lt;tag&gt;.prettify()</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(demo, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.prettify()</span><br><span class="line"><span class="string">'&lt;html&gt;\n &lt;head&gt;\n  &lt;title&gt;\n   This is a python demo page\n  &lt;/title&gt;\n &lt;/head&gt;\n &lt;body&gt;\n  &lt;p class="title"&gt;\n   &lt;b&gt;\n    The demo python introduces several python courses.\n   &lt;/b&gt;\n  &lt;/p&gt;\n  &lt;p class="course"&gt;\n   Python is a wonderful general-purpose programming language. You can learn Python from novice to professional by tracking the following courses:\n   &lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;\n    Basic Python\n   &lt;/a&gt;\n   and\n   &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;\n    Advanced Python\n   &lt;/a&gt;\n   .\n  &lt;/p&gt;\n &lt;/body&gt;\n&lt;/html&gt;'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(soup.prettify())</span><br><span class="line">&lt;html&gt;</span><br><span class="line"> &lt;head&gt;</span><br><span class="line">  &lt;title&gt;</span><br><span class="line">   This <span class="keyword">is</span> a python demo page</span><br><span class="line">  &lt;/title&gt;</span><br><span class="line"> &lt;/head&gt;</span><br><span class="line"> &lt;body&gt;</span><br><span class="line">  &lt;p class="title"&gt;</span><br><span class="line">   &lt;b&gt;</span><br><span class="line">    The demo python introduces several python courses.</span><br><span class="line">   &lt;/b&gt;</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line">  &lt;p class="course"&gt;</span><br><span class="line">   Python <span class="keyword">is</span> a wonderful general-purpose programming language. You can learn Python <span class="keyword">from</span> novice to professional by tracking the following courses:</span><br><span class="line">   &lt;a class="py1" href="http://www.icourse163.org/course/BIT-268001" id="link1"&gt;</span><br><span class="line">    Basic Python</span><br><span class="line">   &lt;/a&gt;</span><br><span class="line">   <span class="keyword">and</span></span><br><span class="line">   &lt;a class="py2" href="http://www.icourse163.org/course/BIT-1001870001" id="link2"&gt;</span><br><span class="line">    Advanced Python</span><br><span class="line">   &lt;/a&gt;</span><br><span class="line">   .</span><br><span class="line">  &lt;/p&gt;</span><br><span class="line"> &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>编码</strong></p>
-<blockquote>
-<p>bs4库将任何HTML输入都变成utf-8编码<br>Python 3.x默认支持编码时utf-8，解析无障碍</p>
-</blockquote>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup = BeautifulSoup(<span class="string">"&lt;p&gt;中文&lt;/p&gt;"</span>, <span class="string">"html.parser"</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>soup.p.string</span><br><span class="line"><span class="string">'中文'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(soup.p.prettify())</span><br><span class="line">&lt;p&gt;</span><br><span class="line"> 中文</span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
-
-
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>Note</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python BeautifulSoup 中.text与.string的区别</title>
     <url>/2020/04/18/bs4-diff-bt-text-and-string/</url>
     <content><![CDATA[<p><strong><em>在学习编写爬虫的过程中对于bs4库使用中的小记</em></strong></p>
@@ -472,6 +434,84 @@
       </tags>
   </entry>
   <entry>
+    <title>mariaDB连接</title>
+    <url>/2020/04/21/connection-for-mariadb/</url>
+    <content><![CDATA[<p><strong><em>对mariaDB不同连接方式的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><p><strong>内连接，INNER JOIN (也称为SIMPLE JOIN)</strong></p>
+<ul>
+<li>INNER JOIN是最常见的连接类型，它返回连接条件满足的多个表中的所有行。</li>
+<li>位置在FROM之后。</li>
+<li><img src="/images/connect_1.png" alt="内连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">INNER JOIN database_name  </span><br><span class="line">ON expression</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>左外连接</strong></p>
+<ul>
+<li>LEFT OUTER JOIN用于返回ON条件中指定的左侧表中的所有行，并仅返回满足连接条件的其他表中的行。</li>
+<li><img src="/images/connect_2.png" alt="左外连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">columns</span>  </span><br><span class="line"><span class="keyword">FROM</span> table1  </span><br><span class="line"><span class="keyword">LEFT</span> [<span class="keyword">OUTER</span>] <span class="keyword">JOIN</span> table2  </span><br><span class="line"><span class="keyword">ON</span> table1.column = table2.column;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>右外连接</strong></p>
+<ul>
+<li>RIGHT OUTER JOIN用于返回ON条件中指定的右表中的所有行，并且仅返回来自其他表中连接字段满足条件的行。</li>
+<li><img src="/images/connect_3.png" alt="右外连接"><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">columns</span>  </span><br><span class="line"><span class="keyword">FROM</span> table1  </span><br><span class="line"><span class="keyword">RIGHT</span> [<span class="keyword">OUTER</span>] <span class="keyword">JOIN</span> table2  </span><br><span class="line"><span class="keyword">ON</span> table1.column = table2.column;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>几个简单的爬虫实例</title>
+    <url>/2020/04/11/craw-stage-note/</url>
+    <content><![CDATA[<p><strong><em>爬虫实例记录。</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="中国大学排名定向爬虫"><a href="#中国大学排名定向爬虫" class="headerlink" title="中国大学排名定向爬虫"></a><strong>中国大学排名定向爬虫</strong></h2><ul>
+<li><p><strong>网站</strong></p>
+<blockquote>
+<p><a href="http://www.zuihaodaxue.cn/zuihaodaxuepaiming2016.html" target="_blank" rel="noopener">http://www.zuihaodaxue.cn/zuihaodaxuepaiming2016.html</a></p>
+</blockquote>
+</li>
+<li><p><strong>功能描述</strong></p>
+<blockquote>
+<p>输入：大学排名URL链接。<br>输出：大学爱明信息的屏幕输出（排名，大学名称，总分）。<br>技术路线：request-bs4。<br>定向爬虫：仅对输入URL进行爬取，不扩展爬取。</p>
+</blockquote>
+</li>
+<li><p><strong>程序的设计步骤</strong></p>
+<blockquote>
+<p>步骤1：从网络上获取大学排名网页内容，使用getHTMLText()。<br>步骤2：提取网页内容中信息到合适的数据结构，使用fillUnivList()。<br>步骤3：利用数据结构展示并输出结果，使用printUnivList()。</p>
+</blockquote>
+</li>
+<li><p><strong>实例编写</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> bs4</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url, timeout=<span class="number">30</span>)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fillUnivList</span><span class="params">(ulist, html)</span>:</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">"html.parser"</span>)</span><br><span class="line">    <span class="keyword">for</span> tr <span class="keyword">in</span> soup.find(<span class="string">'tbody'</span>).children:</span><br><span class="line">        <span class="keyword">if</span> isinstance(tr, bs4.element.Tag):</span><br><span class="line">            tds = tr(<span class="string">'td'</span>)</span><br><span class="line">            ulist,append([tds[<span class="number">0</span>].string, tds[<span class="number">1</span>].string, tds[<span class="number">3</span>].string])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printUnivList</span><span class="params">(ulist, num)</span>:</span></span><br><span class="line">    print(<span class="string">"&#123;:^10&#125;\t&#123;:^6&#125;\t&#123;:^10&#125;"</span>.format(<span class="string">"排名"</span>, <span class="string">"学校名单"</span>, <span class="string">"总分"</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num):</span><br><span class="line">        u = ulist[i]</span><br><span class="line">        print(<span class="string">"&#123;:^10&#125;\t&#123;:^6&#125;\t&#123;:^10&#125;\t"</span>.format(u[<span class="number">0</span>], u[<span class="number">1</span>], u[<span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    uinfo = []</span><br><span class="line">    url = <span class="string">'http://www.zuihaodaxue.cn/zuihaodaxuepaiming2016.html'</span></span><br><span class="line">    html = getHTMLText(url)</span><br><span class="line">    fillUnivList(uinfo, html)</span><br><span class="line">    printUnivList(uinfo, <span class="number">20</span>) <span class="comment"># 打印20个大学</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>优化</strong></p>
+<ul>
+<li><strong>中文字符对齐问题的解决</strong><blockquote>
+<p>采用中文字符的空格填充chr(12288)</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printUnivList</span><span class="params">(ulist, num)</span>:</span></span><br><span class="line">    tplt = &#123;<span class="number">0</span>:^<span class="number">10</span>&#125;\t&#123;<span class="number">1</span>:^<span class="number">6</span>&#125;\t&#123;<span class="number">2</span>:^<span class="number">10</span>&#125;</span><br><span class="line">    print(tplt.format(<span class="string">"排名"</span>, <span class="string">"学校名单"</span>, <span class="string">"总分"</span>), chr(<span class="number">12288</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num):</span><br><span class="line">        u = ulist[i]</span><br><span class="line">        print(tplt.format(u[<span class="number">0</span>], u[<span class="number">1</span>], u[<span class="number">2</span>], chr(<span class="number">12288</span>)))</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Crawler</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Python爬虫笔记</title>
     <url>/2020/04/04/crawler-note/</url>
     <content><![CDATA[<p><strong><em>对于爬虫的学习记录</em></strong></p>
@@ -537,46 +577,6 @@
  <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    <span class="keyword">import</span> os</span><br><span class="line">    url = <span class="string">"http://image.ngchina.com.cn/2019/0523/20190523103156143.jpg"</span></span><br><span class="line">    root = <span class="string">"/home/john/celitea"</span></span><br><span class="line">    path = root + url.split(<span class="string">'/'</span>)[<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(root):</span><br><span class="line">            os.mkdir(root)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(path):</span><br><span class="line">            r = requests.get(url)</span><br><span class="line">            <span class="keyword">with</span> open(path, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(r.content)</span><br><span class="line">                f.close()</span><br><span class="line">                print(<span class="string">"文件保存成功"</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">"文件已存在"</span>)</span><br><span class="line">    <span class="keyword">except</span>：</span><br><span class="line">        print(<span class="string">"爬取失败"</span>)</span><br><span class="line">    ``` </span><br><span class="line"></span><br><span class="line"><span class="number">5.</span> IP地址归属地的自动查询</span><br><span class="line">    ```Python</span><br><span class="line">    <span class="comment"># 此方法已不适用，仅供参考</span></span><br><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    url = <span class="string">"http://m.ip138.com/ip.asp?ip="</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url+<span class="string">'104.36.66.224'</span>)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        print(r.text[<span class="number">-500</span>:])</span><br><span class="line">    <span class="keyword">except</span>：</span><br><span class="line">        print(<span class="string">"爬取失败"</span>)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Crawler</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>几个简单的爬虫实例</title>
-    <url>/2020/04/11/craw-stage-note/</url>
-    <content><![CDATA[<p><strong><em>爬虫实例记录。</em></strong></p>
-<a id="more"></a>
-<hr>
-<h2 id="中国大学排名定向爬虫"><a href="#中国大学排名定向爬虫" class="headerlink" title="中国大学排名定向爬虫"></a><strong>中国大学排名定向爬虫</strong></h2><ul>
-<li><p><strong>网站</strong></p>
-<blockquote>
-<p><a href="http://www.zuihaodaxue.cn/zuihaodaxuepaiming2016.html" target="_blank" rel="noopener">http://www.zuihaodaxue.cn/zuihaodaxuepaiming2016.html</a></p>
-</blockquote>
-</li>
-<li><p><strong>功能描述</strong></p>
-<blockquote>
-<p>输入：大学排名URL链接。<br>输出：大学爱明信息的屏幕输出（排名，大学名称，总分）。<br>技术路线：request-bs4。<br>定向爬虫：仅对输入URL进行爬取，不扩展爬取。</p>
-</blockquote>
-</li>
-<li><p><strong>程序的设计步骤</strong></p>
-<blockquote>
-<p>步骤1：从网络上获取大学排名网页内容，使用getHTMLText()。<br>步骤2：提取网页内容中信息到合适的数据结构，使用fillUnivList()。<br>步骤3：利用数据结构展示并输出结果，使用printUnivList()。</p>
-</blockquote>
-</li>
-<li><p><strong>实例编写</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> bs4</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url, timeout=<span class="number">30</span>)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fillUnivList</span><span class="params">(ulist, html)</span>:</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">"html.parser"</span>)</span><br><span class="line">    <span class="keyword">for</span> tr <span class="keyword">in</span> soup.find(<span class="string">'tbody'</span>).children:</span><br><span class="line">        <span class="keyword">if</span> isinstance(tr, bs4.element.Tag):</span><br><span class="line">            tds = tr(<span class="string">'td'</span>)</span><br><span class="line">            ulist,append([tds[<span class="number">0</span>].string, tds[<span class="number">1</span>].string, tds[<span class="number">3</span>].string])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printUnivList</span><span class="params">(ulist, num)</span>:</span></span><br><span class="line">    print(<span class="string">"&#123;:^10&#125;\t&#123;:^6&#125;\t&#123;:^10&#125;"</span>.format(<span class="string">"排名"</span>, <span class="string">"学校名单"</span>, <span class="string">"总分"</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num):</span><br><span class="line">        u = ulist[i]</span><br><span class="line">        print(<span class="string">"&#123;:^10&#125;\t&#123;:^6&#125;\t&#123;:^10&#125;\t"</span>.format(u[<span class="number">0</span>], u[<span class="number">1</span>], u[<span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    uinfo = []</span><br><span class="line">    url = <span class="string">'http://www.zuihaodaxue.cn/zuihaodaxuepaiming2016.html'</span></span><br><span class="line">    html = getHTMLText(url)</span><br><span class="line">    fillUnivList(uinfo, html)</span><br><span class="line">    printUnivList(uinfo, <span class="number">20</span>) <span class="comment"># 打印20个大学</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p><strong>优化</strong></p>
-<ul>
-<li><strong>中文字符对齐问题的解决</strong><blockquote>
-<p>采用中文字符的空格填充chr(12288)</p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printUnivList</span><span class="params">(ulist, num)</span>:</span></span><br><span class="line">    tplt = &#123;<span class="number">0</span>:^<span class="number">10</span>&#125;\t&#123;<span class="number">1</span>:^<span class="number">6</span>&#125;\t&#123;<span class="number">2</span>:^<span class="number">10</span>&#125;</span><br><span class="line">    print(tplt.format(<span class="string">"排名"</span>, <span class="string">"学校名单"</span>, <span class="string">"总分"</span>), chr(<span class="number">12288</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num):</span><br><span class="line">        u = ulist[i]</span><br><span class="line">        print(tplt.format(u[<span class="number">0</span>], u[<span class="number">1</span>], u[<span class="number">2</span>], chr(<span class="number">12288</span>)))</span><br></pre></td></tr></table></figure></li>
-</ul>
 ]]></content>
       <tags>
         <tag>Note</tag>
@@ -804,6 +804,54 @@
       </tags>
   </entry>
   <entry>
+    <title>mariaDB聚合函数</title>
+    <url>/2020/04/21/method-for-mariadb/</url>
+    <content><![CDATA[<p><strong><em>对mariaDB聚合函数的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><p><strong>Count()函数</strong></p>
+<ul>
+<li>COUNT()函数用于返回表达式的计数/行数，只计算NOT NULL值。</li>
+<li>在COUNT之后的aggregate_expression可以添加DISTINCT防止统计重复数据。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(aggregate_expression)  [<span class="keyword">AS</span> <span class="string">"title"</span>]</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>SUM()函数</strong></p>
+<ul>
+<li>SUM()函数用于返回表达式求和的值。</li>
+<li>可以使用SUM函数的DISTINCT子句来避免重复值的总和。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">SUM</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>MIN()函数</strong></p>
+<ul>
+<li>MIN()函数用于检索表达式的最小值。</li>
+<li>可以使用Min函数的GROUP BY子句来分组。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">MIN</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>MAX()函数</strong></p>
+<ul>
+<li>MAX()函数用于检索表达式的最大值。</li>
+<li>可以使用MAX函数的GROUP BY子句来分组。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">MAX</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>AVG()函数</strong></p>
+<ul>
+<li>Avg()函数用于检索表达式的平均值。</li>
+<li>也可以在AVG()函数使用数学公式。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">AVG</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br><span class="line"></span><br><span class="line"><span class="comment"># 扩展使用</span></span><br><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n,  </span><br><span class="line"><span class="keyword">AVG</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions]  </span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> expression1, expression2, ... expression_n;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>numpy中数组切片时使用None</title>
     <url>/2020/03/21/numpy-slice/</url>
     <content><![CDATA[<p><strong><em>学习Numpy的途中偶然看到数组切片时使用None的技巧，故记录一下。</em></strong></p>
@@ -899,54 +947,6 @@
       <tags>
         <tag>Note</tag>
         <tag>Crawler</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>mariaDB聚合函数</title>
-    <url>/2020/04/21/method-for-mariadb/</url>
-    <content><![CDATA[<p><strong><em>对mariaDB聚合函数的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
-<a id="more"></a>
-<hr>
-<ul>
-<li><p><strong>Count()函数</strong></p>
-<ul>
-<li>COUNT()函数用于返回表达式的计数/行数，只计算NOT NULL值。</li>
-<li>在COUNT之后的aggregate_expression可以添加DISTINCT防止统计重复数据。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">COUNT</span>(aggregate_expression)  [<span class="keyword">AS</span> <span class="string">"title"</span>]</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>SUM()函数</strong></p>
-<ul>
-<li>SUM()函数用于返回表达式求和的值。</li>
-<li>可以使用SUM函数的DISTINCT子句来避免重复值的总和。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">SUM</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>MIN()函数</strong></p>
-<ul>
-<li>MIN()函数用于检索表达式的最小值。</li>
-<li>可以使用Min函数的GROUP BY子句来分组。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">MIN</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>MAX()函数</strong></p>
-<ul>
-<li>MAX()函数用于检索表达式的最大值。</li>
-<li>可以使用MAX函数的GROUP BY子句来分组。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">MAX</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>AVG()函数</strong></p>
-<ul>
-<li>Avg()函数用于检索表达式的平均值。</li>
-<li>也可以在AVG()函数使用数学公式。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="keyword">AVG</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions];</span><br><span class="line"></span><br><span class="line"><span class="comment"># 扩展使用</span></span><br><span class="line"><span class="keyword">SELECT</span> expression1, expression2, ... expression_n,  </span><br><span class="line"><span class="keyword">AVG</span>(aggregate_expression)  </span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">tables</span>  </span><br><span class="line">[<span class="keyword">WHERE</span> conditions]  </span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> expression1, expression2, ... expression_n;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -1098,51 +1098,6 @@
         <tag>Note</tag>
         <tag>Numpy</tag>
         <tag>DL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>numpy 基本使用</title>
-    <url>/2020/03/14/numpy-function/</url>
-    <content><![CDATA[<p><strong><em>对Numpy库中的函数进行整理</em></strong><br>学习DL途中对于numpy的一个粗略整理，部分函数只给出常用参数，之后可能会跳出其中几个复杂的做详细记录。</p>
-<a id="more"></a>
-<hr>
-<h2 id="查看数组属性"><a href="#查看数组属性" class="headerlink" title="查看数组属性"></a>查看数组属性</h2><ul>
-<li><strong>函数及其功能</strong><br>a.ndim：维度。<br>a.shape：改变自身各维度的尺度。<br>a.size：元素的个数。<br>a.dtype：元素的类型。<br>a.itemsize：每个元素的大小。</li>
-</ul>
-<hr>
-<h2 id="数组的初始化"><a href="#数组的初始化" class="headerlink" title="数组的初始化"></a>数组的初始化</h2><ul>
-<li><strong>函数及其功能</strong><br>np.array(a)/np.ndarray(shape, dtype)：初始化数组a。<br>np.arange(start, end, distance, dtype=None)：由[start, end)创建一个步进为distance的行数组。<br>np.ones((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的1数组。<br>np.zeros((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的0数组。<br>np.full((shape), val, dtype=None)：创建shape大小，内涵dtype类型val的填充数组。<br>np.empty((shape), dtype=np.float64)：生成一个shape大小，dtype类型含无意义数的数组。<br>np.eye(n, dtype=np.float64)：创建一个n*n，dtype类型的单位数组。<br>np.ones_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的1数组。<br>np.zeros_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的0数组。<br>np.full_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型fill_value的数组。<br>np.empty_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型无意义值的数组。<br>np.linspace(start, end, distance)：由[start, end)区间等间距地生成数组.<br>np.set_printoptions(precision=None, threshold=None)：设置所有数组的精度和打印位数。</li>
-</ul>
-<hr>
-<h2 id="数组的合并"><a href="#数组的合并" class="headerlink" title="数组的合并"></a>数组的合并</h2><ul>
-<li><strong>函数及其功能</strong><br>np.concatenate((a, b), axis=0):将b沿着垂直方向（axis=0）或者水平方向（axis=1）与a进行合并。<br>np.vstack((a, b))：沿着竖直方向将数组堆叠起来。<br>np.hstack((a, b))：沿着水平方向将数组堆叠起来。<br>np.c_(a, b)：将列向量进行连接。<br>np.r_(a, b)：将行向量进行链接。</li>
-</ul>
-<hr>
-<h2 id="数组的维度操作"><a href="#数组的维度操作" class="headerlink" title="数组的维度操作"></a>数组的维度操作</h2><ul>
-<li><strong>函数及其功能</strong><br>a.reshape(shape) : 不改变当前数组，依shape生成。<br>a.resize(shape) : 改变当前数组，依shape生成。<br>a.swapaxes(ax1, ax2) : 将两个维度调换。<br>a.flatten() : 对数组进行降维，返回折叠后的一维数组。<br>a.ravel()：对数组进行降维，不会产生源数据的副本。<br>a.squeeze()：对数组进行降维，只能对维数为1的维度降维。<br>np.newaxis：增加一个维度。<br>a.repeat(repeat, axis=None)：将a数组进行repeat倍扩充，axis=0时进行纵向扩充，axis=1时进行横向扩充，为设置时进项扁平化处理。<br>np.repeat(x, y)：创建一个数组，内含y个x。<br>np.tile(a, tile)：对数字进行轮流扩充，将原数据最大单元看做一个单元，将形状变为tile的形状。<br>np.asscalar(a)：将只有一个元素的数组a，转化成标量值。</li>
-</ul>
-<hr>
-<h2 id="数组的类型变换"><a href="#数组的类型变换" class="headerlink" title="数组的类型变换"></a>数组的类型变换</h2><ul>
-<li><strong>函数及其功能</strong><br>a.asarray(b)：将一个非numpy数组的元素转变为numpy数组。<br>a.astype(new_type) : 数据类型的转换。<br>a.tolist()：数组向列表的转换。</li>
-</ul>
-<hr>
-<h2 id="数组的运算操作"><a href="#数组的运算操作" class="headerlink" title="数组的运算操作"></a>数组的运算操作</h2><ul>
-<li><strong>函数及其功能</strong><br>a.transpose()/a.T()：求a矩阵的转置矩阵。<br>np.abs(a)/np.fabs(a)/np.absolute(a): 取各元素的绝对值。<br>np.sqrt(a): 计算各元素的平方根。<br>np.square(a): 计算各元素的平方。<br>np.log(a): 计算以e为底，a的对数。<br>np.log10(a)：计算以10为底，a的对数。<br>np.log2(a)：计算以2为底，a的对数。<br>np.ceil(a)：返回输入值的上限，向上取整。<br>np.floor(a): 返回不大于输入参数的最大整数，向下取整。<br>np.around(a, decimals=0): 返回各元素四舍五入的值，decimals指定保留至小数点后xx位，如果为负，整数将四舍五入到小数点左侧的位置，与round()函数类似。<br>np.exp(a): 计算各元素的指数值。<br>np.sign(a): 计算各元素的符号值 1（+），0，-1（-）。<br>a.copy()：将a进行深复制。<br>a.view()：将a进行浅复制。<br>np.copysign(a, b): 将b中各元素的符号赋值给数组a的对应元素。<br>np.mod(a, b): 元素级的模运算。<br>np.dot(a, b)：对矩阵进行点乘运算。<br>np.sin(a)：计算a的正弦。<br>np.cos(a)：计算a的余弦。<br>np.tan(a)：计算a的正切。<br>np.cov(x)：求协方差。<br>np.corrcoef(x, y)：求x，y相关系数。<br>np.logical_and(x, y)：返回x和y逻辑与之后的结果。<br>np.logical_or(x, y)：返回x和y逻辑或之后的结果。<br>np.logical_not(x, y)：返回x和y逻辑非之后的结果。<br>np.logical_xor(x, y)：返回x和y逻辑异或之后的结果。<br>np.vectorize(myfunc, otype)：定义了一个矢量函数myfunc，输入是嵌套化的对象序列或者是numpy数组，输出是单个或元组的numpy数组，otype指定输出值的类型。<br>np.gradient(a)：计算数组a中元素的梯度。<br>numpy.linalg.solve(a, b)：返回矩阵方程ax=b的解。<br>numpy.linalg.norm(a, ord=2)：求矩阵a的范数，ord=1求一范数，ord=2求二范数，ord=np.inf求无穷范数，当a为两个数组相减的表达式时是计算欧氏距离。</li>
-</ul>
-<hr>
-<h2 id="随机数函数"><a href="#随机数函数" class="headerlink" title="随机数函数"></a>随机数函数</h2><ul>
-<li><strong>函数及其功能</strong><br>np.random.seed(s)：随机数种子，使用下面的随机方法前最好设置一个随机数种子。<br>np.random.rand(d0, d1, …,dn)：各元素是[0, 1）的浮点数，服从均匀分布。<br>np.random.randn(d0, d1, …,dn)：标准正态分布。<br>np.random.randint(low，high=None, size)：创建size个随机整数或整数数组，范围是[low, high），如果没有写参数high的值，则返回[0,low)的值。<br>np.random.shuffle(a)：根据数组a的第一轴进行随机排列，改变数组a。<br>np.random.permutation(a)：根据数组a的第一轴进行随机排列，但是不改变原数组，将生成新数组。<br>np.random.choice(a, size, replace=False, p)：从一维数组a中以概率p抽取元素， 形成size形状新数组，replace表示是否可以重用元素，默认为False。<br>np.random.uniform(low, high, size)：产生均匀分布的数组，起始值为low，high为结束值，size为形状。<br>np.random.normal(loc, scale, size)：产生正态分布的数组，loc为均值，scale为标准差，size为形状。<br>np.random.poisson(lam, size)：产生泊松分布的数组，lam随机事件发生概率，size为形状。</li>
-</ul>
-<hr>
-<h2 id="统计函数"><a href="#统计函数" class="headerlink" title="统计函数"></a>统计函数</h2><ul>
-<li><strong>函数及其功能</strong><br>np.diff(a, n=1, axis=1)：沿着指定轴计算第N维的离散差值（执行的是后一个元素减去前一个元素）。<br>np.sum(a, axis = None)：依给定轴axis计算数组a相关元素之和，axis为整数或者元组。<br>numpy.cumsum(a, axis=None, dtype=None)：按照所给定的轴参数返回元素的梯形累计和(后一个加上前面元素的累加和)，axis=0，按照行累加。axis=1，按照列累加。axis不给定具体值，就把numpy数组当成一个一维数组。<br>numpy.ufunc.accumulate(a, axis=0, dtype=None)：照所给定的轴参数返回根据ufunc进行计算的元素的梯形累计，ufunc可以是add，multiply等。<br>np.mean(a)：返回数组元素中的均值。<br>np.average(a, axis =None, weights=None)：依给定轴axis计算数组a相关元素的加权平均值。<br>np.median(a, axis=None)：计算数组的中位数。<br>np.std(a, axis=None)：计算数组的标准差，axis=0时计算每一列的标砖茶，axis=1计算每一行的标准差。<br>a.var()：计算数组的方差。<br>np.max(a, axis=0)：寻找数组中的最大值。<br>np.min(a, axis=0)：寻找数组中的最小值。<br>np.maximum(a, b)/np.fmax()：a,b逐位比较（或者计算）元素级的最大值。<br>np.minimum(a, b)/np.fmin()：a,b逐位比较（或者计算）元素级的最小值。<br>np.argmax(a, axis=None)：沿axis返回最大值的索引。<br>np.argmin(a, axis=None)：沿axis返回最小值的索引。<br>np.argsort(a, axis=None)：返回的是数组值从小到大的索引值。<br>np.argpartition(a, kth)：是将第k大的数字，放在第k个位置。类似于快排找第k大的数，堆其它数不做排序。<br>np.amin(a，axis=None)：返回一维数组a中的最小值，二维数组需通过axis指定行或列，获取行（1）或列（0）的最小值，如不指定，则是所有元素的最小值 。<br>np.amax(a, axis=None)：返回一维数组a中的最大值，二维数组需通过axis指定行（1）或列（0），获取行或列的最大值，如不指定，则是所有元素的最大值。<br>numpy.apply_along_axis(func, axis, arr)：func指定转换方法，axis指定按行（1）运算还是按列（0）运算，arr指定数组。<br>np.nonzero(a)：返回数组a中非零元素的索引值数组。<br>np.percentile(a, percent)：返回数组中第percent%位置的浮点数。<br>(expression).all()：两个数组进行比较时如果所有元素根据expression都为True则返回True。<br>(expression).any()：两个数组进行比较时如果任意元素根据expression都为True则返回True。<br>np.bincount(a)：统计a中[min, max]之间各个数字的出现次数。<br>np.where(condition, x, y)：当condition为True时输出x，否则输出y。<br>np.where(condition)：当筛选满足condition条件的元素。<br>np.argwhere(expression)：返回非0的数组位置的索引，其中expression是要索引数组的条件，非0数组指的时expression中左值对应的数组。<br>a.ptp()：计算数组元素最大值与最小值的差。<br>np.pi：数学中的π。<br>numpy.euler_gamma：数学中的伽马。<br>np.e：欧拉的常数，自然对数的基础，纳皮尔的常数<br>np.newaxis：None的别称，用于增加一个维度。<br>np.inf：IEEE 754 浮点表示（正）无穷大。<br>np.infinity：IEEE 754 浮点表示（正）无穷大。<br>np.infty：IEEE 754浮点表示（正）无穷大。<br>np.pinf：IEEE 754 浮点表示（正）无穷大。<br>np.ninf：IEEE 754 浮点表示负无穷大。<br>np.nan：IEEE 754 浮点表示非数字（NaN）。<br>np.pzero：IEEE 754 浮点表示正零。<br>np.nzero：IEEE 754 浮点表示负零。<br>np.isnan(item)：查看item是否为nan值。<br>np.isinf(item) : 显示item元素是否为正或负无穷大。<br>np.isposinf(item) : 显示item元素是否为正无穷大。<br>np.isneginf(item) : 显示item元素是否为负无穷大。<br>np.isnan(item) : 显示item元素是否不是数字。<br>np.isfinite(item) : 显示item元素是否为有限的（不是非数字，正无穷大和负无穷大中的一个）<br>np.nan_to_num(x)：使用0代替数组x中的nan元素，使用有限的数字代替inf元素。<br>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)：对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出；return_index=True返回新列表元素在旧列表中的位置，并以列表形式储存；return_inverse=True返回旧列表元素在新列表中的位置，并以列表形式储存；return_count=True对独特值进行计数。<br>np.digitize(x, bins, right = False)：获得属于数组的每个值的bin的索引数组。<br>np.searchsorted(a, x)：输出x在a中所处数字间的间隔代号。<br>np.sort(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序，会影响列表本身。<br>np.sorted(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序， 不会影响列表本身。<br>np.clip(a, a_min, a_max)：将a的范围限制到[a_min, a_max]之间。<br>np.intersect1d(a1, a2, assume_unique=False)：返回a1中和a2共有的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.setdiff1d(a1, a2, assume_unique=False)：返回a1中和a2差异的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.convolve(a, b, mode=‘full’)：对数组a，b进行卷积运算。<br>np.interp(x, xp, fp)：给定1维数据x中插入点(xp, fp)。<br>np.allclose(a, b)：比较两个array是不是每一元素都相等，默认在1e-05的误差范围内。<br>numpy.trunc(x, /, out=None, *, where=True, casting=’same_kind’, order=’K’, dtype=None, subok=True[, signature, extobj])：以元素方式返回输入的截断值。标量x的截断值是最接近的整数i，它比x更接近零。简而言之，丢弃带符号数x的小数部分。</li>
-</ul>
-<hr>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>Note</tag>
-        <tag>Numpy</tag>
       </tags>
   </entry>
   <entry>
@@ -1581,6 +1536,51 @@
       </tags>
   </entry>
   <entry>
+    <title>numpy 基本使用</title>
+    <url>/2020/03/14/numpy-function/</url>
+    <content><![CDATA[<p><strong><em>对Numpy库中的函数进行整理</em></strong><br>学习DL途中对于numpy的一个粗略整理，部分函数只给出常用参数，之后可能会跳出其中几个复杂的做详细记录。</p>
+<a id="more"></a>
+<hr>
+<h2 id="查看数组属性"><a href="#查看数组属性" class="headerlink" title="查看数组属性"></a>查看数组属性</h2><ul>
+<li><strong>函数及其功能</strong><br>a.ndim：维度。<br>a.shape：改变自身各维度的尺度。<br>a.size：元素的个数。<br>a.dtype：元素的类型。<br>a.itemsize：每个元素的大小。</li>
+</ul>
+<hr>
+<h2 id="数组的初始化"><a href="#数组的初始化" class="headerlink" title="数组的初始化"></a>数组的初始化</h2><ul>
+<li><strong>函数及其功能</strong><br>np.array(a)/np.ndarray(shape, dtype)：初始化数组a。<br>np.arange(start, end, distance, dtype=None)：由[start, end)创建一个步进为distance的行数组。<br>np.ones((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的1数组。<br>np.zeros((shape), dtype=np.float64)：创建shape大小，内涵dtype类型的0数组。<br>np.full((shape), val, dtype=None)：创建shape大小，内涵dtype类型val的填充数组。<br>np.empty((shape), dtype=np.float64)：生成一个shape大小，dtype类型含无意义数的数组。<br>np.eye(n, dtype=np.float64)：创建一个n*n，dtype类型的单位数组。<br>np.ones_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的1数组。<br>np.zeros_like(a, dtype=None)：创建一个和a相同大小，填充dtype类型的0数组。<br>np.full_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型fill_value的数组。<br>np.empty_like(a, fill_value, dtype=None)：创建一个和a相同大小，填充dtype类型无意义值的数组。<br>np.linspace(start, end, distance)：由[start, end)区间等间距地生成数组.<br>np.set_printoptions(precision=None, threshold=None)：设置所有数组的精度和打印位数。</li>
+</ul>
+<hr>
+<h2 id="数组的合并"><a href="#数组的合并" class="headerlink" title="数组的合并"></a>数组的合并</h2><ul>
+<li><strong>函数及其功能</strong><br>np.concatenate((a, b), axis=0):将b沿着垂直方向（axis=0）或者水平方向（axis=1）与a进行合并。<br>np.vstack((a, b))：沿着竖直方向将数组堆叠起来。<br>np.hstack((a, b))：沿着水平方向将数组堆叠起来。<br>np.c_(a, b)：将列向量进行连接。<br>np.r_(a, b)：将行向量进行链接。</li>
+</ul>
+<hr>
+<h2 id="数组的维度操作"><a href="#数组的维度操作" class="headerlink" title="数组的维度操作"></a>数组的维度操作</h2><ul>
+<li><strong>函数及其功能</strong><br>a.reshape(shape) : 不改变当前数组，依shape生成。<br>a.resize(shape) : 改变当前数组，依shape生成。<br>a.swapaxes(ax1, ax2) : 将两个维度调换。<br>a.flatten() : 对数组进行降维，返回折叠后的一维数组。<br>a.ravel()：对数组进行降维，不会产生源数据的副本。<br>a.squeeze()：对数组进行降维，只能对维数为1的维度降维。<br>np.newaxis：增加一个维度。<br>a.repeat(repeat, axis=None)：将a数组进行repeat倍扩充，axis=0时进行纵向扩充，axis=1时进行横向扩充，为设置时进项扁平化处理。<br>np.repeat(x, y)：创建一个数组，内含y个x。<br>np.tile(a, tile)：对数字进行轮流扩充，将原数据最大单元看做一个单元，将形状变为tile的形状。<br>np.asscalar(a)：将只有一个元素的数组a，转化成标量值。</li>
+</ul>
+<hr>
+<h2 id="数组的类型变换"><a href="#数组的类型变换" class="headerlink" title="数组的类型变换"></a>数组的类型变换</h2><ul>
+<li><strong>函数及其功能</strong><br>a.asarray(b)：将一个非numpy数组的元素转变为numpy数组。<br>a.astype(new_type) : 数据类型的转换。<br>a.tolist()：数组向列表的转换。</li>
+</ul>
+<hr>
+<h2 id="数组的运算操作"><a href="#数组的运算操作" class="headerlink" title="数组的运算操作"></a>数组的运算操作</h2><ul>
+<li><strong>函数及其功能</strong><br>a.transpose()/a.T()：求a矩阵的转置矩阵。<br>np.abs(a)/np.fabs(a)/np.absolute(a): 取各元素的绝对值。<br>np.sqrt(a): 计算各元素的平方根。<br>np.square(a): 计算各元素的平方。<br>np.log(a): 计算以e为底，a的对数。<br>np.log10(a)：计算以10为底，a的对数。<br>np.log2(a)：计算以2为底，a的对数。<br>np.ceil(a)：返回输入值的上限，向上取整。<br>np.floor(a): 返回不大于输入参数的最大整数，向下取整。<br>np.around(a, decimals=0): 返回各元素四舍五入的值，decimals指定保留至小数点后xx位，如果为负，整数将四舍五入到小数点左侧的位置，与round()函数类似。<br>np.exp(a): 计算各元素的指数值。<br>np.sign(a): 计算各元素的符号值 1（+），0，-1（-）。<br>a.copy()：将a进行深复制。<br>a.view()：将a进行浅复制。<br>np.copysign(a, b): 将b中各元素的符号赋值给数组a的对应元素。<br>np.mod(a, b): 元素级的模运算。<br>np.dot(a, b)：对矩阵进行点乘运算。<br>np.sin(a)：计算a的正弦。<br>np.cos(a)：计算a的余弦。<br>np.tan(a)：计算a的正切。<br>np.cov(x)：求协方差。<br>np.corrcoef(x, y)：求x，y相关系数。<br>np.logical_and(x, y)：返回x和y逻辑与之后的结果。<br>np.logical_or(x, y)：返回x和y逻辑或之后的结果。<br>np.logical_not(x, y)：返回x和y逻辑非之后的结果。<br>np.logical_xor(x, y)：返回x和y逻辑异或之后的结果。<br>np.vectorize(myfunc, otype)：定义了一个矢量函数myfunc，输入是嵌套化的对象序列或者是numpy数组，输出是单个或元组的numpy数组，otype指定输出值的类型。<br>np.gradient(a)：计算数组a中元素的梯度。<br>numpy.linalg.solve(a, b)：返回矩阵方程ax=b的解。<br>numpy.linalg.norm(a, ord=2)：求矩阵a的范数，ord=1求一范数，ord=2求二范数，ord=np.inf求无穷范数，当a为两个数组相减的表达式时是计算欧氏距离。</li>
+</ul>
+<hr>
+<h2 id="随机数函数"><a href="#随机数函数" class="headerlink" title="随机数函数"></a>随机数函数</h2><ul>
+<li><strong>函数及其功能</strong><br>np.random.seed(s)：随机数种子，使用下面的随机方法前最好设置一个随机数种子。<br>np.random.rand(d0, d1, …,dn)：各元素是[0, 1）的浮点数，服从均匀分布。<br>np.random.randn(d0, d1, …,dn)：标准正态分布。<br>np.random.randint(low，high=None, size)：创建size个随机整数或整数数组，范围是[low, high），如果没有写参数high的值，则返回[0,low)的值。<br>np.random.shuffle(a)：根据数组a的第一轴进行随机排列，改变数组a。<br>np.random.permutation(a)：根据数组a的第一轴进行随机排列，但是不改变原数组，将生成新数组。<br>np.random.choice(a, size, replace=False, p)：从一维数组a中以概率p抽取元素， 形成size形状新数组，replace表示是否可以重用元素，默认为False。<br>np.random.uniform(low, high, size)：产生均匀分布的数组，起始值为low，high为结束值，size为形状。<br>np.random.normal(loc, scale, size)：产生正态分布的数组，loc为均值，scale为标准差，size为形状。<br>np.random.poisson(lam, size)：产生泊松分布的数组，lam随机事件发生概率，size为形状。</li>
+</ul>
+<hr>
+<h2 id="统计函数"><a href="#统计函数" class="headerlink" title="统计函数"></a>统计函数</h2><ul>
+<li><strong>函数及其功能</strong><br>np.diff(a, n=1, axis=1)：沿着指定轴计算第N维的离散差值（执行的是后一个元素减去前一个元素）。<br>np.sum(a, axis = None)：依给定轴axis计算数组a相关元素之和，axis为整数或者元组。<br>numpy.cumsum(a, axis=None, dtype=None)：按照所给定的轴参数返回元素的梯形累计和(后一个加上前面元素的累加和)，axis=0，按照行累加。axis=1，按照列累加。axis不给定具体值，就把numpy数组当成一个一维数组。<br>numpy.ufunc.accumulate(a, axis=0, dtype=None)：照所给定的轴参数返回根据ufunc进行计算的元素的梯形累计，ufunc可以是add，multiply等。<br>np.mean(a)：返回数组元素中的均值。<br>np.average(a, axis =None, weights=None)：依给定轴axis计算数组a相关元素的加权平均值。<br>np.median(a, axis=None)：计算数组的中位数。<br>np.std(a, axis=None)：计算数组的标准差，axis=0时计算每一列的标砖茶，axis=1计算每一行的标准差。<br>a.var()：计算数组的方差。<br>np.max(a, axis=0)：寻找数组中的最大值。<br>np.min(a, axis=0)：寻找数组中的最小值。<br>np.maximum(a, b)/np.fmax()：a,b逐位比较（或者计算）元素级的最大值。<br>np.minimum(a, b)/np.fmin()：a,b逐位比较（或者计算）元素级的最小值。<br>np.argmax(a, axis=None)：沿axis返回最大值的索引。<br>np.argmin(a, axis=None)：沿axis返回最小值的索引。<br>np.argsort(a, axis=None)：返回的是数组值从小到大的索引值。<br>np.argpartition(a, kth)：是将第k大的数字，放在第k个位置。类似于快排找第k大的数，堆其它数不做排序。<br>np.amin(a，axis=None)：返回一维数组a中的最小值，二维数组需通过axis指定行或列，获取行（1）或列（0）的最小值，如不指定，则是所有元素的最小值 。<br>np.amax(a, axis=None)：返回一维数组a中的最大值，二维数组需通过axis指定行（1）或列（0），获取行或列的最大值，如不指定，则是所有元素的最大值。<br>numpy.apply_along_axis(func, axis, arr)：func指定转换方法，axis指定按行（1）运算还是按列（0）运算，arr指定数组。<br>np.nonzero(a)：返回数组a中非零元素的索引值数组。<br>np.percentile(a, percent)：返回数组中第percent%位置的浮点数。<br>(expression).all()：两个数组进行比较时如果所有元素根据expression都为True则返回True。<br>(expression).any()：两个数组进行比较时如果任意元素根据expression都为True则返回True。<br>np.bincount(a)：统计a中[min, max]之间各个数字的出现次数。<br>np.where(condition, x, y)：当condition为True时输出x，否则输出y。<br>np.where(condition)：当筛选满足condition条件的元素。<br>np.argwhere(expression)：返回非0的数组位置的索引，其中expression是要索引数组的条件，非0数组指的时expression中左值对应的数组。<br>a.ptp()：计算数组元素最大值与最小值的差。<br>np.pi：数学中的π。<br>numpy.euler_gamma：数学中的伽马。<br>np.e：欧拉的常数，自然对数的基础，纳皮尔的常数<br>np.newaxis：None的别称，用于增加一个维度。<br>np.inf：IEEE 754 浮点表示（正）无穷大。<br>np.infinity：IEEE 754 浮点表示（正）无穷大。<br>np.infty：IEEE 754浮点表示（正）无穷大。<br>np.pinf：IEEE 754 浮点表示（正）无穷大。<br>np.ninf：IEEE 754 浮点表示负无穷大。<br>np.nan：IEEE 754 浮点表示非数字（NaN）。<br>np.pzero：IEEE 754 浮点表示正零。<br>np.nzero：IEEE 754 浮点表示负零。<br>np.isnan(item)：查看item是否为nan值。<br>np.isinf(item) : 显示item元素是否为正或负无穷大。<br>np.isposinf(item) : 显示item元素是否为正无穷大。<br>np.isneginf(item) : 显示item元素是否为负无穷大。<br>np.isnan(item) : 显示item元素是否不是数字。<br>np.isfinite(item) : 显示item元素是否为有限的（不是非数字，正无穷大和负无穷大中的一个）<br>np.nan_to_num(x)：使用0代替数组x中的nan元素，使用有限的数字代替inf元素。<br>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)：对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出；return_index=True返回新列表元素在旧列表中的位置，并以列表形式储存；return_inverse=True返回旧列表元素在新列表中的位置，并以列表形式储存；return_count=True对独特值进行计数。<br>np.digitize(x, bins, right = False)：获得属于数组的每个值的bin的索引数组。<br>np.searchsorted(a, x)：输出x在a中所处数字间的间隔代号。<br>np.sort(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序，会影响列表本身。<br>np.sorted(a, axis=1)：对a进行排序，默认为按行从小到大排序，当axis=0时按列从小到大排序， 不会影响列表本身。<br>np.clip(a, a_min, a_max)：将a的范围限制到[a_min, a_max]之间。<br>np.intersect1d(a1, a2, assume_unique=False)：返回a1中和a2共有的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.setdiff1d(a1, a2, assume_unique=False)：返回a1中和a2差异的值，当assume_unique为True时，嘉定输入的a1和a2是唯一的，可以加快计算速度。<br>np.convolve(a, b, mode=‘full’)：对数组a，b进行卷积运算。<br>np.interp(x, xp, fp)：给定1维数据x中插入点(xp, fp)。<br>np.allclose(a, b)：比较两个array是不是每一元素都相等，默认在1e-05的误差范围内。<br>numpy.trunc(x, /, out=None, *, where=True, casting=’same_kind’, order=’K’, dtype=None, subok=True[, signature, extobj])：以元素方式返回输入的截断值。标量x的截断值是最接近的整数i，它比x更接近零。简而言之，丢弃带符号数x的小数部分。</li>
+</ul>
+<hr>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>Note</tag>
+        <tag>Numpy</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>mariaDB符号</title>
     <url>/2020/04/21/sign-for-mariadb/</url>
     <content><![CDATA[<p><strong><em>对mariaDB操作符的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
@@ -1899,6 +1899,241 @@
         <tag>Python</tag>
         <tag>Note</tag>
         <tag>Crawler</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>股票爬虫实例</title>
+    <url>/2020/04/15/stock-example/</url>
+    <content><![CDATA[<p><strong><em>股票爬虫实例</em></strong></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><p><strong>功能描述</strong></p>
+<ul>
+<li>目标：获取上交所和深交所所有股票的名称和交易信息</li>
+<li>输出：保存到文件中</li>
+<li>技术路线：<blockquote>
+<p>requests<br>bs4<br>re</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>候选数据网站的选择</strong></p>
+<blockquote>
+<p>新浪股票：<a href="http://finance.sina.com.cn/stock/" target="_blank" rel="noopener">http://finance.sina.com.cn/stock/</a><br>百度股票：<a href="https://gupiao.baidu.com/stock/" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/</a></p>
+</blockquote>
+<ul>
+<li>选取原则：股票信息静态存在于HTML页面中，非js代码生成,没有Robots协议限制</li>
+<li>选取方法：浏览器 F12，源代码查看等</li>
+<li>选取心态：不要纠结于某个网站，多找信息源尝试</li>
+</ul>
+</li>
+<li><p><strong>数据网站的确定</strong></p>
+<ul>
+<li>获取股票列表：<blockquote>
+<p>东方财富网：<a href="http://quote.eastmoney.com/stocklist.html" target="_blank" rel="noopener">http://quote.eastmoney.com/stocklist.html</a></p>
+</blockquote>
+</li>
+<li>获取个股信息：<blockquote>
+<p>百度股票：<a href="https://gupiao.baidu.com/stock/" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/</a><br>单个股票：<a href="https://gupiao.baidu.com/stock/sz002439.html" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/sz002439.html</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>程序的结构设计</strong></p>
+<blockquote>
+<p>步骤1：从东方财富网获取股票列表<br>步骤2：根据股票列表逐个到百度股票获取个股信息<br>步骤3：将结果存储到文件</p>
+</blockquote>
+</li>
+<li><p><strong>程序代码（已经优化）</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> traceback</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认设置为utf-8编码，使用apparent_encoding会花费更多时间</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span><span class="params">(url, code=<span class="string">"utf-8"</span>)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = code</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getStockList</span><span class="params">(lst, stockURL)</span>:</span></span><br><span class="line">    html = getHTMLText(stockURL, <span class="string">"GB2312"</span>)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>) </span><br><span class="line">    a = soup.find_all(<span class="string">'a'</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            href = i.attrs[<span class="string">'href'</span>]</span><br><span class="line">            lst.append(re.findall(<span class="string">r"[s][hz]\d&#123;6&#125;"</span>, href)[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加动态速度</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getStockInfo</span><span class="params">(lst, stockURL, fpath)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> stock <span class="keyword">in</span> lst:</span><br><span class="line">        url = stockURL + stock + <span class="string">".html"</span></span><br><span class="line">        html = getHTMLText(url)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span> html==<span class="string">""</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            infoDict = &#123;&#125;</span><br><span class="line">            soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">            stockInfo = soup.find(<span class="string">'div'</span>,attrs=&#123;<span class="string">'class'</span>:<span class="string">'stock-bets'</span>&#125;)</span><br><span class="line"></span><br><span class="line">            name = stockInfo.find_all(attrs=&#123;<span class="string">'class'</span>:<span class="string">'bets-name'</span>&#125;)[<span class="number">0</span>]</span><br><span class="line">            infoDict.update(&#123;<span class="string">'股票名称'</span>: name.text.split()[<span class="number">0</span>]&#125;)</span><br><span class="line">            </span><br><span class="line">            keyList = stockInfo.find_all(<span class="string">'dt'</span>)</span><br><span class="line">            valueList = stockInfo.find_all(<span class="string">'dd'</span>)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(keyList)):</span><br><span class="line">                key = keyList[i].text</span><br><span class="line">                val = valueList[i].text</span><br><span class="line">                infoDict[key] = val</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">with</span> open(fpath, <span class="string">'a'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write( str(infoDict) + <span class="string">'\n'</span> )</span><br><span class="line">                count = count + <span class="number">1</span></span><br><span class="line">                print(<span class="string">"\r当前进度: &#123;:.2f&#125;%"</span>.format(count*<span class="number">100</span>/len(lst)),end=<span class="string">""</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            count = count + <span class="number">1</span></span><br><span class="line">            print(<span class="string">"\r当前进度: &#123;:.2f&#125;%"</span>.format(count*<span class="number">100</span>/len(lst)),end=<span class="string">""</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    stock_list_url = <span class="string">'http://quote.eastmoney.com/stocklist.html'</span></span><br><span class="line">    stock_info_url = <span class="string">'http://gupiao.baidu.com/stock/'</span></span><br><span class="line">    output_file = <span class="string">'D:/BaiduStockInfo.txt'</span></span><br><span class="line">    slist=[]</span><br><span class="line">    getStockList(slist, stock_list_url)</span><br><span class="line">    getStockInfo(slist, stock_info_url, output_file)</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Crawler</tag>
+        <tag>Example</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mariaDB高级技巧</title>
+    <url>/2020/04/21/sneior-for-mariadb/</url>
+    <content><![CDATA[<p><strong><em>对mariaDB高级部分的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><p><strong>MariaDB创建函数</strong></p>
+<ul>
+<li><p>语法</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span>   </span><br><span class="line">[ DEFINER = &#123; <span class="keyword">CURRENT_USER</span> | user_name &#125; ]   </span><br><span class="line"><span class="keyword">FUNCTION</span> function_name [ (parameter datatype [, parameter datatype]) ]  </span><br><span class="line"><span class="keyword">RETURNS</span> return_datatype [ <span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span>  </span><br><span class="line">| <span class="keyword">DETERMINISTIC</span>  </span><br><span class="line">| <span class="keyword">NOT</span> <span class="keyword">DETERMINISTIC</span>  </span><br><span class="line">| &#123; CONTAINS <span class="keyword">SQL</span>   </span><br><span class="line">| <span class="keyword">NO</span> <span class="keyword">SQL</span>  </span><br><span class="line">| <span class="keyword">READS</span> <span class="keyword">SQL</span> <span class="keyword">DATA</span>  </span><br><span class="line">| MODIFIES <span class="keyword">SQL</span> <span class="keyword">DATA</span> &#125;  </span><br><span class="line">| <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> &#123; DEFINER | INVOKER &#125;  </span><br><span class="line">| <span class="keyword">COMMENT</span> <span class="string">'comment_value'</span>  </span><br><span class="line"><span class="keyword">BEGIN</span>  </span><br><span class="line">    declaration_section  </span><br><span class="line">    executable_section  </span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>示例</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">DELIMITER //</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> CalcValue ( starting_value <span class="built_in">INT</span> )</span><br><span class="line"><span class="keyword">RETURNS</span> <span class="built_in">INT</span> <span class="keyword">DETERMINISTIC</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> total_value <span class="built_in">INT</span>;<span class="comment"># 声明一个变量</span></span><br><span class="line">    <span class="keyword">SET</span> total_value = <span class="number">0</span>;<span class="comment"># 为变量赋值</span></span><br><span class="line">    label1: WHILE total_value &lt;= 3000 DO# 循环</span><br><span class="line">    <span class="keyword">SET</span> total_value = total_value + starting_value;</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">WHILE</span> label1;<span class="comment"># 结束循环</span></span><br><span class="line">    RETURN total_value;<span class="comment"># 返回值</span></span><br><span class="line"><span class="keyword">END</span>; //<span class="comment"># 结束循环</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>参数说明</p>
+<ul>
+<li>DEFINER子句：它是一个可选的子句。如果没有指定，定义者是创建函数的用户。 如果您希望指定不同的定义者，则必须包含DEFINER子句，其中user_name是该函数的定义者。</li>
+<li>function_name：指定要在MariaDB中分配给此函数的名称。</li>
+<li>return_datatype：它指定函数返回值的数据类型。</li>
+<li>LANGUAGE SQL：语法为可移植语法，但不会影响函数。</li>
+<li>DETERMINISTIC：表示该函数将总是返回给定一组输入参数的一个结果。</li>
+<li>NOT DETERMINISTIC：表示给定一组输入参数，该函数可能会返回不同的结果。 结果可能受到表数据，随机数字或服务器变量的影响。</li>
+<li>CONTAINS SQL：这是默认的。这是一个告知MariaDB该函数包含SQL的信息性子句，但数据库不验证为真。</li>
+<li>NO SQL：没有使用的信息性子句将不会影响函数。</li>
+<li>READS SQL DATA：一个告知MariaDB该函数将使用SELECT语句读取数据但不修改任何数据的信息性子句。</li>
+<li>MODIFIES SQL DATA：一个告知MariaDB该函数将使用INSERT，UPDATE，DELETE或其他DDL语句修改SQL数据的信息性子句。</li>
+<li>declaration_section：声明局部变量的函数的地方。</li>
+<li>executable_section：在函数中输入函数代码的地方。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>MariaDB过程</strong></p>
+<ul>
+<li><p>语法</p>
+  <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span>   </span><br><span class="line">[ DEFINER = &#123; <span class="keyword">CURRENT_USER</span> | user_name &#125; ]   </span><br><span class="line"><span class="keyword">PROCEDURE</span> procedure_name [ (parameter datatype [, parameter datatype]) ]  </span><br><span class="line">[ <span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span>  </span><br><span class="line">| <span class="keyword">DETERMINISTIC</span>  </span><br><span class="line">| <span class="keyword">NOT</span> <span class="keyword">DETERMINISTIC</span>  </span><br><span class="line">| &#123; CONTAINS <span class="keyword">SQL</span>   </span><br><span class="line">| <span class="keyword">NO</span> <span class="keyword">SQL</span>  </span><br><span class="line">| <span class="keyword">READS</span> <span class="keyword">SQL</span> <span class="keyword">DATA</span>  </span><br><span class="line">| MODIFIES <span class="keyword">SQL</span> <span class="keyword">DATA</span> &#125;  </span><br><span class="line">| <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> &#123; DEFINER | INVOKER &#125;  </span><br><span class="line">| <span class="keyword">COMMENT</span> <span class="string">'comment_value'</span>  </span><br><span class="line"><span class="keyword">BEGIN</span>  </span><br><span class="line">declaration_section  </span><br><span class="line">executable_section  </span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>参数说明</p>
+<ul>
+<li>DEFINER：可选。procedure_name：在MariaDB中分配给此过程的名称。</li>
+<li>Parameter：传入过程的一个或多个参数。创建过程时，可以声明三种类型的参数：<ul>
+<li>IN：参数可以被程序引用。 该参数的值不能被程序覆盖。</li>
+<li>OUT：参数不能被程序引用，但参数的值可以被程序覆盖。</li>
+<li>IN OUT：参数可以被程序引用，参数的值可以被程序覆盖。</li>
+</ul>
+</li>
+<li>LANGUAGE SQL：语法为可移植语法，但不会影响函数。</li>
+<li>DETERMINISTIC：表示该函数将始终返回给定一组输入参数的一个结果。</li>
+<li>NOT DETERMINISTIC：表示给定一组输入参数，该函数可能会返回不同的结果。 结果可能受到表格数据，随机数字或服务器变量的影响。</li>
+<li>CONTAINS SQL：这是默认的。这是一个告知MariaDB该函数包含SQL的信息性子句，但数据库不验证它是真的。</li>
+<li>NO SQL：这是一个信息性子句，不使用也不会影响功能。</li>
+<li>READS SQL DATA：这是一个告知MariaDB的函数，它将使用SELECT语句读取数据，但不会修改任何数据。</li>
+<li>MODIFIES SQL DATA：这是一个告知MariaDB的信息子句，该函数将使用INSERT，UPDATE，DELETE或其他DDL语句修改SQL数据。</li>
+<li>declaration_section：声明局部变量的过程中的位置。</li>
+<li>executable_section：输入过程代码的过程中的位置。</li>
+</ul>
+</li>
+<li><p>示例</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">DELIMITER //  </span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">procedure</span> CalcValue ( <span class="keyword">OUT</span> ending_value <span class="built_in">INT</span> )  </span><br><span class="line"><span class="keyword">DETERMINISTIC</span>  </span><br><span class="line"><span class="keyword">BEGIN</span>  </span><br><span class="line"><span class="keyword">DECLARE</span> total_value <span class="built_in">INT</span>;  </span><br><span class="line"><span class="keyword">SET</span> total_value = <span class="number">50</span>;  </span><br><span class="line">label1: WHILE total_value &lt;= 3000 DO  </span><br><span class="line">    <span class="keyword">SET</span> total_value = total_value * <span class="number">2</span>;  </span><br><span class="line"><span class="keyword">END</span> <span class="keyword">WHILE</span> label1;  </span><br><span class="line"><span class="keyword">SET</span> ending_value = total_value;  </span><br><span class="line"><span class="keyword">END</span>; //  </span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>删除过程</p>
+  <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">procedure</span> [ <span class="keyword">IF</span> <span class="keyword">EXISTS</span> ] procedure_name;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p><strong>MariaDB正则表达式</strong></p>
+<ul>
+<li>详见之前学习爬虫时关于<a href="https://www.johnaki.xyz/2020/04/13/re-note/" target="_blank" rel="noopener">re库的笔记</a>。</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>淘宝爬虫实例</title>
+    <url>/2020/04/14/tb-example/</url>
+    <content><![CDATA[<p><strong><em>淘宝爬虫实例</em></strong></p>
+<a id="more"></a>
+<hr>
+<ul>
+<li><p><strong>功能描述</strong></p>
+<ul>
+<li>目标：获取淘宝搜索页面的信息，提取其中的商品名称和价格</li>
+<li>理解：<blockquote>
+<p>淘宝的搜索接口<br>翻页的处理</p>
+</blockquote>
+</li>
+<li>技术路线：<blockquote>
+<p>requests<br>bs4<br>re</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>搜索接口和翻页的URL对应属性</strong></p>
+<ul>
+<li>书包链接（每页44个商品）<blockquote>
+<p>起始页：<a href="https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8" target="_blank" rel="noopener">https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8</a><br>第二页：<a href="https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8&amp;bcoffset=0&amp;ntoffset=0&amp;p4ppushleft=1%2C48&amp;s=44" target="_blank" rel="noopener">https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8&amp;bcoffset=0&amp;ntoffset=0&amp;p4ppushleft=1%2C48&amp;s=44</a><br>第三页：<a href="https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8&amp;bcoffset=-3&amp;ntoffset=-3&amp;p4ppushleft=1%2C48&amp;s=88" target="_blank" rel="noopener">https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8&amp;bcoffset=-3&amp;ntoffset=-3&amp;p4ppushleft=1%2C48&amp;s=88</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p><strong>注意</strong></p>
+<ul>
+<li>打开淘宝网的robots.txt  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: &#x2F;</span><br></pre></td></tr></table></figure></li>
+<li>仅探讨技术实现，请不要不加限制的爬取该网站</li>
+</ul>
+</li>
+<li><p><strong>程序的结构设计</strong></p>
+<blockquote>
+<p>步骤1：提交商品搜索请求，循环获取页面<br>步骤2：对于每个页面，提取商品名称和价格信息<br>步骤3：将信息输出到屏幕上</p>
+</blockquote>
+</li>
+<li><p><strong>程序代码</strong></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url, timeout=<span class="number">30</span>)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">"Error"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePage</span><span class="params">(ilt, html)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        plt = re.findall(<span class="string">r'\"view_price\"\:\"[\d\.]*\"'</span>,html)</span><br><span class="line">        tlt = re.findall(<span class="string">r'\"raw_title\"\:\".*?\"'</span>,html)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(plt))):</span><br><span class="line">            <span class="comment"># eval()用于去除引号</span></span><br><span class="line">            price = eval(plt[i].split(<span class="string">':'</span>)[<span class="number">1</span>])</span><br><span class="line">            title = eval(tlt[i].split(<span class="string">':'</span>)[<span class="number">1</span>])</span><br><span class="line">            ilt.append([price, title])</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">"Error2"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printGoodsList</span><span class="params">(ilt)</span>:</span></span><br><span class="line">    tplt = <span class="string">"&#123;:4&#125;\t&#123;:8&#125;\t&#123;:16&#125;"</span></span><br><span class="line">    print(tplt.format(<span class="string">"序号"</span>, <span class="string">"价格"</span>, <span class="string">"商品名称"</span>))</span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> g <span class="keyword">in</span> ilt:</span><br><span class="line">        count = count + <span class="number">1</span></span><br><span class="line">        print(tplt.format(count, g[<span class="number">0</span>], g[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    goods = <span class="string">'书包'</span></span><br><span class="line">    depth = <span class="number">2</span></span><br><span class="line">    start_url = <span class="string">'https://s.taobao.com/search?q='</span>+goods</span><br><span class="line">    infoList = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(depth):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            url = start_url + <span class="string">'&amp;s='</span> + str(<span class="number">44</span>*i)</span><br><span class="line">            html = getHTMLText(url)</span><br><span class="line">            parsePage(infoList, html)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">    printGoodsList(infoList)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span></span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Crawler</tag>
+        <tag>Example</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>numpy.unique()详解</title>
+    <url>/2020/03/19/unique/</url>
+    <content><![CDATA[<p><strong><em>numpy库里面的unique参数比较多，有些复杂，故整理一下方便以后查阅。</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="np-unique-a-return-index-False-return-inverse-False-return-counts-False-axis-None"><a href="#np-unique-a-return-index-False-return-inverse-False-return-counts-False-axis-None" class="headerlink" title="np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)"></a>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)</h2><ul>
+<li>对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.unique(a)</span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure></li>
+<li>return_index=True<u>返回新列表元素在旧列表中的位置</u>，并以列表形式储存。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b,s = np.unique(a, return_index=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(b)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(s)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">4</span> <span class="number">5</span> <span class="number">3</span>]</span><br></pre></td></tr></table></figure></li>
+<li>return_inverse=True<u>返回旧列表元素在新列表中的位置</u>，并以列表形式储存。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>c,s,p = np.unique(a, return_index=<span class="literal">True</span>, return_inverse=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(c)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(s)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">4</span> <span class="number">5</span> <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(p)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">1</span> <span class="number">4</span> <span class="number">2</span> <span class="number">3</span> <span class="number">2</span>]</span><br></pre></td></tr></table></figure></li>
+<li>return_count=True对独特值进行计数。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d,q = np.unique(a, return_counts=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(d)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(q)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">2</span> <span class="number">1</span> <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<ul>
+<li>参考自<a href="https://blog.csdn.net/yangyuwen_yang/article/details/79193770" target="_blank" rel="noopener">https://blog.csdn.net/yangyuwen_yang/article/details/79193770</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Note</tag>
+        <tag>Numpy</tag>
+        <tag>独特值相关计算</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>where和argwhere详解</title>
+    <url>/2020/03/21/where-argwhere/</url>
+    <content><![CDATA[<p><strong><em>学习Numpy发现np.where()使用有一些难点，顺便一块将np.argsort()进行整理</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="np-where-condition-x-y"><a href="#np-where-condition-x-y" class="headerlink" title="np.where(condition, x, y)"></a>np.where(condition, x, y)</h2><ul>
+<li>功能：当condition为真时执行x，否则执行y。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1.1</span>, <span class="number">2.2</span>, <span class="number">3.3</span>, <span class="number">4.4</span>, <span class="number">5.5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.array([<span class="number">6.1</span>, <span class="number">7.2</span>, <span class="number">8.3</span>, <span class="number">9.4</span>, <span class="number">10.5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">1.1</span>, <span class="number">2.2</span>, <span class="number">3.3</span>, <span class="number">4.4</span>, <span class="number">5.5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([ <span class="number">6.1</span>,  <span class="number">7.2</span>,  <span class="number">8.3</span>,  <span class="number">9.4</span>, <span class="number">10.5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cond = np.array([<span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">True</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(cond, a, b)</span><br><span class="line">array([<span class="number">1.1</span>, <span class="number">7.2</span>, <span class="number">3.3</span>, <span class="number">9.4</span>, <span class="number">5.5</span>])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="np-where-cond-和a-expression-的辨析"><a href="#np-where-cond-和a-expression-的辨析" class="headerlink" title="np.where(cond)和a[expression]的辨析"></a>np.where(cond)和a[expression]的辨析</h2><ul>
+<li>功能：</li>
+<li>a[expression]返回符合expression的元素。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[a&gt;<span class="number">2</span>] <span class="comment">#直接返回元素</span></span><br><span class="line">array([<span class="number">3</span>, <span class="number">4</span>])</span><br></pre></td></tr></table></figure></li>
+<li>np.where(cond)返回符合cond条件的元素的下标，<u>如果cond中数组为一维，返回值由一个array和一个空值组成，要想得到真真结果需单独获取下标[0]的元素</u>。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(a&gt;<span class="number">2</span>) <span class="comment">#返回的是一个元组</span></span><br><span class="line">(array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]),)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(a&gt;<span class="number">2</span>)[<span class="number">0</span>] <span class="comment">#想要取得里面的array需要单独获取下标[0]的元素</span></span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="np-argwhere-a"><a href="#np-argwhere-a" class="headerlink" title="np.argwhere(a)"></a>np.argwhere(a)</h2><ul>
+<li>功能：返回非0的数组元组的索引，其中a是要索引数组的条件。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">6</span>).reshape(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.argwhere(a&gt;<span class="number">1</span>)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">2</span>]])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(a&gt;<span class="number">1</span>)<span class="comment">#当a中涉及的是一个二位数组时，返回的元组会将下标分成两个维度的数组作为返回值返回，无空值。</span></span><br><span class="line">(array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]), array([<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>Note</tag>
+        <tag>Numpy</tag>
       </tags>
   </entry>
   <entry>
@@ -2280,241 +2515,6 @@
       <tags>
         <tag>Note</tag>
         <tag>Crawler</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>mariaDB高级技巧</title>
-    <url>/2020/04/21/sneior-for-mariadb/</url>
-    <content><![CDATA[<p><strong><em>对mariaDB高级部分的记录（简单记录，太详细会浪费大量时间）</em></strong></p>
-<a id="more"></a>
-<hr>
-<ul>
-<li><p><strong>MariaDB创建函数</strong></p>
-<ul>
-<li><p>语法</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span>   </span><br><span class="line">[ DEFINER = &#123; <span class="keyword">CURRENT_USER</span> | user_name &#125; ]   </span><br><span class="line"><span class="keyword">FUNCTION</span> function_name [ (parameter datatype [, parameter datatype]) ]  </span><br><span class="line"><span class="keyword">RETURNS</span> return_datatype [ <span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span>  </span><br><span class="line">| <span class="keyword">DETERMINISTIC</span>  </span><br><span class="line">| <span class="keyword">NOT</span> <span class="keyword">DETERMINISTIC</span>  </span><br><span class="line">| &#123; CONTAINS <span class="keyword">SQL</span>   </span><br><span class="line">| <span class="keyword">NO</span> <span class="keyword">SQL</span>  </span><br><span class="line">| <span class="keyword">READS</span> <span class="keyword">SQL</span> <span class="keyword">DATA</span>  </span><br><span class="line">| MODIFIES <span class="keyword">SQL</span> <span class="keyword">DATA</span> &#125;  </span><br><span class="line">| <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> &#123; DEFINER | INVOKER &#125;  </span><br><span class="line">| <span class="keyword">COMMENT</span> <span class="string">'comment_value'</span>  </span><br><span class="line"><span class="keyword">BEGIN</span>  </span><br><span class="line">    declaration_section  </span><br><span class="line">    executable_section  </span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure></li>
-<li><p>示例</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">DELIMITER //</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> CalcValue ( starting_value <span class="built_in">INT</span> )</span><br><span class="line"><span class="keyword">RETURNS</span> <span class="built_in">INT</span> <span class="keyword">DETERMINISTIC</span></span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">    <span class="keyword">DECLARE</span> total_value <span class="built_in">INT</span>;<span class="comment"># 声明一个变量</span></span><br><span class="line">    <span class="keyword">SET</span> total_value = <span class="number">0</span>;<span class="comment"># 为变量赋值</span></span><br><span class="line">    label1: WHILE total_value &lt;= 3000 DO# 循环</span><br><span class="line">    <span class="keyword">SET</span> total_value = total_value + starting_value;</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">WHILE</span> label1;<span class="comment"># 结束循环</span></span><br><span class="line">    RETURN total_value;<span class="comment"># 返回值</span></span><br><span class="line"><span class="keyword">END</span>; //<span class="comment"># 结束循环</span></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>参数说明</p>
-<ul>
-<li>DEFINER子句：它是一个可选的子句。如果没有指定，定义者是创建函数的用户。 如果您希望指定不同的定义者，则必须包含DEFINER子句，其中user_name是该函数的定义者。</li>
-<li>function_name：指定要在MariaDB中分配给此函数的名称。</li>
-<li>return_datatype：它指定函数返回值的数据类型。</li>
-<li>LANGUAGE SQL：语法为可移植语法，但不会影响函数。</li>
-<li>DETERMINISTIC：表示该函数将总是返回给定一组输入参数的一个结果。</li>
-<li>NOT DETERMINISTIC：表示给定一组输入参数，该函数可能会返回不同的结果。 结果可能受到表数据，随机数字或服务器变量的影响。</li>
-<li>CONTAINS SQL：这是默认的。这是一个告知MariaDB该函数包含SQL的信息性子句，但数据库不验证为真。</li>
-<li>NO SQL：没有使用的信息性子句将不会影响函数。</li>
-<li>READS SQL DATA：一个告知MariaDB该函数将使用SELECT语句读取数据但不修改任何数据的信息性子句。</li>
-<li>MODIFIES SQL DATA：一个告知MariaDB该函数将使用INSERT，UPDATE，DELETE或其他DDL语句修改SQL数据的信息性子句。</li>
-<li>declaration_section：声明局部变量的函数的地方。</li>
-<li>executable_section：在函数中输入函数代码的地方。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>MariaDB过程</strong></p>
-<ul>
-<li><p>语法</p>
-  <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span>   </span><br><span class="line">[ DEFINER = &#123; <span class="keyword">CURRENT_USER</span> | user_name &#125; ]   </span><br><span class="line"><span class="keyword">PROCEDURE</span> procedure_name [ (parameter datatype [, parameter datatype]) ]  </span><br><span class="line">[ <span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span>  </span><br><span class="line">| <span class="keyword">DETERMINISTIC</span>  </span><br><span class="line">| <span class="keyword">NOT</span> <span class="keyword">DETERMINISTIC</span>  </span><br><span class="line">| &#123; CONTAINS <span class="keyword">SQL</span>   </span><br><span class="line">| <span class="keyword">NO</span> <span class="keyword">SQL</span>  </span><br><span class="line">| <span class="keyword">READS</span> <span class="keyword">SQL</span> <span class="keyword">DATA</span>  </span><br><span class="line">| MODIFIES <span class="keyword">SQL</span> <span class="keyword">DATA</span> &#125;  </span><br><span class="line">| <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> &#123; DEFINER | INVOKER &#125;  </span><br><span class="line">| <span class="keyword">COMMENT</span> <span class="string">'comment_value'</span>  </span><br><span class="line"><span class="keyword">BEGIN</span>  </span><br><span class="line">declaration_section  </span><br><span class="line">executable_section  </span><br><span class="line"><span class="keyword">END</span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>参数说明</p>
-<ul>
-<li>DEFINER：可选。procedure_name：在MariaDB中分配给此过程的名称。</li>
-<li>Parameter：传入过程的一个或多个参数。创建过程时，可以声明三种类型的参数：<ul>
-<li>IN：参数可以被程序引用。 该参数的值不能被程序覆盖。</li>
-<li>OUT：参数不能被程序引用，但参数的值可以被程序覆盖。</li>
-<li>IN OUT：参数可以被程序引用，参数的值可以被程序覆盖。</li>
-</ul>
-</li>
-<li>LANGUAGE SQL：语法为可移植语法，但不会影响函数。</li>
-<li>DETERMINISTIC：表示该函数将始终返回给定一组输入参数的一个结果。</li>
-<li>NOT DETERMINISTIC：表示给定一组输入参数，该函数可能会返回不同的结果。 结果可能受到表格数据，随机数字或服务器变量的影响。</li>
-<li>CONTAINS SQL：这是默认的。这是一个告知MariaDB该函数包含SQL的信息性子句，但数据库不验证它是真的。</li>
-<li>NO SQL：这是一个信息性子句，不使用也不会影响功能。</li>
-<li>READS SQL DATA：这是一个告知MariaDB的函数，它将使用SELECT语句读取数据，但不会修改任何数据。</li>
-<li>MODIFIES SQL DATA：这是一个告知MariaDB的信息子句，该函数将使用INSERT，UPDATE，DELETE或其他DDL语句修改SQL数据。</li>
-<li>declaration_section：声明局部变量的过程中的位置。</li>
-<li>executable_section：输入过程代码的过程中的位置。</li>
-</ul>
-</li>
-<li><p>示例</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">DELIMITER //  </span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">procedure</span> CalcValue ( <span class="keyword">OUT</span> ending_value <span class="built_in">INT</span> )  </span><br><span class="line"><span class="keyword">DETERMINISTIC</span>  </span><br><span class="line"><span class="keyword">BEGIN</span>  </span><br><span class="line"><span class="keyword">DECLARE</span> total_value <span class="built_in">INT</span>;  </span><br><span class="line"><span class="keyword">SET</span> total_value = <span class="number">50</span>;  </span><br><span class="line">label1: WHILE total_value &lt;= 3000 DO  </span><br><span class="line">    <span class="keyword">SET</span> total_value = total_value * <span class="number">2</span>;  </span><br><span class="line"><span class="keyword">END</span> <span class="keyword">WHILE</span> label1;  </span><br><span class="line"><span class="keyword">SET</span> ending_value = total_value;  </span><br><span class="line"><span class="keyword">END</span>; //  </span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>删除过程</p>
-  <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DROP</span> <span class="keyword">procedure</span> [ <span class="keyword">IF</span> <span class="keyword">EXISTS</span> ] procedure_name;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p><strong>MariaDB正则表达式</strong></p>
-<ul>
-<li>详见之前学习爬虫时关于<a href="https://www.johnaki.xyz/2020/04/13/re-note/" target="_blank" rel="noopener">re库的笔记</a>。</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Mysql</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>numpy.unique()详解</title>
-    <url>/2020/03/19/unique/</url>
-    <content><![CDATA[<p><strong><em>numpy库里面的unique参数比较多，有些复杂，故整理一下方便以后查阅。</em></strong></p>
-<a id="more"></a>
-<hr>
-<h2 id="np-unique-a-return-index-False-return-inverse-False-return-counts-False-axis-None"><a href="#np-unique-a-return-index-False-return-inverse-False-return-counts-False-axis-None" class="headerlink" title="np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)"></a>np.unique(a, return_index=False, return_inverse=False, return_counts=False, axis=None)</h2><ul>
-<li>对于只有a参数的一位数组，去除数组中的重复元素，进行排序后输出。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">3</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.unique(a)</span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure></li>
-<li>return_index=True<u>返回新列表元素在旧列表中的位置</u>，并以列表形式储存。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b,s = np.unique(a, return_index=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(b)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(s)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">4</span> <span class="number">5</span> <span class="number">3</span>]</span><br></pre></td></tr></table></figure></li>
-<li>return_inverse=True<u>返回旧列表元素在新列表中的位置</u>，并以列表形式储存。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>c,s,p = np.unique(a, return_index=<span class="literal">True</span>, return_inverse=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(c)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(s)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">4</span> <span class="number">5</span> <span class="number">3</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(p)</span><br><span class="line">[<span class="number">0</span> <span class="number">1</span> <span class="number">1</span> <span class="number">4</span> <span class="number">2</span> <span class="number">3</span> <span class="number">2</span>]</span><br></pre></td></tr></table></figure></li>
-<li>return_count=True对独特值进行计数。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>d,q = np.unique(a, return_counts=<span class="literal">True</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(d)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="number">5</span>]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(q)</span><br><span class="line">[<span class="number">1</span> <span class="number">2</span> <span class="number">2</span> <span class="number">1</span> <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<ul>
-<li>参考自<a href="https://blog.csdn.net/yangyuwen_yang/article/details/79193770" target="_blank" rel="noopener">https://blog.csdn.net/yangyuwen_yang/article/details/79193770</a></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Numpy</tag>
-        <tag>独特值相关计算</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>淘宝爬虫实例</title>
-    <url>/2020/04/14/tb-example/</url>
-    <content><![CDATA[<p><strong><em>淘宝爬虫实例</em></strong></p>
-<a id="more"></a>
-<hr>
-<ul>
-<li><p><strong>功能描述</strong></p>
-<ul>
-<li>目标：获取淘宝搜索页面的信息，提取其中的商品名称和价格</li>
-<li>理解：<blockquote>
-<p>淘宝的搜索接口<br>翻页的处理</p>
-</blockquote>
-</li>
-<li>技术路线：<blockquote>
-<p>requests<br>bs4<br>re</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>搜索接口和翻页的URL对应属性</strong></p>
-<ul>
-<li>书包链接（每页44个商品）<blockquote>
-<p>起始页：<a href="https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8" target="_blank" rel="noopener">https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8</a><br>第二页：<a href="https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8&amp;bcoffset=0&amp;ntoffset=0&amp;p4ppushleft=1%2C48&amp;s=44" target="_blank" rel="noopener">https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8&amp;bcoffset=0&amp;ntoffset=0&amp;p4ppushleft=1%2C48&amp;s=44</a><br>第三页：<a href="https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8&amp;bcoffset=-3&amp;ntoffset=-3&amp;p4ppushleft=1%2C48&amp;s=88" target="_blank" rel="noopener">https://s.taobao.com/search?q=书包&amp;js=1&amp;stats_click=search_radio_all%3A1&amp;initiative_id=staobaoz_20170105&amp;ie=utf8&amp;bcoffset=-3&amp;ntoffset=-3&amp;p4ppushleft=1%2C48&amp;s=88</a></p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>注意</strong></p>
-<ul>
-<li>打开淘宝网的robots.txt  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: &#x2F;</span><br></pre></td></tr></table></figure></li>
-<li>仅探讨技术实现，请不要不加限制的爬取该网站</li>
-</ul>
-</li>
-<li><p><strong>程序的结构设计</strong></p>
-<blockquote>
-<p>步骤1：提交商品搜索请求，循环获取页面<br>步骤2：对于每个页面，提取商品名称和价格信息<br>步骤3：将信息输出到屏幕上</p>
-</blockquote>
-</li>
-<li><p><strong>程序代码</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url, timeout=<span class="number">30</span>)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">"Error"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parsePage</span><span class="params">(ilt, html)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        plt = re.findall(<span class="string">r'\"view_price\"\:\"[\d\.]*\"'</span>,html)</span><br><span class="line">        tlt = re.findall(<span class="string">r'\"raw_title\"\:\".*?\"'</span>,html)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(plt))):</span><br><span class="line">            <span class="comment"># eval()用于去除引号</span></span><br><span class="line">            price = eval(plt[i].split(<span class="string">':'</span>)[<span class="number">1</span>])</span><br><span class="line">            title = eval(tlt[i].split(<span class="string">':'</span>)[<span class="number">1</span>])</span><br><span class="line">            ilt.append([price, title])</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        print(<span class="string">"Error2"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printGoodsList</span><span class="params">(ilt)</span>:</span></span><br><span class="line">    tplt = <span class="string">"&#123;:4&#125;\t&#123;:8&#125;\t&#123;:16&#125;"</span></span><br><span class="line">    print(tplt.format(<span class="string">"序号"</span>, <span class="string">"价格"</span>, <span class="string">"商品名称"</span>))</span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> g <span class="keyword">in</span> ilt:</span><br><span class="line">        count = count + <span class="number">1</span></span><br><span class="line">        print(tplt.format(count, g[<span class="number">0</span>], g[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    goods = <span class="string">'书包'</span></span><br><span class="line">    depth = <span class="number">2</span></span><br><span class="line">    start_url = <span class="string">'https://s.taobao.com/search?q='</span>+goods</span><br><span class="line">    infoList = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(depth):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            url = start_url + <span class="string">'&amp;s='</span> + str(<span class="number">44</span>*i)</span><br><span class="line">            html = getHTMLText(url)</span><br><span class="line">            parsePage(infoList, html)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">    printGoodsList(infoList)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span></span><br><span class="line">    main()</span><br></pre></td></tr></table></figure></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Crawler</tag>
-        <tag>Example</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>股票爬虫实例</title>
-    <url>/2020/04/15/stock-example/</url>
-    <content><![CDATA[<p><strong><em>股票爬虫实例</em></strong></p>
-<a id="more"></a>
-<hr>
-<ul>
-<li><p><strong>功能描述</strong></p>
-<ul>
-<li>目标：获取上交所和深交所所有股票的名称和交易信息</li>
-<li>输出：保存到文件中</li>
-<li>技术路线：<blockquote>
-<p>requests<br>bs4<br>re</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>候选数据网站的选择</strong></p>
-<blockquote>
-<p>新浪股票：<a href="http://finance.sina.com.cn/stock/" target="_blank" rel="noopener">http://finance.sina.com.cn/stock/</a><br>百度股票：<a href="https://gupiao.baidu.com/stock/" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/</a></p>
-</blockquote>
-<ul>
-<li>选取原则：股票信息静态存在于HTML页面中，非js代码生成,没有Robots协议限制</li>
-<li>选取方法：浏览器 F12，源代码查看等</li>
-<li>选取心态：不要纠结于某个网站，多找信息源尝试</li>
-</ul>
-</li>
-<li><p><strong>数据网站的确定</strong></p>
-<ul>
-<li>获取股票列表：<blockquote>
-<p>东方财富网：<a href="http://quote.eastmoney.com/stocklist.html" target="_blank" rel="noopener">http://quote.eastmoney.com/stocklist.html</a></p>
-</blockquote>
-</li>
-<li>获取个股信息：<blockquote>
-<p>百度股票：<a href="https://gupiao.baidu.com/stock/" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/</a><br>单个股票：<a href="https://gupiao.baidu.com/stock/sz002439.html" target="_blank" rel="noopener">https://gupiao.baidu.com/stock/sz002439.html</a></p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p><strong>程序的结构设计</strong></p>
-<blockquote>
-<p>步骤1：从东方财富网获取股票列表<br>步骤2：根据股票列表逐个到百度股票获取个股信息<br>步骤3：将结果存储到文件</p>
-</blockquote>
-</li>
-<li><p><strong>程序代码（已经优化）</strong></p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> traceback</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line"><span class="comment"># 默认设置为utf-8编码，使用apparent_encoding会花费更多时间</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span><span class="params">(url, code=<span class="string">"utf-8"</span>)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = code</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getStockList</span><span class="params">(lst, stockURL)</span>:</span></span><br><span class="line">    html = getHTMLText(stockURL, <span class="string">"GB2312"</span>)</span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'html.parser'</span>) </span><br><span class="line">    a = soup.find_all(<span class="string">'a'</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            href = i.attrs[<span class="string">'href'</span>]</span><br><span class="line">            lst.append(re.findall(<span class="string">r"[s][hz]\d&#123;6&#125;"</span>, href)[<span class="number">0</span>])</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加动态速度</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getStockInfo</span><span class="params">(lst, stockURL, fpath)</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> stock <span class="keyword">in</span> lst:</span><br><span class="line">        url = stockURL + stock + <span class="string">".html"</span></span><br><span class="line">        html = getHTMLText(url)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span> html==<span class="string">""</span>:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            infoDict = &#123;&#125;</span><br><span class="line">            soup = BeautifulSoup(html, <span class="string">'html.parser'</span>)</span><br><span class="line">            stockInfo = soup.find(<span class="string">'div'</span>,attrs=&#123;<span class="string">'class'</span>:<span class="string">'stock-bets'</span>&#125;)</span><br><span class="line"></span><br><span class="line">            name = stockInfo.find_all(attrs=&#123;<span class="string">'class'</span>:<span class="string">'bets-name'</span>&#125;)[<span class="number">0</span>]</span><br><span class="line">            infoDict.update(&#123;<span class="string">'股票名称'</span>: name.text.split()[<span class="number">0</span>]&#125;)</span><br><span class="line">            </span><br><span class="line">            keyList = stockInfo.find_all(<span class="string">'dt'</span>)</span><br><span class="line">            valueList = stockInfo.find_all(<span class="string">'dd'</span>)</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(len(keyList)):</span><br><span class="line">                key = keyList[i].text</span><br><span class="line">                val = valueList[i].text</span><br><span class="line">                infoDict[key] = val</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">with</span> open(fpath, <span class="string">'a'</span>, encoding=<span class="string">'utf-8'</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write( str(infoDict) + <span class="string">'\n'</span> )</span><br><span class="line">                count = count + <span class="number">1</span></span><br><span class="line">                print(<span class="string">"\r当前进度: &#123;:.2f&#125;%"</span>.format(count*<span class="number">100</span>/len(lst)),end=<span class="string">""</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            count = count + <span class="number">1</span></span><br><span class="line">            print(<span class="string">"\r当前进度: &#123;:.2f&#125;%"</span>.format(count*<span class="number">100</span>/len(lst)),end=<span class="string">""</span>)</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    stock_list_url = <span class="string">'http://quote.eastmoney.com/stocklist.html'</span></span><br><span class="line">    stock_info_url = <span class="string">'http://gupiao.baidu.com/stock/'</span></span><br><span class="line">    output_file = <span class="string">'D:/BaiduStockInfo.txt'</span></span><br><span class="line">    slist=[]</span><br><span class="line">    getStockList(slist, stock_list_url)</span><br><span class="line">    getStockInfo(slist, stock_info_url, output_file)</span><br><span class="line"></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Note</tag>
-        <tag>Crawler</tag>
-        <tag>Example</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>where和argwhere详解</title>
-    <url>/2020/03/21/where-argwhere/</url>
-    <content><![CDATA[<p><strong><em>学习Numpy发现np.where()使用有一些难点，顺便一块将np.argsort()进行整理</em></strong></p>
-<a id="more"></a>
-<hr>
-<h2 id="np-where-condition-x-y"><a href="#np-where-condition-x-y" class="headerlink" title="np.where(condition, x, y)"></a>np.where(condition, x, y)</h2><ul>
-<li>功能：当condition为真时执行x，否则执行y。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1.1</span>, <span class="number">2.2</span>, <span class="number">3.3</span>, <span class="number">4.4</span>, <span class="number">5.5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = np.array([<span class="number">6.1</span>, <span class="number">7.2</span>, <span class="number">8.3</span>, <span class="number">9.4</span>, <span class="number">10.5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">1.1</span>, <span class="number">2.2</span>, <span class="number">3.3</span>, <span class="number">4.4</span>, <span class="number">5.5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>b</span><br><span class="line">array([ <span class="number">6.1</span>,  <span class="number">7.2</span>,  <span class="number">8.3</span>,  <span class="number">9.4</span>, <span class="number">10.5</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>cond = np.array([<span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">True</span>, <span class="literal">False</span>, <span class="literal">True</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(cond, a, b)</span><br><span class="line">array([<span class="number">1.1</span>, <span class="number">7.2</span>, <span class="number">3.3</span>, <span class="number">9.4</span>, <span class="number">5.5</span>])</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="np-where-cond-和a-expression-的辨析"><a href="#np-where-cond-和a-expression-的辨析" class="headerlink" title="np.where(cond)和a[expression]的辨析"></a>np.where(cond)和a[expression]的辨析</h2><ul>
-<li>功能：</li>
-<li>a[expression]返回符合expression的元素。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">5</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a[a&gt;<span class="number">2</span>] <span class="comment">#直接返回元素</span></span><br><span class="line">array([<span class="number">3</span>, <span class="number">4</span>])</span><br></pre></td></tr></table></figure></li>
-<li>np.where(cond)返回符合cond条件的元素的下标，<u>如果cond中数组为一维，返回值由一个array和一个空值组成，要想得到真真结果需单独获取下标[0]的元素</u>。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.array([<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([<span class="number">1</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>])</span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(a&gt;<span class="number">2</span>) <span class="comment">#返回的是一个元组</span></span><br><span class="line">(array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]),)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(a&gt;<span class="number">2</span>)[<span class="number">0</span>] <span class="comment">#想要取得里面的array需要单独获取下标[0]的元素</span></span><br><span class="line">array([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<hr>
-<h2 id="np-argwhere-a"><a href="#np-argwhere-a" class="headerlink" title="np.argwhere(a)"></a>np.argwhere(a)</h2><ul>
-<li>功能：返回非0的数组元组的索引，其中a是要索引数组的条件。<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>a = np.arange(<span class="number">6</span>).reshape(<span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>a</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]])</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.argwhere(a&gt;<span class="number">1</span>)</span><br><span class="line">array([[<span class="number">0</span>, <span class="number">2</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">0</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">1</span>],</span><br><span class="line">       [<span class="number">1</span>, <span class="number">2</span>]])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>np.where(a&gt;<span class="number">1</span>)<span class="comment">#当a中涉及的是一个二位数组时，返回的元组会将下标分成两个维度的数组作为返回值返回，无空值。</span></span><br><span class="line">(array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>]), array([<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>]))</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Python</tag>
-        <tag>Note</tag>
-        <tag>Numpy</tag>
       </tags>
   </entry>
   <entry>
