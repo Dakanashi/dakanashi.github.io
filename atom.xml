@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-22T16:01:30.252Z</updated>
+  <updated>2020-04-26T07:17:55.808Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Django基础笔记</title>
+    <link href="http://yoursite.com/2020/04/23/base-of-django/"/>
+    <id>http://yoursite.com/2020/04/23/base-of-django/</id>
+    <published>2020-04-23T10:41:41.000Z</published>
+    <updated>2020-04-26T07:17:55.808Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;在Django的学习过程中进行的简单记录&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Python后端" scheme="http://yoursite.com/categories/Python%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="Django" scheme="http://yoursite.com/tags/Django/"/>
+    
+  </entry>
   
   <entry>
     <title>mariaDB高级技巧</title>
@@ -443,29 +466,6 @@
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Numpy文件的存取</title>
-    <link href="http://yoursite.com/2020/03/22/file-of-numpy/"/>
-    <id>http://yoursite.com/2020/03/22/file-of-numpy/</id>
-    <published>2020-03-21T16:23:05.000Z</published>
-    <updated>2020-04-22T16:05:39.223Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;对Numpy中文件相关的函数进行总结&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="机器学习" scheme="http://yoursite.com/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="Numpy" scheme="http://yoursite.com/tags/Numpy/"/>
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
   </entry>
   
