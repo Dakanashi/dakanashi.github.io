@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-26T07:17:55.808Z</updated>
+  <updated>2021-02-20T15:12:19.329Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,11 +17,226 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Hexo警告问题</title>
+    <link href="http://yoursite.com/2021/02/20/hexo-warning/"/>
+    <id>http://yoursite.com/2021/02/20/hexo-warning/</id>
+    <published>2021-02-20T14:49:48.000Z</published>
+    <updated>2021-02-20T15:12:19.329Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;在使用Hexo时出现奇怪的警告&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>清楚pacman与aur应用相关的旧文件</title>
+    <link href="http://yoursite.com/2021/02/20/pacman-and-aur-clean/"/>
+    <id>http://yoursite.com/2021/02/20/pacman-and-aur-clean/</id>
+    <published>2021-02-20T14:22:28.000Z</published>
+    <updated>2021-02-20T14:36:44.510Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;(node:23394) Warning: Accessing non-existent property ‘lineno’ of module exports inside circular dependency&lt;br&gt;(Use &lt;code&gt;node
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="Pacman" scheme="http://yoursite.com/tags/Pacman/"/>
+    
+      <category term="Aur" scheme="http://yoursite.com/tags/Aur/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>colab guide</title>
+    <link href="http://yoursite.com/2020/05/14/colab-guide/"/>
+    <id>http://yoursite.com/2020/05/14/colab-guide/</id>
+    <published>2020-05-14T06:42:41.000Z</published>
+    <updated>2020-05-14T09:04:48.052Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;因为自己的1070ti在学校，因为疫情回不了学校，bitahub只能导入训练好的模型去训练，所以只能寻找别的云显卡平台使用，最终找到的时Google Colab，听说使用的是Telsa K80，必须得爽一下&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="谷歌云显卡" scheme="http://yoursite.com/categories/%E8%B0%B7%E6%AD%8C%E4%BA%91%E6%98%BE%E5%8D%A1/"/>
+    
+      <category term="机器学习" scheme="http://yoursite.com/categories/%E8%B0%B7%E6%AD%8C%E4%BA%91%E6%98%BE%E5%8D%A1/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="Google Colab" scheme="http://yoursite.com/tags/Google-Colab/"/>
+    
+      <category term="GPU" scheme="http://yoursite.com/tags/GPU/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>opencv haar</title>
+    <link href="http://yoursite.com/2020/05/11/opencv-haar/"/>
+    <id>http://yoursite.com/2020/05/11/opencv-haar/</id>
+    <published>2020-05-11T12:04:36.000Z</published>
+    <updated>2020-05-11T14:46:47.119Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;装这个OpenCV3.4.0+Python3.5.0的旧版环境真的是废了不少功夫，接下来就该使用这个功能了，自己训练一个口罩识别的级联（Cascade）分类器&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Opencv安装" scheme="http://yoursite.com/categories/Opencv%E5%AE%89%E8%A3%85/"/>
+    
+      <category term="机器学习" scheme="http://yoursite.com/categories/Opencv%E5%AE%89%E8%A3%85/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="Opencv" scheme="http://yoursite.com/tags/Opencv/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>opencv parameter</title>
+    <link href="http://yoursite.com/2020/05/09/opencv-parameter/"/>
+    <id>http://yoursite.com/2020/05/09/opencv-parameter/</id>
+    <published>2020-05-08T17:32:24.000Z</published>
+    <updated>2020-05-08T17:39:40.809Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;在过去无数次经历过在树莓派和PC上编译OPENCV的痛苦之后总结出来的经验教训就是cmake预编译时的参数是关键中的关键，为了方便以后的查阅，故在此进行所有参数的记录&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Opencv安装" scheme="http://yoursite.com/categories/Opencv%E5%AE%89%E8%A3%85/"/>
+    
+    
+      <category term="Opencv" scheme="http://yoursite.com/tags/Opencv/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo无法使用错误</title>
+    <link href="http://yoursite.com/2020/05/09/hexo-error/"/>
+    <id>http://yoursite.com/2020/05/09/hexo-error/</id>
+    <published>2020-05-08T17:19:18.000Z</published>
+    <updated>2020-05-09T13:01:36.014Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;前几天Nodejs更新14.0后Hexo就无法正常使用了，从Google查阅得知时Hexo还未兼容Nodejs的新特性，故记录一下临时的结局方法&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Hexo Blog无法更新" scheme="http://yoursite.com/categories/Hexo-Blog%E6%97%A0%E6%B3%95%E6%9B%B4%E6%96%B0/"/>
+    
+    
+      <category term="Hexo" scheme="http://yoursite.com/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Arch Linux下Opencv3.4在Pyenv虚拟环境编译教程</title>
+    <link href="http://yoursite.com/2020/05/07/opencv-3-4-install/"/>
+    <id>http://yoursite.com/2020/05/07/opencv-3-4-install/</id>
+    <published>2020-05-07T06:37:13.000Z</published>
+    <updated>2020-05-11T12:40:04.135Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;Opencv在3.4.0之后版本放弃支持使用者训练自己的Haar联级分类器，为了使用这个已经被官方抛弃的好用功能，记录一下相关环境的构造过程。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Opencv安装" scheme="http://yoursite.com/categories/Opencv%E5%AE%89%E8%A3%85/"/>
+    
+      <category term="机器学习" scheme="http://yoursite.com/categories/Opencv%E5%AE%89%E8%A3%85/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="Opencv" scheme="http://yoursite.com/tags/Opencv/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Session和Cookie小记</title>
+    <link href="http://yoursite.com/2020/05/02/session-and-cookie-in-django/"/>
+    <id>http://yoursite.com/2020/05/02/session-and-cookie-in-django/</id>
+    <published>2020-05-02T05:55:10.000Z</published>
+    <updated>2020-05-02T06:05:11.993Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;在Django的学习过程中对cookie和session的记录&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Python后端" scheme="http://yoursite.com/categories/Python%E5%90%8E%E7%AB%AF/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="Django" scheme="http://yoursite.com/tags/Django/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Xadmin安装小记</title>
+    <link href="http://yoursite.com/2020/04/28/xadmin-note/"/>
+    <id>http://yoursite.com/2020/04/28/xadmin-note/</id>
+    <published>2020-04-27T17:07:26.000Z</published>
+    <updated>2020-04-27T17:54:52.072Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;Xadmin的原作者距今有近一年的时间没有更新，已经不兼容当前的django3.0和Python3.8，但因为网课学习需要不得不勉强使用， 故对当前Xadmin的安装进行一下记录&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Python后端" scheme="http://yoursite.com/categories/Python%E5%90%8E%E7%AB%AF/"/>
+    
+      <category term="Xadmin安装" scheme="http://yoursite.com/categories/Python%E5%90%8E%E7%AB%AF/Xadmin%E5%AE%89%E8%A3%85/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="Django" scheme="http://yoursite.com/tags/Django/"/>
+    
+      <category term="Xadmin" scheme="http://yoursite.com/tags/Xadmin/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Django基础笔记</title>
     <link href="http://yoursite.com/2020/04/23/base-of-django/"/>
     <id>http://yoursite.com/2020/04/23/base-of-django/</id>
     <published>2020-04-23T10:41:41.000Z</published>
-    <updated>2020-04-26T07:17:55.808Z</updated>
+    <updated>2020-06-01T09:33:22.964Z</updated>
     
     <summary type="html">
     
@@ -249,223 +464,6 @@
     
     
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python中的Scrapy库</title>
-    <link href="http://yoursite.com/2020/04/15/scrapy-note/"/>
-    <id>http://yoursite.com/2020/04/15/scrapy-note/</id>
-    <published>2020-04-15T07:49:52.000Z</published>
-    <updated>2020-04-22T16:06:43.229Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt; &lt;strong&gt;&lt;em&gt;本笔记内容巨多，请耐心学习&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-      <category term="Scrapy" scheme="http://yoursite.com/tags/Scrapy/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>股票爬虫实例</title>
-    <link href="http://yoursite.com/2020/04/15/stock-example/"/>
-    <id>http://yoursite.com/2020/04/15/stock-example/</id>
-    <published>2020-04-14T16:30:53.000Z</published>
-    <updated>2020-04-22T16:06:59.079Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;股票爬虫实例&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-      <category term="Example" scheme="http://yoursite.com/tags/Example/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>淘宝爬虫实例</title>
-    <link href="http://yoursite.com/2020/04/14/tb-example/"/>
-    <id>http://yoursite.com/2020/04/14/tb-example/</id>
-    <published>2020-04-14T07:32:57.000Z</published>
-    <updated>2020-04-22T16:07:07.160Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;淘宝爬虫实例&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-      <category term="Example" scheme="http://yoursite.com/tags/Example/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>正则表达式Re库</title>
-    <link href="http://yoursite.com/2020/04/13/re-note/"/>
-    <id>http://yoursite.com/2020/04/13/re-note/</id>
-    <published>2020-04-13T09:48:44.000Z</published>
-    <updated>2020-04-22T16:06:24.808Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;Re库笔记。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-      <category term="正则表达式" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-      <category term="Re" scheme="http://yoursite.com/tags/Re/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>几个简单的爬虫实例</title>
-    <link href="http://yoursite.com/2020/04/11/craw-stage-note/"/>
-    <id>http://yoursite.com/2020/04/11/craw-stage-note/</id>
-    <published>2020-04-11T06:43:13.000Z</published>
-    <updated>2020-04-22T16:05:10.996Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;爬虫实例记录。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>信息标记笔记</title>
-    <link href="http://yoursite.com/2020/04/10/info-note/"/>
-    <id>http://yoursite.com/2020/04/10/info-note/</id>
-    <published>2020-04-10T12:54:42.000Z</published>
-    <updated>2020-04-22T16:05:50.404Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;学习爬虫途中所学信息标记相关知识的笔记。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>BeautifulSoup 解析</title>
-    <link href="http://yoursite.com/2020/04/08/bs4-note/"/>
-    <id>http://yoursite.com/2020/04/08/bs4-note/</id>
-    <published>2020-04-08T15:05:01.000Z</published>
-    <updated>2020-04-22T16:04:46.948Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;爬虫学习中对bs4库的记录&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="BeautifulSoup" scheme="http://yoursite.com/tags/BeautifulSoup/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python爬虫笔记</title>
-    <link href="http://yoursite.com/2020/04/04/crawler-note/"/>
-    <id>http://yoursite.com/2020/04/04/crawler-note/</id>
-    <published>2020-04-04T10:28:46.000Z</published>
-    <updated>2020-04-22T16:05:17.299Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;对于爬虫的学习记录&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>request库小记</title>
-    <link href="http://yoursite.com/2020/04/04/request-note/"/>
-    <id>http://yoursite.com/2020/04/04/request-note/</id>
-    <published>2020-04-04T09:59:07.000Z</published>
-    <updated>2020-04-22T16:06:37.365Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;学习爬虫之前先记录一下request库&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
     
   </entry>
   
