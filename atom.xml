@@ -36,35 +36,6 @@
   </entry>
   
   <entry>
-    <title>清楚pacman与aur应用相关的旧文件</title>
-    <link href="http://yoursite.com/2021/02/20/pacman-and-aur-clean/"/>
-    <id>http://yoursite.com/2021/02/20/pacman-and-aur-clean/</id>
-    <published>2021-02-20T14:22:28.000Z</published>
-    <updated>2021-02-20T14:36:44.510Z</updated>
-    
-    <summary type="html">
-    
-      
-      
-        
-        
-          &lt;p&gt;(node:23394) Warning: Accessing non-existent property ‘lineno’ of module exports inside circular dependency&lt;br&gt;(Use &lt;code&gt;node
-        
-      
-    
-    </summary>
-    
-    
-    
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-      <category term="Pacman" scheme="http://yoursite.com/tags/Pacman/"/>
-    
-      <category term="Aur" scheme="http://yoursite.com/tags/Aur/"/>
-    
-  </entry>
-  
-  <entry>
     <title>colab guide</title>
     <link href="http://yoursite.com/2020/05/14/colab-guide/"/>
     <id>http://yoursite.com/2020/05/14/colab-guide/</id>
@@ -90,11 +61,11 @@
   </entry>
   
   <entry>
-    <title>opencv haar</title>
+    <title>opencv编译错误记录</title>
     <link href="http://yoursite.com/2020/05/11/opencv-haar/"/>
     <id>http://yoursite.com/2020/05/11/opencv-haar/</id>
     <published>2020-05-11T12:04:36.000Z</published>
-    <updated>2020-05-11T14:46:47.119Z</updated>
+    <updated>2021-02-20T15:27:48.483Z</updated>
     
     <summary type="html">
     
@@ -115,11 +86,11 @@
   </entry>
   
   <entry>
-    <title>opencv parameter</title>
+    <title>opencv编译参数</title>
     <link href="http://yoursite.com/2020/05/09/opencv-parameter/"/>
     <id>http://yoursite.com/2020/05/09/opencv-parameter/</id>
     <published>2020-05-08T17:32:24.000Z</published>
-    <updated>2020-05-08T17:39:40.809Z</updated>
+    <updated>2021-02-20T15:27:23.516Z</updated>
     
     <summary type="html">
     
@@ -140,11 +111,11 @@
     <link href="http://yoursite.com/2020/05/09/hexo-error/"/>
     <id>http://yoursite.com/2020/05/09/hexo-error/</id>
     <published>2020-05-08T17:19:18.000Z</published>
-    <updated>2020-05-09T13:01:36.014Z</updated>
+    <updated>2021-02-20T15:28:15.520Z</updated>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;前几天Nodejs更新14.0后Hexo就无法正常使用了，从Google查阅得知时Hexo还未兼容Nodejs的新特性，故记录一下临时的结局方法&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;前几天Nodejs更新14.0后Hexo就无法正常使用了，从Google查阅得知时Hexo还未兼容Nodejs的新特性，故记录一下临时的解决方法&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
     
     </summary>
     
@@ -464,6 +435,31 @@
     
     
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Python中的Scrapy库</title>
+    <link href="http://yoursite.com/2020/04/15/scrapy-note/"/>
+    <id>http://yoursite.com/2020/04/15/scrapy-note/</id>
+    <published>2020-04-15T07:49:52.000Z</published>
+    <updated>2020-04-22T16:06:43.229Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt; &lt;strong&gt;&lt;em&gt;本笔记内容巨多，请耐心学习&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
+    
+      <category term="Scrapy" scheme="http://yoursite.com/tags/Scrapy/"/>
     
   </entry>
   
