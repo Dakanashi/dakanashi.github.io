@@ -2629,7 +2629,8 @@
 </li>
 </ul>
 <h2 id="HTML内容遍历"><a href="#HTML内容遍历" class="headerlink" title="HTML内容遍历"></a><strong>HTML内容遍历</strong></h2><ul>
-<li><strong>标签树的上层遍历</strong><table>
+<li><p><strong>标签树的上层遍历</strong></p>
+<table>
 <thead>
 <tr>
 <th align="center">属性</th>
@@ -2650,7 +2651,8 @@
 </tr>
 </tbody></table>
 </li>
-<li><strong>标签树的下层遍历</strong><table>
+<li><p><strong>标签树的下层遍历</strong></p>
+<table>
 <thead>
 <tr>
 <th align="center">属性</th>
@@ -2675,7 +2677,8 @@
 </tr>
 </tbody></table>
 </li>
-<li><strong>标签树的平行遍历</strong><table>
+<li><p><strong>标签树的平行遍历</strong></p>
+<table>
 <thead>
 <tr>
 <th align="center">属性</th>
