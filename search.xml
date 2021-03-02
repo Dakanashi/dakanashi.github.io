@@ -191,6 +191,40 @@
       </tags>
   </entry>
   <entry>
+    <title>PIP更新问题</title>
+    <url>/2021/02/28/pip-error/</url>
+    <content><![CDATA[<p><strong><em>时隔半年多重新开始敲代码，突然发现Python升级后无论是普通还是虚拟环境的Pip都无法下载其他模块和更新，记录一下解决办法</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p><strong>Pip无法下载模块和更新</strong></p>
+<h2 id="错误详情"><a href="#错误详情" class="headerlink" title="错误详情"></a><strong>错误详情</strong></h2><pre><code><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; pip --version      </span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">File "/home/john/.virtualenvs/dp/bin/pip", line 5, in &lt;module&gt;</span><br><span class="line">    from pip._internal.cli.main import main</span><br><span class="line">ModuleNotFoundError: No module named 'pip'</span><br></pre></td></tr></table></figure></code></pre><h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a><strong>解决办法</strong></h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; python -m ensurepip</span></span><br><span class="line">Looking in links: /tmp/tmps803pxka</span><br><span class="line">Processing /tmp/tmps803pxka/setuptools-49.2.1-py3-none-any.whl</span><br><span class="line">Processing /tmp/tmps803pxka/pip-20.2.3-py2.py3-none-any.whl</span><br><span class="line">Installing collected packages: setuptools, pip</span><br><span class="line">Successfully installed pip-20.2.3 setuptools-49.2.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; python -m pip install --upgrade pip</span></span><br><span class="line">Collecting pip</span><br><span class="line">  Downloading pip-21.0.1-py3-none-any.whl (1.5 MB)</span><br><span class="line">     |████████████████████████████████| 1.5 MB 9.9 kB/s </span><br><span class="line">Installing collected packages: pip</span><br><span class="line">  Attempting uninstall: pip</span><br><span class="line">    Found existing installation: pip 20.2.3</span><br><span class="line">    Uninstalling pip-20.2.3:</span><br><span class="line">      Successfully uninstalled pip-20.2.3</span><br><span class="line">Successfully installed pip-21.0.1</span><br></pre></td></tr></table></figure>
+
+<h2 id="补充：PIP一次性更新所有模块"><a href="#补充：PIP一次性更新所有模块" class="headerlink" title="补充：PIP一次性更新所有模块"></a><strong>补充：PIP一次性更新所有模块</strong></h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; pip list --outdate //列出所有可升级的包</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; pip freeze --<span class="built_in">local</span> | grep -v <span class="string">'^-e'</span> | cut -d = -f 1 | xargs -n1 pip install -U //更新命令</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Python</tag>
+        <tag>Pip</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Gnome开机问题</title>
+    <url>/2021/02/27/gdm-error/</url>
+    <content><![CDATA[<p><strong><em>解决Gnome开机黑屏问题</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p><strong>开机引导完成后，左上角出现白色标识符频繁闪烁，只能通过tty重启gdm.service(一次性，无法根本解决问题)</strong></p>
+<h2 id="错误详情"><a href="#错误详情" class="headerlink" title="错误详情"></a><strong>错误详情</strong></h2>  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">gdm.service - GNOME Display Manager</span><br><span class="line">    Loaded: loaded (/usr/lib/systemd/system/gdm.service; enabled; vendor preset: disabled)</span><br><span class="line">    Active: active (running) since Sat 2021-02-27 14:46:34 CST; 5min ago</span><br><span class="line">  Main PID: 945 (gdm)</span><br><span class="line">      Tasks: 3 (limit: 9194)</span><br><span class="line">    Memory: 3.3M</span><br><span class="line">    CGroup: /system.slice/gdm.service</span><br><span class="line">            └─945 /usr/bin/gdm</span><br><span class="line"></span><br><span class="line">2月 27 14:46:34 Mob systemd[1]: Starting GNOME Display Manager...</span><br><span class="line">2月 27 14:46:34 Mob systemd[1]: Started GNOME Display Manager.</span><br><span class="line">2月 27 14:46:41 Mob gdm[346]: Gdm: GdmDisplay: Session never registered, failing</span><br><span class="line">2月 27 14:46:41 Mob gdm[346]: Gdm: Child process -458 was already dead.</span><br><span class="line">2月 27 14:46:41 Mob gdm[346]: Gdm: Child process -458 was already dead.</span><br><span class="line">2月 27 14:46:41 Mob gdm[346]: Gdm: Child process -491 was already dead.</span><br></pre></td></tr></table></figure>
+
+<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a><strong>解决办法</strong></h2><ul>
+<li><a href="https://wiki.archlinux.org/index.php/GDM#Use_Xorg_backend" target="_blank" rel="noopener">https://wiki.archlinux.org/index.php/GDM#Use_Xorg_backend</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Gnome</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hexo警告问题</title>
     <url>/2021/02/20/hexo-warning/</url>
     <content><![CDATA[<p><strong><em>在使用Hexo时出现奇怪的警告</em></strong></p>
@@ -2103,11 +2137,106 @@
 <tr>
 <td align="center">\d</td>
 <td align="center">数字，等价于[0-9]</td>
-<td align="center"></td>
+<td align="center">\d\d可以匹配01 / 23 / 99等</td>
 </tr>
 <tr>
 <td align="center">\w</td>
 <td align="center">单词字符，等价于[A-Za-z0-9_]</td>
+<td align="center">b\wt可以匹配bat / b1t / b_t等,但不能匹配b#t</td>
+</tr>
+<tr>
+<td align="center">\s</td>
+<td align="center">匹配空白字符（包括\r、\n、\t等）</td>
+<td align="center">love\syou可以匹配love you</td>
+</tr>
+<tr>
+<td align="center">\b</td>
+<td align="center">匹配单词的边界</td>
+<td align="center">\bThe\b</td>
+</tr>
+<tr>
+<td align="center">\W</td>
+<td align="center">匹配非字母/数字/下划线</td>
+<td align="center">b\Wt可以匹配b#t / b@t等，但不能匹配but / b1t / b_t等</td>
+</tr>
+<tr>
+<td align="center">\S</td>
+<td align="center">匹配非空白字符</td>
+<td align="center">love\Syou可以匹配love#you等，但不能匹配love you</td>
+</tr>
+<tr>
+<td align="center">\D</td>
+<td align="center">匹配非数字</td>
+<td align="center">\d\D可以匹配9a / 3# / 0F等</td>
+</tr>
+<tr>
+<td align="center">\B</td>
+<td align="center">匹配非单词边界</td>
+<td align="center">\Bio\B</td>
+</tr>
+<tr>
+<td align="center">(?#)</td>
+<td align="center">注释</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(exp)</td>
+<td align="center">匹配exp并捕获到自动命名的组中</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(?&lt;name&gt;exp)</td>
+<td align="center">匹配exp并捕获到名为name的组中</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(?:exp)</td>
+<td align="center">匹配exp但是不捕获匹配的文本</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(?=exp)</td>
+<td align="center">匹配exp前面的位置</td>
+<td align="center">\b\w+(?=ing)可以匹配I’m dancing中的danc</td>
+</tr>
+<tr>
+<td align="center">(?&lt;=exp)</td>
+<td align="center">匹配exp后面的位置</td>
+<td align="center">(?&lt;=\bdanc)\w+\b可以匹配I love dancing and reading中的第一个ing</td>
+</tr>
+<tr>
+<td align="center">(?!exp)</td>
+<td align="center">匹配后面不是exp的位置</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(?&lt;!exp)</td>
+<td align="center">匹配前面不是exp的位置</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">*?</td>
+<td align="center">重复任意次，但尽可能少重复</td>
+<td align="center">a.*b、a.*?b将正则表达式应用于aabab，前者会匹配整个字符串aabab，后者会匹配aab和ab两个字符串</td>
+</tr>
+<tr>
+<td align="center">+?</td>
+<td align="center">重复1次或多次，但尽可能少重复</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">??</td>
+<td align="center">重复0次或1次，但尽可能少重复</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">{M,N}?</td>
+<td align="center">重复M到N次，但尽可能少重复</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">{M,}?</td>
+<td align="center">重复M次以上，但尽可能少重复</td>
 <td align="center"></td>
 </tr>
 </tbody></table>
@@ -2199,28 +2328,36 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="center">re.search()</td>
-<td align="center">在一个字符串中搜索匹配正则表达式的第一个位置，返回match对象</td>
+<td align="center">compile(pattern, flags=0)</td>
+<td align="center">编译正则表达式返回正则表达式对象</td>
 </tr>
 <tr>
-<td align="center">re.match()</td>
-<td align="center">从一个字符串的开始位置起匹配正则表达式，返回match对象</td>
+<td align="center">search(pattern, string, flags=0)</td>
+<td align="center">搜索字符串中第一次出现正则表达式的模式 成功返回匹配对象 否则返回None</td>
 </tr>
 <tr>
-<td align="center">re.findall()</td>
+<td align="center">match(pattern, string, flags=0)</td>
+<td align="center">用正则表达式匹配字符串 成功返回匹配对象 否则返回None</td>
+</tr>
+<tr>
+<td align="center">sub(pattern, repl, string, count=0, flags=0)</td>
+<td align="center">在用指定的字符串替换原字符串中与正则表达式匹配的模式 可以用count指定替换的次数</td>
+</tr>
+<tr>
+<td align="center">split(pattern, string, maxsplit=0, flags=0)</td>
+<td align="center">用正则表达式指定的模式分隔符拆分字符串 返回列表</td>
+</tr>
+<tr>
+<td align="center">findall(pattern, string, flags=0)</td>
 <td align="center">搜索字符串，以列表类型返回全部能匹配的子串</td>
 </tr>
 <tr>
-<td align="center">re.split()</td>
-<td align="center">将一个字符串按照正则表达式匹配结果进行分割，返回列表类型</td>
+<td align="center">finditer(pattern, string, flags=0)</td>
+<td align="center">查找字符串所有与正则表达式匹配的模式 返回一个迭代器</td>
 </tr>
 <tr>
-<td align="center">re.finditer()</td>
-<td align="center">搜索字符串，返回一个匹配结果的迭代类型，每个迭代元素是match对象</td>
-</tr>
-<tr>
-<td align="center">re.sub()</td>
-<td align="center">在一个字符串中替换所有匹配正则表达式的子串，返回替换后的字符串</td>
+<td align="center">purge()</td>
+<td align="center">清除隐式编译的正则表达式的缓存</td>
 </tr>
 </tbody></table>
 </li>
@@ -2297,7 +2434,7 @@
 </tr>
 <tr>
 <td align="left">re.M　re.MULTILINE</td>
-<td align="left">正则表达式中的^操作符能够将给定字符串的每行当作匹配开始</td>
+<td align="left">正则表达式中的^操作符能够将给定字符串的每行当作匹配开始，多行匹配标记</td>
 </tr>
 <tr>
 <td align="left">re.S　re.DOTALL</td>

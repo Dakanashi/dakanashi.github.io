@@ -63,7 +63,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">2.4k字</span>
+            <span class="post-count">2.8k字</span>
         </span>
     </span>
 
@@ -72,7 +72,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">10分钟</span>
+            <span class="post-count">12分钟</span>
         </span>
     </span>
 </div>
@@ -190,11 +190,106 @@
 <tr>
 <td align="center">\d</td>
 <td align="center">数字，等价于[0-9]</td>
-<td align="center"></td>
+<td align="center">\d\d可以匹配01 / 23 / 99等</td>
 </tr>
 <tr>
 <td align="center">\w</td>
 <td align="center">单词字符，等价于[A-Za-z0-9_]</td>
+<td align="center">b\wt可以匹配bat / b1t / b_t等,但不能匹配b#t</td>
+</tr>
+<tr>
+<td align="center">\s</td>
+<td align="center">匹配空白字符（包括\r、\n、\t等）</td>
+<td align="center">love\syou可以匹配love you</td>
+</tr>
+<tr>
+<td align="center">\b</td>
+<td align="center">匹配单词的边界</td>
+<td align="center">\bThe\b</td>
+</tr>
+<tr>
+<td align="center">\W</td>
+<td align="center">匹配非字母/数字/下划线</td>
+<td align="center">b\Wt可以匹配b#t / b@t等，但不能匹配but / b1t / b_t等</td>
+</tr>
+<tr>
+<td align="center">\S</td>
+<td align="center">匹配非空白字符</td>
+<td align="center">love\Syou可以匹配love#you等，但不能匹配love you</td>
+</tr>
+<tr>
+<td align="center">\D</td>
+<td align="center">匹配非数字</td>
+<td align="center">\d\D可以匹配9a / 3# / 0F等</td>
+</tr>
+<tr>
+<td align="center">\B</td>
+<td align="center">匹配非单词边界</td>
+<td align="center">\Bio\B</td>
+</tr>
+<tr>
+<td align="center">(?#)</td>
+<td align="center">注释</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(exp)</td>
+<td align="center">匹配exp并捕获到自动命名的组中</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(?&lt;name&gt;exp)</td>
+<td align="center">匹配exp并捕获到名为name的组中</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(?:exp)</td>
+<td align="center">匹配exp但是不捕获匹配的文本</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(?=exp)</td>
+<td align="center">匹配exp前面的位置</td>
+<td align="center">\b\w+(?=ing)可以匹配I’m dancing中的danc</td>
+</tr>
+<tr>
+<td align="center">(?&lt;=exp)</td>
+<td align="center">匹配exp后面的位置</td>
+<td align="center">(?&lt;=\bdanc)\w+\b可以匹配I love dancing and reading中的第一个ing</td>
+</tr>
+<tr>
+<td align="center">(?!exp)</td>
+<td align="center">匹配后面不是exp的位置</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">(?&lt;!exp)</td>
+<td align="center">匹配前面不是exp的位置</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">*?</td>
+<td align="center">重复任意次，但尽可能少重复</td>
+<td align="center">a.*b、a.*?b将正则表达式应用于aabab，前者会匹配整个字符串aabab，后者会匹配aab和ab两个字符串</td>
+</tr>
+<tr>
+<td align="center">+?</td>
+<td align="center">重复1次或多次，但尽可能少重复</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">??</td>
+<td align="center">重复0次或1次，但尽可能少重复</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">{M,N}?</td>
+<td align="center">重复M到N次，但尽可能少重复</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">{M,}?</td>
+<td align="center">重复M次以上，但尽可能少重复</td>
 <td align="center"></td>
 </tr>
 </tbody></table>
@@ -286,28 +381,36 @@
 </tr>
 </thead>
 <tbody><tr>
-<td align="center">re.search()</td>
-<td align="center">在一个字符串中搜索匹配正则表达式的第一个位置，返回match对象</td>
+<td align="center">compile(pattern, flags=0)</td>
+<td align="center">编译正则表达式返回正则表达式对象</td>
 </tr>
 <tr>
-<td align="center">re.match()</td>
-<td align="center">从一个字符串的开始位置起匹配正则表达式，返回match对象</td>
+<td align="center">search(pattern, string, flags=0)</td>
+<td align="center">搜索字符串中第一次出现正则表达式的模式 成功返回匹配对象 否则返回None</td>
 </tr>
 <tr>
-<td align="center">re.findall()</td>
+<td align="center">match(pattern, string, flags=0)</td>
+<td align="center">用正则表达式匹配字符串 成功返回匹配对象 否则返回None</td>
+</tr>
+<tr>
+<td align="center">sub(pattern, repl, string, count=0, flags=0)</td>
+<td align="center">在用指定的字符串替换原字符串中与正则表达式匹配的模式 可以用count指定替换的次数</td>
+</tr>
+<tr>
+<td align="center">split(pattern, string, maxsplit=0, flags=0)</td>
+<td align="center">用正则表达式指定的模式分隔符拆分字符串 返回列表</td>
+</tr>
+<tr>
+<td align="center">findall(pattern, string, flags=0)</td>
 <td align="center">搜索字符串，以列表类型返回全部能匹配的子串</td>
 </tr>
 <tr>
-<td align="center">re.split()</td>
-<td align="center">将一个字符串按照正则表达式匹配结果进行分割，返回列表类型</td>
+<td align="center">finditer(pattern, string, flags=0)</td>
+<td align="center">查找字符串所有与正则表达式匹配的模式 返回一个迭代器</td>
 </tr>
 <tr>
-<td align="center">re.finditer()</td>
-<td align="center">搜索字符串，返回一个匹配结果的迭代类型，每个迭代元素是match对象</td>
-</tr>
-<tr>
-<td align="center">re.sub()</td>
-<td align="center">在一个字符串中替换所有匹配正则表达式的子串，返回替换后的字符串</td>
+<td align="center">purge()</td>
+<td align="center">清除隐式编译的正则表达式的缓存</td>
 </tr>
 </tbody></table>
 </li>
@@ -384,7 +487,7 @@
 </tr>
 <tr>
 <td align="left">re.M　re.MULTILINE</td>
-<td align="left">正则表达式中的^操作符能够将给定字符串的每行当作匹配开始</td>
+<td align="left">正则表达式中的^操作符能够将给定字符串的每行当作匹配开始，多行匹配标记</td>
 </tr>
 <tr>
 <td align="left">re.S　re.DOTALL</td>

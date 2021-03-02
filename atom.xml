@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2021-02-20T15:12:19.329Z</updated>
+  <updated>2021-02-28T06:54:26.646Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,48 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>PIP更新问题</title>
+    <link href="http://yoursite.com/2021/02/28/pip-error/"/>
+    <id>http://yoursite.com/2021/02/28/pip-error/</id>
+    <published>2021-02-28T06:26:59.000Z</published>
+    <updated>2021-02-28T06:54:26.646Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;时隔半年多重新开始敲代码，突然发现Python升级后无论是普通还是虚拟环境的Pip都无法下载其他模块和更新，记录一下解决办法&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
+    
+      <category term="Pip" scheme="http://yoursite.com/tags/Pip/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Gnome开机问题</title>
+    <link href="http://yoursite.com/2021/02/27/gdm-error/"/>
+    <id>http://yoursite.com/2021/02/27/gdm-error/</id>
+    <published>2021-02-27T06:54:37.000Z</published>
+    <updated>2021-02-27T08:03:26.690Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;解决Gnome开机黑屏问题&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="Gnome" scheme="http://yoursite.com/tags/Gnome/"/>
+    
+  </entry>
   
   <entry>
     <title>Hexo警告问题</title>
@@ -414,52 +456,6 @@
       <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
     
       <category term="BeautifulSoup" scheme="http://yoursite.com/tags/BeautifulSoup/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Arch Linux安装deb包</title>
-    <link href="http://yoursite.com/2020/04/18/install-deb-pkg/"/>
-    <id>http://yoursite.com/2020/04/18/install-deb-pkg/</id>
-    <published>2020-04-18T08:10:14.000Z</published>
-    <updated>2020-04-22T15:58:24.625Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;最近想要使用linux端的百度云，但官网只给出了rpm和deb的安装包，就从网上查询了几种方法&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Linux系统疑难杂症" scheme="http://yoursite.com/categories/Linux%E7%B3%BB%E7%BB%9F%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87/"/>
-    
-    
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python中的Scrapy库</title>
-    <link href="http://yoursite.com/2020/04/15/scrapy-note/"/>
-    <id>http://yoursite.com/2020/04/15/scrapy-note/</id>
-    <published>2020-04-15T07:49:52.000Z</published>
-    <updated>2020-04-22T16:06:43.229Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt; &lt;strong&gt;&lt;em&gt;本笔记内容巨多，请耐心学习&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="Crawler" scheme="http://yoursite.com/tags/Crawler/"/>
-    
-      <category term="Scrapy" scheme="http://yoursite.com/tags/Scrapy/"/>
     
   </entry>
   
