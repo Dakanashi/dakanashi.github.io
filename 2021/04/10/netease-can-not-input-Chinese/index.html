@@ -6,7 +6,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    Tag: Linux |  Hexo
+    解决网易云音乐无法输入中文的问题 |  Hexo
   </title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   
@@ -31,171 +31,240 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article class="articles">
+  <article id="post-netease-can-not-input-Chinese" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
     
-    
-    <h1 class="page-type-title">#&nbspLinux</h1>
-    
-    
-  
-  
-  
-  
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2021" class="archive-year">2021</a>
-    </div>
-    <div class="archives">
-      
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/04/10/netease-can-not-input-Chinese/" class="archive-article-date">
-  <time datetime="2021-04-09T17:30:03.000Z" itemprop="datePublished">04/10</time>
-</a>
+    <header class="article-header">
        
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/04/10/netease-can-not-input-Chinese/"
-    >解决网易云音乐无法输入中文的问题</a
-  >
-</h2>
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  解决网易云音乐无法输入中文的问题
+</h1>
   
 
     </header>
     
+
     
+    <div class="article-meta">
+      <a href="/2021/04/10/netease-can-not-input-Chinese/" class="article-date">
+  <time datetime="2021-04-09T17:30:03.000Z" itemprop="datePublished">2021-04-10</time>
+</a>
+      
+      
+      
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">233字</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">1分钟</span>
+        </span>
+    </span>
+</div>
+
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+      <p><strong><em>不知道从何时开始，发现Arch上的网易云音乐在搜索歌曲时无法输入中文，特此记录以下解决办法</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="问题产生原因"><a href="#问题产生原因" class="headerlink" title="问题产生原因"></a><strong>问题产生原因</strong></h2><p><strong>Arch不支持qcef框架（Ubuntu支持），原本在AUR可以下载安装，但现也已经无法下载，网易云音乐许久没有更新，仍旧只支持qcfe库，导致在Arch上无法输入中文。</strong></p>
+<h2 id="解决办法一（已成功）"><a href="#解决办法一（已成功）" class="headerlink" title="解决办法一（已成功）"></a><strong>解决办法一（已成功）</strong></h2><p><strong>1. 修改文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo nano /opt/netease/netease-cloud-music/netease-cloud-music.bash</span></span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">HERE="$(dirname "$(readlink -f "$&#123;0&#125;")")"</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="string">"<span class="variable">$&#123;HERE&#125;</span>"</span>/libs</span></span><br><span class="line">export QT_PLUGIN_PATH="$&#123;HERE&#125;"/plugins </span><br><span class="line">export QT_QPA_PLATFORM_PLUGIN_PATH="$&#123;HERE&#125;"/plugins/platforms</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">export</span> XDG_CURRENT_DESKTOP=DDE</span></span><br><span class="line">export LD_LIBRARY_PATH=/usr/lib</span><br><span class="line">exec "$&#123;HERE&#125;"/netease-cloud-music $@</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.安装编译好的qcfe</strong><br>    - 网址：链接: <a href="https://pan.baidu.com/s/1tyzorY2QlnIdCCG9gU6GNg" target="_blank" rel="noopener">https://pan.baidu.com/s/1tyzorY2QlnIdCCG9gU6GNg</a>  密码: bple</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo pacman -U qcef-1.1.6-1-x86_64.pkg.tar.xz</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo pacman -S vlc</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="解决办法二（未经过验证）"><a href="#解决办法二（未经过验证）" class="headerlink" title="解决办法二（未经过验证）"></a><strong>解决办法二（未经过验证）</strong></h2><p><a href="https://zhuanlan.zhihu.com/p/150387095" target="_blank" rel="noopener">Linux 下 Rstudio 等闭源 Qt 软件不能使用 Fcitx 的解决办法</a></p>
+
+      
+      <!-- reward -->
+      
+      <div id="reward-btn">
+        打赏
+      </div>
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+        <div class="declare">
+          <ul class="post-copyright">
+            <li>
+              <i class="ri-copyright-line"></i>
+              <strong>版权声明： </strong s>
+              本博客所有文章除特别声明外，均采用 <a href="https://www.apache.org/licenses/LICENSE-2.0.html" rel="external nofollow"
+                target="_blank">Apache License 2.0</a> 许可协议。转载请注明出处！
+            </li>
+          </ul>
+        </div>
+        
+    <footer class="article-footer">
+      
+          
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2021/04/10/netease-can-not-input-Chinese/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>
+      
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
 
-    
+
+    </footer>
+
   </div>
-</article>
-      
+
   
   
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/04/10/dash-to-dock-for-gnome-40/" class="archive-article-date">
-  <time datetime="2021-04-09T16:26:43.000Z" itemprop="datePublished">04/10</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/04/10/dash-to-dock-for-gnome-40/"
-    >Gnome-40 可用插件的记录与修复</a
-  >
-</h2>
+  <nav class="article-nav">
+    
+    
+      <a href="/2021/04/10/dash-to-dock-for-gnome-40/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Gnome-40 可用插件的记录与修复</div>
+      </a>
+    
+  </nav>
+
+
   
 
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gnome/" rel="tag">Gnome</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    
-  </div>
-</article>
-      
   
   
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2021/02/27/gdm-error/" class="archive-article-date">
-  <time datetime="2021-02-27T06:54:37.000Z" itemprop="datePublished">02/27</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2021/02/27/gdm-error/"
-    >Gnome开机问题</a
-  >
-</h2>
-  
-
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gnome/" rel="tag">Gnome</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    
-  </div>
-</article>
-      
-  
-  
-  
-  </div>
-  </div>
-  
-  
-  <div class="archives-wrap">
-    <div class="archive-year-wrap">
-      <a href="/archives/2020" class="archive-year">2020</a>
+<!-- valine评论 -->
+<div id="vcomments-box">
+    <div id="vcomments">
     </div>
-    <div class="archives">
-      
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/04/18/install-deb-pkg/" class="archive-article-date">
-  <time datetime="2020-04-18T08:10:14.000Z" itemprop="datePublished">04/18</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/04/18/install-deb-pkg/"
-    >Arch Linux安装deb包</a
-  >
-</h2>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        app_id: '',
+        app_key: '',
+        path: window.location.pathname,
+        notify: 'false',
+        verify: 'false',
+        avatar: 'mp',
+        placeholder: '给我的文章加点评论吧~',
+        recordIP: true
+    });
+    const infoEle = document.querySelector('#vcomments .info');
+    if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+        infoEle.childNodes.forEach(function (item) {
+            item.parentNode.removeChild(item);
+        });
+    }
+</script>
+<style>
+    #vcomments-box {
+        padding: 5px 30px;
+    }
+
+    @media screen and (max-width: 800px) {
+        #vcomments-box {
+            padding: 5px 0px;
+        }
+    }
+
+    #vcomments-box #vcomments {
+        background-color: #fff;
+    }
+
+    .v .vlist .vcard .vh {
+        padding-right: 20px;
+    }
+
+    .v .vlist .vcard {
+        padding-left: 10px;
+    }
+</style>
+
   
 
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
+  
+  
+  
 
-    
-  </div>
 </article>
-      
-  
-  
-      <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2020/03/12/gnome3-36-dash-to-dock-fix/" class="archive-article-date">
-  <time datetime="2020-03-12T14:37:05.000Z" itemprop="datePublished">03/12</time>
-</a>
-       
-<h2 itemprop="name">
-  <a class="archive-article-title" href="/2020/03/12/gnome3-36-dash-to-dock-fix/"
-    >gnome3.36版本解决dash to dock无法使用问题</a
-  >
-</h2>
-  
-
-    </header>
-    
-    
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
-
-    
-  </div>
-</article>
-      
-      
-    </div>
-  </div>
-  
-  
-
-  
 </section>
+
       <footer class="footer">
   <div class="outer">
     <ul class="list-inline">
@@ -341,6 +410,30 @@
 </script>
 
 
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto',
+    onClick: (e) => {
+      $('.toc-link').removeClass('is-active-link');
+      $(`a[href=${e.target.hash}]`).addClass('is-active-link');
+      $(e.target.hash).scrollIntoView();
+      return false;
+    }
+  });
+</script>
 
 
 

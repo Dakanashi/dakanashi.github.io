@@ -191,6 +191,104 @@
       </tags>
   </entry>
   <entry>
+    <title>解决网易云音乐无法输入中文的问题</title>
+    <url>/2021/04/10/netease-can-not-input-Chinese/</url>
+    <content><![CDATA[<p><strong><em>不知道从何时开始，发现Arch上的网易云音乐在搜索歌曲时无法输入中文，特此记录以下解决办法</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="问题产生原因"><a href="#问题产生原因" class="headerlink" title="问题产生原因"></a><strong>问题产生原因</strong></h2><p><strong>Arch不支持qcef框架（Ubuntu支持），原本在AUR可以下载安装，但现也已经无法下载，网易云音乐许久没有更新，仍旧只支持qcfe库，导致在Arch上无法输入中文。</strong></p>
+<h2 id="解决办法一（已成功）"><a href="#解决办法一（已成功）" class="headerlink" title="解决办法一（已成功）"></a><strong>解决办法一（已成功）</strong></h2><p><strong>1. 修改文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo nano /opt/netease/netease-cloud-music/netease-cloud-music.bash</span></span><br><span class="line">-------------------------------------------------------------------------</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">HERE="$(dirname "$(readlink -f "$&#123;0&#125;")")"</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="string">"<span class="variable">$&#123;HERE&#125;</span>"</span>/libs</span></span><br><span class="line">export QT_PLUGIN_PATH="$&#123;HERE&#125;"/plugins </span><br><span class="line">export QT_QPA_PLATFORM_PLUGIN_PATH="$&#123;HERE&#125;"/plugins/platforms</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="built_in">export</span> XDG_CURRENT_DESKTOP=DDE</span></span><br><span class="line">export LD_LIBRARY_PATH=/usr/lib</span><br><span class="line">exec "$&#123;HERE&#125;"/netease-cloud-music $@</span><br></pre></td></tr></table></figure>
+
+<p><strong>2.安装编译好的qcfe</strong><br>    - 网址：链接: <a href="https://pan.baidu.com/s/1tyzorY2QlnIdCCG9gU6GNg" target="_blank" rel="noopener">https://pan.baidu.com/s/1tyzorY2QlnIdCCG9gU6GNg</a>  密码: bple</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo pacman -U qcef-1.1.6-1-x86_64.pkg.tar.xz</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo pacman -S vlc</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="解决办法二（未经过验证）"><a href="#解决办法二（未经过验证）" class="headerlink" title="解决办法二（未经过验证）"></a><strong>解决办法二（未经过验证）</strong></h2><p><a href="https://zhuanlan.zhihu.com/p/150387095" target="_blank" rel="noopener">Linux 下 Rstudio 等闭源 Qt 软件不能使用 Fcitx 的解决办法</a></p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Gnome-40 可用插件的记录与修复</title>
+    <url>/2021/04/10/dash-to-dock-for-gnome-40/</url>
+    <content><![CDATA[<p><strong><em>Gnome 40桌面环境正式发布，加了很多的新特性让人眼前一亮，但是桌面环境的大版本更新，首当其冲的便是旧版Gnome Extensions全部失效，又得重新找一遍插件555555</em></strong></p>
+<a id="more"></a>
+<hr>
+<h2 id="更新后可以使用的插件推荐"><a href="#更新后可以使用的插件推荐" class="headerlink" title="更新后可以使用的插件推荐"></a><strong>更新后可以使用的插件推荐</strong></h2><ul>
+<li><p><strong>Auto Move Windows</strong>：可以设置当使用特定的应用创建新的窗口时直接移动至新的工作区（workspace）。<br><a href="https://extensions.gnome.org/extension/16/auto-move-windows/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/16/auto-move-windows/</a></p>
+</li>
+<li><p><strong>Bluetooth quick connect</strong>：允许从gnome控制面板连接到配对的设备。<br><a href="https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/</a></p>
+</li>
+<li><p><strong>Bottom triggers Activities overview</strong>：当鼠标到达屏幕底部时，可以切换“活动概述”，用于暂时代替Dash to dock插件。<br><a href="https://extensions.gnome.org/extension/4120/bottom-triggers-activities-overview/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/4120/bottom-triggers-activities-overview/</a></p>
+</li>
+<li><p><strong>Floating Dock</strong>：又一个Dash to dock的替代品。<br><a href="https://extensions.gnome.org/extension/2542/floating-dock/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/2542/floating-dock/</a></p>
+</li>
+<li><p><strong>Compiz alike windows effect</strong>：拖拽程序窗口的果冻特效。<br><a href="https://extensions.gnome.org/extension/2950/compiz-alike-windows-effect/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/2950/compiz-alike-windows-effect/</a></p>
+</li>
+<li><p><strong>ddterm</strong>：Drop down termination适配Gnome 40的版本。<br><a href="https://extensions.gnome.org/extension/3780/ddterm/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/3780/ddterm/</a></p>
+</li>
+<li><p><strong>Espresso</strong>：Caffine适配Gnome 40的版本，防止电脑自动休眠。<br><a href="https://extensions.gnome.org/extension/4135/espresso/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/4135/espresso/</a></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Hide Activities Button</strong>：隐藏左上角的活动按钮。<br><a href="https://extensions.gnome.org/extension/744/hide-activities-button/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/744/hide-activities-button/</a></p>
+</li>
+<li><p><strong>Just Perfection</strong>：具有很多功能的综合性插件，详情看具体页面的说明。<br><a href="https://extensions.gnome.org/extension/3843/just-perfection/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/3843/just-perfection/</a></p>
+</li>
+<li><p><strong>Lunar Calendar 农历</strong>：农历日历。<br><a href="https://extensions.gnome.org/extension/675/lunar-calendar/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/675/lunar-calendar/</a></p>
+</li>
+<li><p><strong>No overview at start-up</strong>：新版Gnome桌面在开机进入系统后会自动进入Overview状态，本插件可以自动退出这个状态。<br><a href="https://extensions.gnome.org/extension/4099/no-overview/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/4099/no-overview/</a></p>
+</li>
+<li><p><strong>Places Status Indicator</strong>：左上角添加菜单以快速导航系统中的位置。<br><a href="https://extensions.gnome.org/extension/8/places-status-indicator/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/8/places-status-indicator/</a></p>
+</li>
+<li><p><strong>Removable Drive Menu</strong>：用于访问和卸载可移动设备的状态菜单。<br><a href="https://extensions.gnome.org/extension/7/removable-drive-menu/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/7/removable-drive-menu/</a></p>
+</li>
+<li><p><strong>Remove Alt+Tab Delay v2</strong>：消除了切换器弹出窗口中的0.15秒弹出延迟，适配Gnome 40。<br><a href="https://extensions.gnome.org/extension/2741/remove-alttab-delay-v2/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/2741/remove-alttab-delay-v2/</a></p>
+</li>
+<li><p><strong>Screenshot Tool</strong>：方便地创建，复制，存储和上传屏幕截图。<br><a href="https://extensions.gnome.org/extension/1112/screenshot-tool/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1112/screenshot-tool/</a></p>
+</li>
+<li><p><strong>Screenshot Window Sizer</strong>：调整GNOME软件屏幕截图的窗口大小。<br><a href="https://extensions.gnome.org/extension/881/screenshot-window-sizer/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/881/screenshot-window-sizer/</a></p>
+</li>
+<li><p><strong>Shu Zhi</strong>：灵感来自Jizhi的用于gnome shell的墙纸生成扩展程序。<br><a href="https://extensions.gnome.org/extension/3985/shu-zhi/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/3985/shu-zhi/</a></p>
+</li>
+<li><p><strong>Simple net speed</strong>：显示网速。<br><a href="https://extensions.gnome.org/extension/1085/simple-net-speed/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1085/simple-net-speed/</a></p>
+</li>
+<li><p><strong>SomaFM internet radio</strong>：在您的GNOME桌面上收听免费的SomaFm网络广播。<br><a href="https://extensions.gnome.org/extension/1237/somafm-internet-radio/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1237/somafm-internet-radio/</a></p>
+</li>
+<li><p><strong>Sound Input &amp; Output Device Chooser</strong>：在音量滑块下方的状态菜单中显示声音输出和输入设备（类似于gnome声音设置）的列表。<br><a href="https://extensions.gnome.org/extension/906/sound-output-device-chooser/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/906/sound-output-device-chooser/</a></p>
+</li>
+<li><p><strong>Switch Workspace</strong>：使用ALT+TAB时显示小窗口（原本只有图标）以及切换工作区的插件。<br><a href="https://extensions.gnome.org/extension/1231/switch-workspace/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1231/switch-workspace/</a></p>
+</li>
+<li><p><strong>Switcher</strong>：功能类似于Spotlight的插件，用于快速搜索文件和打开应用。<br><a href="https://extensions.gnome.org/extension/973/switcher/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/973/switcher/</a></p>
+</li>
+<li><p><strong>Transparent Shell</strong>：透明插件。<br><a href="https://extensions.gnome.org/extension/3518/transparent-shell/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/3518/transparent-shell/</a></p>
+</li>
+<li><p><strong>Tweaks &amp; Extensions in System Menu</strong>：在更新Gnome 40后，Extension扩展一栏已经从Tweak中独立出去，为了方便打开，将二者分别集成在System Menu中。<br><a href="https://extensions.gnome.org/extension/1653/tweaks-in-system-menu/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1653/tweaks-in-system-menu/</a></p>
+</li>
+<li><p><strong>User Themes</strong>：从用户目录加载主题。<br><a href="https://extensions.gnome.org/extension/19/user-themes/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/19/user-themes/</a></p>
+</li>
+<li><p><strong>Workspace Indicator</strong>：在面板上放置一个指示器，以指示您所在的工作空间，并可以切换到另一个工作空间。<br><a href="https://extensions.gnome.org/extension/21/workspace-indicator/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/21/workspace-indicator/</a></p>
+</li>
+<li><p><strong>Weather In The Clock</strong>：在时钟中显示当前天气，此扩展功能需要GNOME Weather。<br><a href="https://extensions.gnome.org/extension/1380/weather-in-the-clock/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1380/weather-in-the-clock/</a></p>
+</li>
+</ul>
+<h2 id="Dash-to-dock插件修复方法"><a href="#Dash-to-dock插件修复方法" class="headerlink" title="Dash to dock插件修复方法"></a><strong>Dash to dock插件修复方法</strong></h2><ul>
+<li><strong>教程网址（仅能达到日常使用，仍存在不少Bug）</strong>：<a href="https://github.com/micheleg/dash-to-dock/pull/1402" target="_blank" rel="noopener">https://github.com/micheleg/dash-to-dock/pull/1402</a></li>
+<li><strong>具体方法</strong>：<ol>
+<li>安装   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/ewlsh/dash-to-dock/</span><br><span class="line">cd dash-to-dock</span><br><span class="line">git checkout ewlsh/gnome-40</span><br><span class="line">make</span><br><span class="line">make install #全部执行完后重启即可</span><br></pre></td></tr></table></figure></li>
+<li>更新   <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git pull</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></li>
+<li>开始享受</li>
+</ol>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Gnome</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PIP更新问题</title>
     <url>/2021/02/28/pip-error/</url>
     <content><![CDATA[<p><strong><em>时隔半年多重新开始敲代码，突然发现Python升级后无论是普通还是虚拟环境的Pip都无法下载其他模块和更新，记录一下解决办法</em></strong></p>

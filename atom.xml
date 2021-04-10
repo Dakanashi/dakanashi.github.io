@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2021-02-28T06:54:26.646Z</updated>
+  <updated>2021-04-10T06:29:37.531Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,46 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解决网易云音乐无法输入中文的问题</title>
+    <link href="http://yoursite.com/2021/04/10/netease-can-not-input-Chinese/"/>
+    <id>http://yoursite.com/2021/04/10/netease-can-not-input-Chinese/</id>
+    <published>2021-04-09T17:30:03.000Z</published>
+    <updated>2021-04-10T06:29:37.531Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;不知道从何时开始，发现Arch上的网易云音乐在搜索歌曲时无法输入中文，特此记录以下解决办法&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Gnome-40 可用插件的记录与修复</title>
+    <link href="http://yoursite.com/2021/04/10/dash-to-dock-for-gnome-40/"/>
+    <id>http://yoursite.com/2021/04/10/dash-to-dock-for-gnome-40/</id>
+    <published>2021-04-09T16:26:43.000Z</published>
+    <updated>2021-04-09T17:38:56.983Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;&lt;em&gt;Gnome 40桌面环境正式发布，加了很多的新特性让人眼前一亮，但是桌面环境的大版本更新，首当其冲的便是旧版Gnome Extensions全部失效，又得重新找一遍插件555555&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="Gnome" scheme="http://yoursite.com/tags/Gnome/"/>
+    
+  </entry>
   
   <entry>
     <title>PIP更新问题</title>
@@ -411,51 +451,6 @@
     
     
       <category term="MySql" scheme="http://yoursite.com/tags/MySql/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>mariaDB介绍</title>
-    <link href="http://yoursite.com/2020/04/20/word-for-mariadb/"/>
-    <id>http://yoursite.com/2020/04/20/word-for-mariadb/</id>
-    <published>2020-04-20T08:59:23.000Z</published>
-    <updated>2020-04-22T16:03:29.858Z</updated>
-    
-    <summary type="html">
-    
-      &lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;除了web前端的那些琐碎知识点，mysql语法也属于许久不用就会遗忘的东西，距离上次学习mariaDB语法已有一年之久，相关知识真的是忘得一干二净，所以直接记录一下等以后忘了再看一下就好了&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="数据库" scheme="http://yoursite.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-      <category term="MySql" scheme="http://yoursite.com/tags/MySql/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Python BeautifulSoup 中.text与.string的区别</title>
-    <link href="http://yoursite.com/2020/04/18/bs4-diff-bt-text-and-string/"/>
-    <id>http://yoursite.com/2020/04/18/bs4-diff-bt-text-and-string/</id>
-    <published>2020-04-18T08:24:34.000Z</published>
-    <updated>2020-04-22T16:04:40.628Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;strong&gt;&lt;em&gt;在学习编写爬虫的过程中对于bs4库使用中的小记&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Python爬虫" scheme="http://yoursite.com/categories/Python%E7%88%AC%E8%99%AB/"/>
-    
-    
-      <category term="Python" scheme="http://yoursite.com/tags/Python/"/>
-    
-      <category term="BeautifulSoup" scheme="http://yoursite.com/tags/BeautifulSoup/"/>
     
   </entry>
   

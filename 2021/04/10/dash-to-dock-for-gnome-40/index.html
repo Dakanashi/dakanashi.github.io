@@ -6,7 +6,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    PIP更新问题 |  Hexo
+    Gnome-40 可用插件的记录与修复 |  Hexo
   </title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   
@@ -31,7 +31,7 @@
   <div id="app">
     <main class="content">
       <section class="outer">
-  <article id="post-pip-error" class="article article-type-post" itemscope
+  <article id="post-dash-to-dock-for-gnome-40" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -39,7 +39,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  PIP更新问题
+  Gnome-40 可用插件的记录与修复
 </h1>
   
 
@@ -48,8 +48,8 @@
 
     
     <div class="article-meta">
-      <a href="/2021/02/28/pip-error/" class="article-date">
-  <time datetime="2021-02-28T06:26:59.000Z" itemprop="datePublished">2021-02-28</time>
+      <a href="/2021/04/10/dash-to-dock-for-gnome-40/" class="article-date">
+  <time datetime="2021-04-09T16:26:43.000Z" itemprop="datePublished">2021-04-10</time>
 </a>
       
       
@@ -59,7 +59,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">257字</span>
+            <span class="post-count">967字</span>
         </span>
     </span>
 
@@ -68,7 +68,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1分钟</span>
+            <span class="post-count">4分钟</span>
         </span>
     </span>
 </div>
@@ -95,13 +95,76 @@
       
 
       
-      <p><strong><em>时隔半年多重新开始敲代码，突然发现Python升级后无论是普通还是虚拟环境的Pip都无法下载其他模块和更新，记录一下解决办法</em></strong></p>
+      <p><strong><em>Gnome 40桌面环境正式发布，加了很多的新特性让人眼前一亮，但是桌面环境的大版本更新，首当其冲的便是旧版Gnome Extensions全部失效，又得重新找一遍插件555555</em></strong></p>
 <a id="more"></a>
 <hr>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h2><p><strong>Pip无法下载模块和更新</strong></p>
-<h2 id="错误详情"><a href="#错误详情" class="headerlink" title="错误详情"></a><strong>错误详情</strong></h2><pre><code><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; pip --version      </span></span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">File "/home/john/.virtualenvs/dp/bin/pip", line 5, in &lt;module&gt;</span><br><span class="line">    from pip._internal.cli.main import main</span><br><span class="line">ModuleNotFoundError: No module named 'pip'</span><br></pre></td></tr></table></figure></code></pre><h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a><strong>解决办法</strong></h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; python -m ensurepip</span></span><br><span class="line">Looking in links: /tmp/tmps803pxka</span><br><span class="line">Processing /tmp/tmps803pxka/setuptools-49.2.1-py3-none-any.whl</span><br><span class="line">Processing /tmp/tmps803pxka/pip-20.2.3-py2.py3-none-any.whl</span><br><span class="line">Installing collected packages: setuptools, pip</span><br><span class="line">Successfully installed pip-20.2.3 setuptools-49.2.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; python -m pip install --upgrade pip</span></span><br><span class="line">Collecting pip</span><br><span class="line">  Downloading pip-21.0.1-py3-none-any.whl (1.5 MB)</span><br><span class="line">     |████████████████████████████████| 1.5 MB 9.9 kB/s </span><br><span class="line">Installing collected packages: pip</span><br><span class="line">  Attempting uninstall: pip</span><br><span class="line">    Found existing installation: pip 20.2.3</span><br><span class="line">    Uninstalling pip-20.2.3:</span><br><span class="line">      Successfully uninstalled pip-20.2.3</span><br><span class="line">Successfully installed pip-21.0.1</span><br></pre></td></tr></table></figure>
-
-<h2 id="补充：PIP一次性更新所有模块"><a href="#补充：PIP一次性更新所有模块" class="headerlink" title="补充：PIP一次性更新所有模块"></a><strong>补充：PIP一次性更新所有模块</strong></h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; pip list --outdate //列出所有可升级的包</span></span><br><span class="line"><span class="meta">&gt;</span><span class="bash">&gt; pip freeze --<span class="built_in">local</span> | grep -v <span class="string">'^-e'</span> | cut -d = -f 1 | xargs -n1 pip install -U //更新命令</span></span><br></pre></td></tr></table></figure>
+<h2 id="更新后可以使用的插件推荐"><a href="#更新后可以使用的插件推荐" class="headerlink" title="更新后可以使用的插件推荐"></a><strong>更新后可以使用的插件推荐</strong></h2><ul>
+<li><p><strong>Auto Move Windows</strong>：可以设置当使用特定的应用创建新的窗口时直接移动至新的工作区（workspace）。<br><a href="https://extensions.gnome.org/extension/16/auto-move-windows/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/16/auto-move-windows/</a></p>
+</li>
+<li><p><strong>Bluetooth quick connect</strong>：允许从gnome控制面板连接到配对的设备。<br><a href="https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1401/bluetooth-quick-connect/</a></p>
+</li>
+<li><p><strong>Bottom triggers Activities overview</strong>：当鼠标到达屏幕底部时，可以切换“活动概述”，用于暂时代替Dash to dock插件。<br><a href="https://extensions.gnome.org/extension/4120/bottom-triggers-activities-overview/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/4120/bottom-triggers-activities-overview/</a></p>
+</li>
+<li><p><strong>Floating Dock</strong>：又一个Dash to dock的替代品。<br><a href="https://extensions.gnome.org/extension/2542/floating-dock/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/2542/floating-dock/</a></p>
+</li>
+<li><p><strong>Compiz alike windows effect</strong>：拖拽程序窗口的果冻特效。<br><a href="https://extensions.gnome.org/extension/2950/compiz-alike-windows-effect/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/2950/compiz-alike-windows-effect/</a></p>
+</li>
+<li><p><strong>ddterm</strong>：Drop down termination适配Gnome 40的版本。<br><a href="https://extensions.gnome.org/extension/3780/ddterm/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/3780/ddterm/</a></p>
+</li>
+<li><p><strong>Espresso</strong>：Caffine适配Gnome 40的版本，防止电脑自动休眠。<br><a href="https://extensions.gnome.org/extension/4135/espresso/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/4135/espresso/</a></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Hide Activities Button</strong>：隐藏左上角的活动按钮。<br><a href="https://extensions.gnome.org/extension/744/hide-activities-button/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/744/hide-activities-button/</a></p>
+</li>
+<li><p><strong>Just Perfection</strong>：具有很多功能的综合性插件，详情看具体页面的说明。<br><a href="https://extensions.gnome.org/extension/3843/just-perfection/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/3843/just-perfection/</a></p>
+</li>
+<li><p><strong>Lunar Calendar 农历</strong>：农历日历。<br><a href="https://extensions.gnome.org/extension/675/lunar-calendar/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/675/lunar-calendar/</a></p>
+</li>
+<li><p><strong>No overview at start-up</strong>：新版Gnome桌面在开机进入系统后会自动进入Overview状态，本插件可以自动退出这个状态。<br><a href="https://extensions.gnome.org/extension/4099/no-overview/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/4099/no-overview/</a></p>
+</li>
+<li><p><strong>Places Status Indicator</strong>：左上角添加菜单以快速导航系统中的位置。<br><a href="https://extensions.gnome.org/extension/8/places-status-indicator/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/8/places-status-indicator/</a></p>
+</li>
+<li><p><strong>Removable Drive Menu</strong>：用于访问和卸载可移动设备的状态菜单。<br><a href="https://extensions.gnome.org/extension/7/removable-drive-menu/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/7/removable-drive-menu/</a></p>
+</li>
+<li><p><strong>Remove Alt+Tab Delay v2</strong>：消除了切换器弹出窗口中的0.15秒弹出延迟，适配Gnome 40。<br><a href="https://extensions.gnome.org/extension/2741/remove-alttab-delay-v2/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/2741/remove-alttab-delay-v2/</a></p>
+</li>
+<li><p><strong>Screenshot Tool</strong>：方便地创建，复制，存储和上传屏幕截图。<br><a href="https://extensions.gnome.org/extension/1112/screenshot-tool/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1112/screenshot-tool/</a></p>
+</li>
+<li><p><strong>Screenshot Window Sizer</strong>：调整GNOME软件屏幕截图的窗口大小。<br><a href="https://extensions.gnome.org/extension/881/screenshot-window-sizer/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/881/screenshot-window-sizer/</a></p>
+</li>
+<li><p><strong>Shu Zhi</strong>：灵感来自Jizhi的用于gnome shell的墙纸生成扩展程序。<br><a href="https://extensions.gnome.org/extension/3985/shu-zhi/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/3985/shu-zhi/</a></p>
+</li>
+<li><p><strong>Simple net speed</strong>：显示网速。<br><a href="https://extensions.gnome.org/extension/1085/simple-net-speed/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1085/simple-net-speed/</a></p>
+</li>
+<li><p><strong>SomaFM internet radio</strong>：在您的GNOME桌面上收听免费的SomaFm网络广播。<br><a href="https://extensions.gnome.org/extension/1237/somafm-internet-radio/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1237/somafm-internet-radio/</a></p>
+</li>
+<li><p><strong>Sound Input &amp; Output Device Chooser</strong>：在音量滑块下方的状态菜单中显示声音输出和输入设备（类似于gnome声音设置）的列表。<br><a href="https://extensions.gnome.org/extension/906/sound-output-device-chooser/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/906/sound-output-device-chooser/</a></p>
+</li>
+<li><p><strong>Switch Workspace</strong>：使用ALT+TAB时显示小窗口（原本只有图标）以及切换工作区的插件。<br><a href="https://extensions.gnome.org/extension/1231/switch-workspace/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1231/switch-workspace/</a></p>
+</li>
+<li><p><strong>Switcher</strong>：功能类似于Spotlight的插件，用于快速搜索文件和打开应用。<br><a href="https://extensions.gnome.org/extension/973/switcher/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/973/switcher/</a></p>
+</li>
+<li><p><strong>Transparent Shell</strong>：透明插件。<br><a href="https://extensions.gnome.org/extension/3518/transparent-shell/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/3518/transparent-shell/</a></p>
+</li>
+<li><p><strong>Tweaks &amp; Extensions in System Menu</strong>：在更新Gnome 40后，Extension扩展一栏已经从Tweak中独立出去，为了方便打开，将二者分别集成在System Menu中。<br><a href="https://extensions.gnome.org/extension/1653/tweaks-in-system-menu/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1653/tweaks-in-system-menu/</a></p>
+</li>
+<li><p><strong>User Themes</strong>：从用户目录加载主题。<br><a href="https://extensions.gnome.org/extension/19/user-themes/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/19/user-themes/</a></p>
+</li>
+<li><p><strong>Workspace Indicator</strong>：在面板上放置一个指示器，以指示您所在的工作空间，并可以切换到另一个工作空间。<br><a href="https://extensions.gnome.org/extension/21/workspace-indicator/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/21/workspace-indicator/</a></p>
+</li>
+<li><p><strong>Weather In The Clock</strong>：在时钟中显示当前天气，此扩展功能需要GNOME Weather。<br><a href="https://extensions.gnome.org/extension/1380/weather-in-the-clock/" target="_blank" rel="noopener">https://extensions.gnome.org/extension/1380/weather-in-the-clock/</a></p>
+</li>
+</ul>
+<h2 id="Dash-to-dock插件修复方法"><a href="#Dash-to-dock插件修复方法" class="headerlink" title="Dash to dock插件修复方法"></a><strong>Dash to dock插件修复方法</strong></h2><ul>
+<li><strong>教程网址（仅能达到日常使用，仍存在不少Bug）</strong>：<a href="https://github.com/micheleg/dash-to-dock/pull/1402" target="_blank" rel="noopener">https://github.com/micheleg/dash-to-dock/pull/1402</a></li>
+<li><strong>具体方法</strong>：<ol>
+<li>安装   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/ewlsh/dash-to-dock/</span><br><span class="line">cd dash-to-dock</span><br><span class="line">git checkout ewlsh/gnome-40</span><br><span class="line">make</span><br><span class="line">make install #全部执行完后重启即可</span><br></pre></td></tr></table></figure></li>
+<li>更新   <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git pull</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></li>
+<li>开始享受</li>
+</ol>
+</li>
+</ul>
 
       
       <!-- reward -->
@@ -171,14 +234,14 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2021/02/28/pip-error/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://yoursite.com/2021/04/10/dash-to-dock-for-gnome-40/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pip/" rel="tag">Pip</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gnome/" rel="tag">Gnome</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li></ul>
 
 
     </footer>
@@ -189,19 +252,19 @@
   
   <nav class="article-nav">
     
-      <a href="/2021/04/10/dash-to-dock-for-gnome-40/" class="article-nav-link">
+      <a href="/2021/04/10/netease-can-not-input-Chinese/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            Gnome-40 可用插件的记录与修复
+            解决网易云音乐无法输入中文的问题
           
         </div>
       </a>
     
     
-      <a href="/2021/02/27/gdm-error/" class="article-nav-link">
+      <a href="/2021/02/28/pip-error/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Gnome开机问题</div>
+        <div class="article-nav-title">PIP更新问题</div>
       </a>
     
   </nav>
